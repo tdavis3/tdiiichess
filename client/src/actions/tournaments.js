@@ -51,7 +51,7 @@ export const createTournament = formData => async dispatch => {
 };
 
 // Edit Tournament
-export const editTournament = (tournamentid, formData) => async dispatch => {
+export const editTournament = (tournament_id, formData) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -60,7 +60,7 @@ export const editTournament = (tournamentid, formData) => async dispatch => {
         };
 
         const res = await axios.put(
-            `/api/tournaments/${tournamentid}`,
+            `/api/tournaments/${tournament_id}`,
             formData,
             config
         );

@@ -44,7 +44,7 @@ export const createPlayer = (sectionid, formData) => async dispatch => {
 };
 
 // Edit a player
-export const editPlayer = (playerid, formData) => async dispatch => {
+export const editPlayer = (player_id, formData) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -52,7 +52,7 @@ export const editPlayer = (playerid, formData) => async dispatch => {
             }
         };
 
-        const res = await axios.put(`/api/players/${playerid}`, formData, config);
+        const res = await axios.put(`/api/players/${player_id}`, formData, config);
 
         dispatch({type: EDIT_PLAYER, payload: res.data});
         dispatch(setAlert("Player Edited", "success"));

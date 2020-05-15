@@ -22,7 +22,7 @@ export const getCurrentSections = id => async dispatch => {
 };
 
 // Create a section
-export const createSection = (tournamentid, formData) => async dispatch => {
+export const createSection = (tournament_id, formData) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -31,7 +31,7 @@ export const createSection = (tournamentid, formData) => async dispatch => {
         };
 
         const res = await axios.post(
-            `/api/sections/${tournamentid}`,
+            `/api/sections/${tournament_id}`,
             formData,
             config
         );
@@ -53,7 +53,7 @@ export const createSection = (tournamentid, formData) => async dispatch => {
 };
 
 // Edit a section
-export const editSection = (sectionid, formData) => async dispatch => {
+export const editSection = (section_id, formData) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -61,7 +61,7 @@ export const editSection = (sectionid, formData) => async dispatch => {
             }
         };
 
-        const res = await axios.put(`/api/sections/${sectionid}`, formData, config);
+        const res = await axios.put(`/api/sections/${section_id}`, formData, config);
 
         dispatch({type: EDIT_SECTION, payload: res.data});
 

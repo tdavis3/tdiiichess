@@ -28,8 +28,8 @@ export const loadUser = () => async dispatch => {
 
 // Register User
 export const register = ({
-  firstname,
-  lastname,
+  first_name,
+  last_name,
   email,
   password
 }) => async dispatch => {
@@ -39,7 +39,7 @@ export const register = ({
     }
   };
 
-  const body = JSON.stringify({ firstname, lastname, email, password });
+  const body = JSON.stringify({ first_name, last_name, email, password });
 
   try {
     const res = await axios.post("/api/users", body, config);

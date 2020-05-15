@@ -10,10 +10,10 @@ import {
 
 
 // Get pairings for a round
-export const getResultPairings = (sectionid, roundnumber) => async dispatch => {
+export const getResultPairings = (section_id, round_number) => async dispatch => {
     try {
         const res = await axios.get(
-            `/api/resultpairings/${sectionid}/${roundnumber}`
+            `/api/resultpairings/${section_id}/${round_number}`
         );
         dispatch({type: GET_PAIRINGS, payload: res.data});
     } catch (err) {
@@ -25,7 +25,7 @@ export const getResultPairings = (sectionid, roundnumber) => async dispatch => {
 };
 
 // Generate pairings
-export const generatePairings = (sectionid, roundnumber, players_list) => async dispatch => {
+export const generatePairings = (section_id, round_number, players_list) => async dispatch => {
     try {
 
         const config = {
@@ -35,7 +35,7 @@ export const generatePairings = (sectionid, roundnumber, players_list) => async 
         };
 
         const res = await axios.post(
-            `/api/pairingalgo/${sectionid}/${roundnumber}`, {players_in_section: players_list}, config
+            `/api/pairingalgo/${section_id}/${round_number}`, {players_in_section: players_list}, config
         );
 
     } catch (err) {
