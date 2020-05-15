@@ -1,0 +1,22 @@
+.jumbotron {
+    background-image: url("./img/chess_bg.jpg");
+    background-size: 100% 100%;
+    /*background-position: left;*/
+    /*background-color: transparent !important;*/
+    padding-bottom: 15%;
+}
+
+.table-dashboard {
+    margin-top: 40px;
+}
+
+.section-dashboard {
+    margin-right: 15px;
+}
+
+.btn-group {
+    vertical-align: bottom;
+}
+
+
+

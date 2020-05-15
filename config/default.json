@@ -1,0 +1,6 @@
+{
+  "mongoURI": "mongodb+srv://td3:Compsci2022@cluster0-trufi.gcp.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "ENP6PcJUJ65N3ZmJFM5FBScBLAR47rQFOSRxhykocAnnD6Y7eOdKkUtdmovDj6L",
+  "uscfURI": "http://www.uschess.org/msa/thin.php/?",
+  "tokenexpirationsecs": 120000
+}
