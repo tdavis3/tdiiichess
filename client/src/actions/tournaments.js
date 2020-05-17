@@ -32,7 +32,7 @@ export const createTournament = formData => async dispatch => {
             }
         };
 
-        console.log('Tyrone');
+        console.log('About to send create tournament to api');
         console.log(formData);
 
         const res = await axios.post("/api/tournaments", formData, config);

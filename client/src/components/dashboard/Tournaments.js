@@ -18,8 +18,14 @@ import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import DrawerHeader from "../layout/DrawerHeader";
 import Typography from "@material-ui/core/Typography";
-import store from "../../store";
-import {loadUser} from "../../actions/auth";
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import DonutLargeIcon from '@material-ui/icons/DonutLarge';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import {Grid} from "@material-ui/core";
+import {red, green, yellow} from '@material-ui/core/colors';
+
+let moment = require('moment');
+moment().format();
 
 const drawerWidth = 260;
 
@@ -91,17 +97,34 @@ const Tournaments = props => {
             {
                 Header: 'Time Control',
                 accessor: 'time_control',
+                Cell: ({cell: {value}}) => {
+                    if (value == null || value === '') {
+                        return (
+                            <>--</>
+                        );
+                    } else {
+                        return (
+                            <>{value}</>
+                        );
+                    }
+                }
             },
             {
                 Header: 'Date',
                 accessor: 'date',
                 Cell: props => {
-                    // console.log(props);
+                    // const formatted_start_date = <Moment
+                    //     format="MM/DD/YYYY">{props.cell.row.original.start_date}</Moment>;
+                    // const formatted_end_date = <Moment format="MM/DD/YYYY">{props.cell.row.original.end_date}</Moment>;
                     return (
-                        <Moment format="MM/DD/YYYY">{props.original.start_date}</Moment> -
-                        <Moment format="MM/DD/YYYY">{props.original.end_date}</Moment>
+                        <div>
+                            <Moment
+                                format="MM/DD/YYYY">{props.cell.row.original.start_date}</Moment> - <Moment
+                            format="MM/DD/YYYY">{props.cell.row.original.end_date}</Moment>
+                        </div>
                     );
                 },
+
                 sortType: (a, b) => {  // Date Comparison function
                     const x = new Date(a);
                     const y = new Date(b);
@@ -111,6 +134,48 @@ const Tournaments = props => {
             {
                 Header: 'Status',
                 accessor: 'start_date',
+                Cell: props => {
+                    // TODO Do this calculation server-side; Add "status field" to Tournament model
+                    const today = moment();
+                    const start = moment(props.cell.row.original.start_date);
+                    const end = moment(props.cell.row.original.end_date);
+                    if (today.isBefore(start)) {
+                        return (
+                            <Grid container spacing={1}>
+                                <Grid item xs={3}>
+                                    <FiberManualRecordIcon style={{color: red[500]}}/>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Typography>Not started</Typography>
+                                </Grid>
+                            </Grid>
+                        );
+                    } else if (today.isBetween(start, end)) {
+                        return (
+                            <Grid container spacing={1}>
+                                <Grid item xs={3}>
+                                    <DonutLargeIcon style={{color: yellow[500]}}/>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Typography>In progress</Typography>
+                                </Grid>
+                            </Grid>
+                        );
+
+                    } else if (today.isAfter(end)) {
+                        return (
+                            <Grid container spacing={1}>
+                                <Grid item xs={3}>
+                                    <CheckCircleOutlineIcon style={{color: green[500]}}/>
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <Typography>Completed</Typography>
+                                </Grid>
+                            </Grid>);
+                    } else {
+                        return null
+                    }
+                },
             },
         ],
         []

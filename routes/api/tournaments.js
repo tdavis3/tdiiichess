@@ -18,7 +18,8 @@ router.get("/", auth, async (req, res) => {
                 .status(400)
                 .json({msg: "There are no tournaments for this user"});
         }
-
+        // console.log("get tournaments");
+        // console.log(tournaments);
         await res.json(tournaments);
     } catch (err) {
         console.error(err.message);
@@ -61,13 +62,15 @@ router.post(
             return res.status(400).json({errors: errors.array()});
         }
 
-        const {name, printing_name, time_control} = req.body;
+        const {name, printing_name, time_control, start_date, end_date} = req.body;
 
         const tournamentFields = {};
         tournamentFields.user_id = req.user.id;
         if (name) tournamentFields.name = name;
         if (printing_name) tournamentFields.printing_name = printing_name;
         if (time_control) tournamentFields.time_control = time_control;
+        if (start_date) tournamentFields.start_date = start_date;
+        if (end_date) tournamentFields.end_date = end_date;
 
         try {
             let tournament = new Tournament(tournamentFields);

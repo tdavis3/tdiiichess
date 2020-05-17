@@ -24,8 +24,8 @@ const initialTournament = {
     name: "",
     printing_name: "",
     time_control: "",
-    start_date: null,
-    end_date: null
+    start_date: new Date(),
+    end_date: new Date()
 };
 
 const AddTournamentDialog = props => {
@@ -41,13 +41,17 @@ const AddTournamentDialog = props => {
 
 
     const handleStartDateChange = (date) => {
+        console.log(date);
         setStartDateChange(date);
+        console.log(selectedStartDate);
         setTournament({...tournament, start_date: date});
+        console.log(tournament);
     };
 
     const handleEndDateChange = (date) => {
         setEndDateChange(date);
         setTournament({...tournament, end_date: date});
+
     };
 
     const handleClickOpen = () => {
@@ -59,6 +63,8 @@ const AddTournamentDialog = props => {
     };
 
     const handleSave = event => {
+        console.log("Saving tournament");
+        console.log(tournament);
         createTournament(tournament);
         setTournament(initialTournament);
         setOpen(false);
@@ -123,7 +129,7 @@ const AddTournamentDialog = props => {
                                     variant="inline"
                                     format="MM/dd/yyyy"
                                     margin="normal"
-                                    id="date-picker-inline"
+                                    id="start-date-picker-inline"
                                     label="Start Date"
                                     value={selectedStartDate}
                                     onChange={handleStartDateChange}
@@ -138,7 +144,7 @@ const AddTournamentDialog = props => {
                                     variant="inline"
                                     format="MM/dd/yyyy"
                                     margin="normal"
-                                    id="date-picker-inline"
+                                    id="end-date-picker-inline"
                                     label="End Date"
                                     value={selectedEndDate}
                                     onChange={handleEndDateChange}

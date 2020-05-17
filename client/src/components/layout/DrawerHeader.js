@@ -4,9 +4,13 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {Box} from "@material-ui/core";
+import {Box, MenuItem} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import MenuIcon from '@material-ui/icons/Menu';
+import Menu from "@material-ui/core/Menu";
+import IconButton from "@material-ui/core/IconButton";
+import {Link} from "react-router-dom";
+import {logout} from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,6 +33,16 @@ const useStyles = makeStyles(theme => ({
 const DrawerHeader = (props) => {
     const classes = useStyles();
 
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Box className={classes.root}>
             <CssBaseline/>
@@ -40,7 +54,25 @@ const DrawerHeader = (props) => {
                     <Typography className={classes.user}>{props.email}</Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.menu}>
-                    <MenuIcon/>
+                    <IconButton
+                        aria-label={"Profile"}
+                        aria-controls={"profile-menu"}
+                        aria-haspopup={"true"}
+                        onClick={handleClick}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Menu
+                        id="profile-menu"
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={handleClose}>Profile</MenuItem>
+                        <MenuItem component={Link} to={'/account'} onClick={handleClose}>My account</MenuItem>
+                        <MenuItem onClick={props.logout}>Logout</MenuItem>
+                    </Menu>
                 </Grid>
             </Grid>
         </Box>
@@ -48,8 +80,13 @@ const DrawerHeader = (props) => {
 };
 
 
-DrawerHeader.propTypes = {};
+DrawerHeader.propTypes = {
+    logout: PropTypes.func.isRequired,
+    auth: PropTypes.object.isRequired
+};
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    auth: state.auth
+});
 
-export default DrawerHeader;
+export default connect(mapStateToProps, {logout})(DrawerHeader);
