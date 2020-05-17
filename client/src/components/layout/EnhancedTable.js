@@ -12,6 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
+
 import {
     useRowSelect,
     useSortBy,
@@ -39,8 +40,16 @@ const IndeterminateCheckbox = React.forwardRef(
 
 const useStyles = makeStyles({
     root: {
-        width: '100%',
+        display: 'block',
+        maxWidth: '100%'
     },
+    table: {
+        width: '100%',
+        borderSpacing: 0
+    },
+    tr: {
+
+    }
 });
 
 const EnhancedTable = ({
@@ -123,58 +132,58 @@ const EnhancedTable = ({
 
     // Render the UI for your table
     return (
-        <Paper>
-            <TableContainer>
-                <TableToolbar
-                    title={title}
-                    numSelected={Object.keys(selectedRowIds).length}
-                    deleteHandler={deleteHandler}
-                    CreateDialog={<CreateDialog parent_id={parent_id}/>}
-                    EditDialog={<EditDialog selectededit={getselectededitData()}/>}
-                />
+        // <Paper>
+        <TableContainer>
+            <TableToolbar
+                title={title}
+                numSelected={Object.keys(selectedRowIds).length}
+                deleteHandler={deleteHandler}
+                CreateDialog={<CreateDialog parent_id={parent_id}/>}
+                EditDialog={<EditDialog selectededit={getselectededitData()}/>}
+            />
 
-                <MaUTable stickyHeader aria-label="enhanced table" {...getTableProps()}>
-                    <TableHead>
-                        {headerGroups.map(headerGroup => (
-                            <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map(column => (
-                                    <TableCell
-                                        {...(column.id === 'selection'
-                                            ? column.getHeaderProps()
-                                            : column.getHeaderProps(column.getSortByToggleProps()))}
-                                    >
-                                        {column.render('Header')}
-                                        {column.id !== 'selection' ? (
-                                            <TableSortLabel
-                                                active={column.isSorted}
-                                                // react-table has a unsorted state which is not treated here
-                                                direction={column.isSortedDesc ? 'desc' : 'asc'}
-                                            />
-                                        ) : null}
-                                    </TableCell>
-                                ))}
+            <MaUTable stickyHeader aria-label="enhanced table" {...getTableProps()}>
+                <TableHead>
+                    {headerGroups.map(headerGroup => (
+                        <TableRow {...headerGroup.getHeaderGroupProps()}>
+                            {headerGroup.headers.map(column => (
+                                <TableCell
+                                    {...(column.id === 'selection'
+                                        ? column.getHeaderProps()
+                                        : column.getHeaderProps(column.getSortByToggleProps()))}
+                                >
+                                    {column.render('Header')}
+                                    {column.id !== 'selection' ? (
+                                        <TableSortLabel
+                                            active={column.isSorted}
+                                            // react-table has a unsorted state which is not treated here
+                                            direction={column.isSortedDesc ? 'desc' : 'asc'}
+                                        />
+                                    ) : null}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableHead>
+                <TableBody>
+                    {rows.map((row, i) => {
+                        prepareRow(row);
+                        return (
+                            <TableRow hover {...row.getRowProps()}>
+                                {row.cells.map(cell => {
+                                    return (
+                                        <TableCell {...cell.getCellProps()}>
+                                            {cell.render('Cell')}
+                                        </TableCell>
+                                    )
+                                })}
                             </TableRow>
-                        ))}
-                    </TableHead>
-                    <TableBody>
-                        {rows.map((row, i) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow hover {...row.getRowProps()}>
-                                    {row.cells.map(cell => {
-                                        return (
-                                            <TableCell {...cell.getCellProps()}>
-                                                {cell.render('Cell')}
-                                            </TableCell>
-                                        )
-                                    })}
-                                </TableRow>
-                            )
-                        })}
-                    </TableBody>
-                </MaUTable>
-            </TableContainer>
-        </Paper>
+                        )
+                    })}
+                </TableBody>
+            </MaUTable>
+        </TableContainer>
+        // </Paper>
 
     )
 };

@@ -9,7 +9,7 @@ function Copyright() {
         <Typography variant="body2">
             {'© '}
             {new Date().getFullYear()}
-            {' '} TDIII, Inc.
+            {' '} TDIII Chess.
         </Typography>
     );
 }

@@ -11,22 +11,44 @@ import IconButton from '@material-ui/core/IconButton'
 import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Tooltip from '@material-ui/core/Tooltip'
-import {connect} from "react-redux";
-import {createTournament} from "../../actions/tournaments";
+import {connect} from 'react-redux';
+import {createTournament} from '../../actions/tournaments';
+import Grid from '@material-ui/core/Grid';
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
+import Typography from "@material-ui/core/Typography";
+import MenuIcon from "@material-ui/icons/Menu";
 
 const initialTournament = {
-    tournamentname: "",
-    printingname: "",
-    timecontrol: ""
+    name: "",
+    printing_name: "",
+    time_control: "",
+    start_date: null,
+    end_date: null
 };
 
 const AddTournamentDialog = props => {
     const [tournament, setTournament] = useState(initialTournament);
     const {createTournament} = props;
 
+    const [selectedStartDate, setStartDateChange] = useState(new Date());
+    const [selectedEndDate, setEndDateChange] = useState(new Date());
+
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
     const [open, setOpen] = React.useState(false);
+
+
+    const handleStartDateChange = (date) => {
+        setStartDateChange(date);
+        setTournament({...tournament, start_date: date});
+    };
+
+    const handleEndDateChange = (date) => {
+        setEndDateChange(date);
+        setTournament({...tournament, end_date: date});
+    };
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -67,8 +89,8 @@ const AddTournamentDialog = props => {
                         label="Name"
                         type="text"
                         fullWidth
-                        value={tournament.tournamentname}
-                        onChange={handleChange('tournamentname')}
+                        value={tournament.name}
+                        onChange={handleChange('name')}
                     />
                     <TextField
                         autoFocus
@@ -76,8 +98,8 @@ const AddTournamentDialog = props => {
                         label="Printing Name"
                         type="text"
                         fullWidth
-                        value={tournament.printingname}
-                        onChange={handleChange('printingname')}
+                        value={tournament.printing_name}
+                        onChange={handleChange('printing_name')}
                     />
                     <TextField
                         autoFocus
@@ -85,9 +107,49 @@ const AddTournamentDialog = props => {
                         label="Time Control"
                         type="text"
                         fullWidth
-                        value={tournament.timecontrol}
-                        onChange={handleChange('timecontrol')}
+                        value={tournament.time_control}
+                        onChange={handleChange('time_control')}
                     />
+                    <small id="timecontrolinfo" className="form-text text-muted">
+                        Only if all sections have the same time control.
+                    </small>
+
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    // autoOk
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="normal"
+                                    id="date-picker-inline"
+                                    label="Start Date"
+                                    value={selectedStartDate}
+                                    onChange={handleStartDateChange}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    variant="inline"
+                                    format="MM/dd/yyyy"
+                                    margin="normal"
+                                    id="date-picker-inline"
+                                    label="End Date"
+                                    value={selectedEndDate}
+                                    onChange={handleEndDateChange}
+                                    // InputAdornmentProps={{position: "start"}}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </Grid>
+                        </Grid>
+                    </MuiPickersUtilsProvider>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

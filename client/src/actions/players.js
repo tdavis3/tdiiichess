@@ -9,9 +9,9 @@ import {
 } from "./types";
 
 // Get players in a specific section
-export const getCurrentPlayers = sectionid => async dispatch => {
+export const getCurrentPlayers = section_id => async dispatch => {
     try {
-        const res = await axios.get(`/api/players/${sectionid}`);
+        const res = await axios.get(`/api/players/${section_id}`);
         dispatch({type: GET_PLAYERS, payload: res.data});
     } catch (err) {
         dispatch({
@@ -22,15 +22,15 @@ export const getCurrentPlayers = sectionid => async dispatch => {
 };
 
 // Create a player
-export const createPlayer = (sectionid, formData) => async dispatch => {
+export const createPlayer = (section_id, formData) => async dispatch => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        await axios.post(`/api/players/${sectionid}`, formData, config);
-        const res = await axios.get(`/api/players/${sectionid}`);
+        await axios.post(`/api/players/${section_id}`, formData, config);
+        const res = await axios.get(`/api/players/${section_id}`);
         // No need to add to redux state directly just get all the players again??  Which one is faster / better??
         dispatch({type: GET_PLAYERS, payload: res.data});
         // dispatch({ type: CREATE_PLAYER, payload: res.data });
@@ -79,7 +79,7 @@ export const deletePlayer = data => async dispatch => {
     if (window.confirm("Are you sure you want to delete the selected?")) {
         try {
             players.map(
-                async playerobj => await axios.put(`/api/players/${parent_id}/${playerobj.playerid._id}`)
+                async playerobj => await axios.put(`/api/players/${parent_id}/${playerobj.player_id._id}`)
             );
             dispatch({type: DELETE_PLAYER, payload: players});
             dispatch(setAlert("Players Deleted", "success"));

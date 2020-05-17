@@ -9,10 +9,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
 
+
 const useToolbarStyles = makeStyles(theme => ({
     root: {
-        paddingLeft: theme.spacing(1.5),
-        paddingRight: theme.spacing(1),
+        // paddingLeft: theme.spacing(1.5),
+        // paddingRight: theme.spacing(1),
         // backgroundColor: 'white',
         // position: 'fixed',
         // zIndex: 5

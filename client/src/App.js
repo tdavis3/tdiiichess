@@ -35,8 +35,9 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     main: {
-        flex: '1 0 auto',
-        width: '100%'
+        // flex: '1 0 auto',
+        flexGrow: 1,
+        // width: '100%'
     }
 }));
 
@@ -54,13 +55,14 @@ const App = () => {
                 <div className={classes.root}>
                     <section className={classes.main}>
                         <Switch>
+                            <Route exact path="/" component={Navbar}/>
                             <Route exact path="/register" component={Navbar}/>
                             <Route exact path="/login" component={Navbar}/>
-                            <PrivateRoute exact path="/tournaments" component={NavbarPrivate}/>
+                            {/*<PrivateRoute exact path="/tournaments" component={NavbarPrivate}/>*/}
                             <PrivateRoute exact path="/account" component={NavbarPrivate}/>
                         </Switch>
                         <Route exact path="/" component={Landing}/>
-                        <section className="container">
+                        <section>
                             <SimpleAlert/>
                             <Switch>
                                 <Route exact path="/register" component={Register}/>

@@ -64,7 +64,7 @@ router.post(
         const {name, printing_name, time_control} = req.body;
 
         const tournamentFields = {};
-        tournamentFields.user = req.user.id;
+        tournamentFields.user_id = req.user.id;
         if (name) tournamentFields.name = name;
         if (printing_name) tournamentFields.printing_name = printing_name;
         if (time_control) tournamentFields.time_control = time_control;

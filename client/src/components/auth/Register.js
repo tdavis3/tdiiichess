@@ -40,14 +40,14 @@ const Register = props => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState({
-        firstname: "",
-        lastname: "",
+        first_name: "",
+        last_name: "",
         email: "",
         password: "",
         confirmpassword: ""
     });
 
-    const {firstname, lastname, email, password, confirmpassword} = formData;
+    const {first_name, last_name, email, password, confirmpassword} = formData;
 
     const onChange = e =>
         setFormData({...formData, [e.target.id]: e.target.value});
@@ -57,7 +57,7 @@ const Register = props => {
         if (password !== confirmpassword) {
             props.setAlert("Passwords do not match", "error");
         } else {
-            props.register({firstname, lastname, email, password});
+            props.register({first_name, last_name, email, password});
         }
     };
 
@@ -84,12 +84,12 @@ const Register = props => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 autoComplete="fname"
-                                name="firstname"
+                                name="first_name"
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="firstname"
-                                value={firstname}
+                                id="first_name"
+                                value={first_name}
                                 onChange={e => onChange(e)}
                                 label="First Name"
                                 autoFocus
@@ -100,11 +100,11 @@ const Register = props => {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                id="lastname"
-                                value={lastname}
+                                id="last_name"
+                                value={last_name}
                                 onChange={e => onChange(e)}
                                 label="Last Name"
-                                name="lastname"
+                                name="last_name"
                                 autoComplete="lname"
                             />
                         </Grid>

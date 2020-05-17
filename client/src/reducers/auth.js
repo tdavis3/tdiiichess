@@ -32,7 +32,8 @@ export default function(state = initialState, action) {
         ...state,
         ...payload,
         isAuthenticated: true,
-        loading: false
+        loading: false,
+        user: payload.user
       };
     case LOGOUT:
     case LOGIN_FAIL:

@@ -15,46 +15,50 @@ import AddTournamentDialog from '../tournament-forms/AddTournamentDialog';
 import EditTournamentDialog from "../tournament-forms/EditTournamentDialog";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
 import Drawer from "@material-ui/core/Drawer";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import {Box} from "@material-ui/core";
+import DrawerHeader from "../layout/DrawerHeader";
+import Typography from "@material-ui/core/Typography";
+import store from "../../store";
+import {loadUser} from "../../actions/auth";
 
-const drawerWidth = 220;
+const drawerWidth = 260;
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
-    appBar: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-    },
+    // appBar: {
+    //     width: `calc(100% - ${drawerWidth}px)`,
+    //     marginLeft: drawerWidth,
+    // },
     drawer: {
         width: drawerWidth,
-        flexShrink: 0,
+        flexShrink: 0
     },
     drawerPaper: {
         width: drawerWidth,
     },
-    // necessary for content to be below app bar
+    drawerContainer: {
+        overflow: 'auto',
+    },
     toolbar: theme.mixins.toolbar,
     content: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
+        // flexGrow: 1,
+        // backgroundColor: theme.palette.background.default,
+        // padding: theme.spacing(3),
     },
     logo: {
         width: '60px',
-        // float: 'left',
-        // marginLeft: theme.spacing(3),
+    },
+    center: {
+        textAlign: 'center',
+        fontSize: 18
     }
 }));
 
 const Tournaments = props => {
     useEffect(() => {
+        // store.dispatch(loadUser());
         props.getCurrentTournaments();
     }, []);
 
@@ -76,12 +80,8 @@ const Tournaments = props => {
                 }
             },
             {
-                Header: 'Time Control',
-                accessor: 'timecontrol',
-            },
-            {
                 Header: 'Sections',
-                accessor: 'sectionids',
+                accessor: 'section_ids',
                 Cell: ({cell: {value}}) => {
                     return (
                         <>{value.length}</>
@@ -89,11 +89,17 @@ const Tournaments = props => {
                 }
             },
             {
+                Header: 'Time Control',
+                accessor: 'time_control',
+            },
+            {
                 Header: 'Date',
                 accessor: 'date',
-                Cell: ({cell: {value}}) => {
+                Cell: props => {
+                    // console.log(props);
                     return (
-                        <Moment format="MM/DD/YYYY">{value}</Moment>
+                        <Moment format="MM/DD/YYYY">{props.original.start_date}</Moment> -
+                        <Moment format="MM/DD/YYYY">{props.original.end_date}</Moment>
                     );
                 },
                 sortType: (a, b) => {  // Date Comparison function
@@ -101,6 +107,10 @@ const Tournaments = props => {
                     const y = new Date(b);
                     return x === y ? 0 : x > y ? 1 : -1
                 }
+            },
+            {
+                Header: 'Status',
+                accessor: 'start_date',
             },
         ],
         []
@@ -119,19 +129,15 @@ const Tournaments = props => {
                 }}
                 anchor="left"
             >
-                <div className={classes.toolbar}>
-                    <Box component={Link} to={'/'}>
-                        <img className={classes.logo} src={require("../../img/kchess_logosvg.svg")} alt="KCHESS logo"/>
-                    </Box>
-                </div>
+                <DrawerHeader
+                    first_name={props.auth.user.first_name}
+                    last_name={props.auth.user.last_name}
+                    email={props.auth.user.email}
+                />
                 <Divider/>
-                <List>
-                    <ListItem button>
-                        <ListItemText primary={"Tournaments"}/>
-                    </ListItem>
-                </List>
-                <Divider/>
+                <Typography className={classes.center}>Welcome!</Typography>
             </Drawer>
+
             <main className={classes.content}>
                 <EnhancedTable
                     title={"Tournaments"}

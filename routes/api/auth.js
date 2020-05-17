@@ -27,7 +27,7 @@ router.get("/", auth, async (req, res) => {
 router.post(
   "/",
   [
-    check("email", "Please include a valid email").isEmail(),
+    // check("email", "Please include a valid email").isEmail(),
     check("password", "Password is required")
       .not()
       .isEmpty()
@@ -70,7 +70,7 @@ router.post(
         { expiresIn: config.get("tokenexpirationsecs") },  // TODO - What's the appropriate expire duration?
         (err, token) => {
           if (err) throw err;
-          res.json({ token }); // Set the response to the token
+          res.json({ token : token, user : user }); // Set the response to the token
         }
       );
 

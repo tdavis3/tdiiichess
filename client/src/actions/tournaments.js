@@ -12,6 +12,8 @@ import {
 export const getCurrentTournaments = () => async dispatch => {
     try {
         const res = await axios.get("/api/tournaments");
+        console.log(res);
+        console.log("Tyrone here");
         dispatch({type: GET_TOURNAMENTS, payload: res.data});
     } catch (err) {
         dispatch({
