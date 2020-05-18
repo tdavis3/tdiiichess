@@ -29,10 +29,12 @@ export const createPlayer = (section_id, formData) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
-        await axios.post(`/api/players/${section_id}`, formData, config);
-        const res = await axios.get(`/api/players/${section_id}`);
+        const res = await axios.post(`/api/players/${section_id}`, formData, config);
+        // const res = await axios.get(`/api/players/${section_id}`);
+
         // No need to add to redux state directly just get all the players again??  Which one is faster / better??
-        dispatch({type: GET_PLAYERS, payload: res.data});
+        // Well one should avoid multiple calls to server when able to avoid it
+        dispatch({type: CREATE_PLAYER, payload: res.data});
         // dispatch({ type: CREATE_PLAYER, payload: res.data });
         dispatch(setAlert("Player Added", "success"));
     } catch (err) {

@@ -50,8 +50,8 @@ const DrawerHeader = (props) => {
             <Grid container spacing={3}>
                 <Grid item xs={9}>
                     <Typography
-                        className={classes.user}>{props.first_name} {props.last_name}</Typography>
-                    <Typography className={classes.user}>{props.email}</Typography>
+                        className={classes.user} noWrap>{props.first_name} {props.last_name}</Typography>
+                    <Typography className={classes.user} noWrap>{props.email}</Typography>
                 </Grid>
                 <Grid item xs={3} className={classes.menu}>
                     <IconButton

@@ -74,7 +74,7 @@ router.post(
 
         const sectionFields = {};
 
-        sectionFields.tournamentid = req.params.tournament_id;
+        sectionFields.tournament_id = req.params.tournament_id;
         if (name) sectionFields.name = name;
         if (printing_name) sectionFields.printing_name = printing_name;
         if (event_type) sectionFields.event_type = event_type;

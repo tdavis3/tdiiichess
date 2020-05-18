@@ -16,16 +16,16 @@ import {createPlayer} from "../../actions/players";
 import {connect} from "react-redux";
 
 const initialPlayer = {
-    firstname: "",
-    lastname: "",
+    first_name: "",
+    last_name: "",
     suffix: "",
-    uscfid: "",
-    uscfregrating: "",
-    uscfblitzrating: "",
-    uscfquickrating: "",
+    uscf_id: "",
+    uscf_reg_rating: "",
+    uscf_blitz_rating: "",
+    uscf_quick_rating: "",
     state: "",
-    fideid: "",
-    fiderating: "",
+    fide_id: "",
+    fide_rating: "",
     expired: "",
     email: "",
     cell: "",
@@ -79,8 +79,8 @@ const AddPlayerDialog = props => {
                         label="First Name"
                         type="text"
                         fullWidth
-                        value={player.firstname}
-                        onChange={handleChange('firstname')}
+                        value={player.first_name}
+                        onChange={handleChange('first_name')}
                     />
                     <TextField
                         autoFocus
@@ -88,8 +88,8 @@ const AddPlayerDialog = props => {
                         label="Last Name"
                         type="text"
                         fullWidth
-                        value={player.lastname}
-                        onChange={handleChange('lastname')}
+                        value={player.last_name}
+                        onChange={handleChange('last_name')}
                     />
                     <TextField
                         autoFocus
@@ -97,8 +97,8 @@ const AddPlayerDialog = props => {
                         label="USCF ID"
                         type="text"
                         fullWidth
-                        value={player.uscfid}
-                        onChange={handleChange('uscfid')}
+                        value={player.uscf_id}
+                        onChange={handleChange('uscf_id')}
                     />
                     <TextField
                         autoFocus
@@ -106,8 +106,8 @@ const AddPlayerDialog = props => {
                         label="Rating"
                         type="text"
                         fullWidth
-                        value={player.uscfregrating}
-                        onChange={handleChange('uscfregrating')}
+                        value={player.uscf_reg_rating}
+                        onChange={handleChange('uscf_reg_rating')}
                     />
                     <TextField
                         autoFocus

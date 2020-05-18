@@ -1,7 +1,7 @@
 import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getCurrentSections, deleteSection} from "../../actions/sections";
+import {getCurrentSections} from "../../actions/sections";
 import {Link} from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import EnhancedTable from "../layout/EnhancedTable";
@@ -11,9 +11,13 @@ import Drawer from "@material-ui/core/Drawer";
 import DrawerHeader from "../layout/DrawerHeader";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import AddTournamentDialog from "../tournament-forms/AddTournamentDialog";
-import EditTournamentDialog from "../tournament-forms/EditTournamentDialog";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import {deletePlayer} from "../../actions/players";
+import Grid from "@material-ui/core/Grid";
+import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
 
 const drawerWidth = 260;
 
@@ -46,12 +50,22 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Sections = props => {
+const Dashboard = props => {
     useEffect(() => {
         props.getCurrentSections(props.location.state.tourney._id);
     }, []);
 
     const classes = useStyles();
+
+    // const [open, setOpen] = React.useState(false);
+    //
+    // const handleClickOpen = () => {
+    //     setOpen(true)
+    // };
+    //
+    // const handleClose = () => {
+    //     setOpen(false);
+    // };
 
     const columns = React.useMemo(
         () => [
@@ -70,11 +84,11 @@ const Sections = props => {
             },
             {
                 Header: 'Event Type',
-                accessor: 'eventtype',
+                accessor: 'event_type',
             },
             {
                 Header: 'Time Control',
-                accessor: 'timecontrol',
+                accessor: 'time_control',
             },
             {
                 Header: 'Players',
@@ -90,6 +104,8 @@ const Sections = props => {
     );
 
     const data = React.useMemo(() => props.sections.sections, [props.sections.sections]);
+
+    console.log(props.sections.sections);
 
     return (
         <div className={classes.root}>
@@ -111,18 +127,34 @@ const Sections = props => {
                 <Typography className={classes.center}>Tournament Info</Typography>
                 <Typography>{props.location.state.tourney.name}</Typography>
                 <Divider/>
-                <Typography className={classes.center}>Sections</Typography>
 
+                <Grid container spacing={2}>
+                    // Or textAlign: right
+                    <Grid item xs={5} style={{display: 'flex', alignItems: 'center', justifyContent: 'right'}}>
+                        <Typography className={classes.center}>Sections</Typography>
+                    </Grid>
+                    <Grid item xs={3}>
+                        <AddSectionDialog/>
+                    </Grid>
+                </Grid>
+
+                <List component="nav" aria-label="secondary mailbox folders">
+                    {props.sections.sections.map((section, index) => (
+                        <ListItem button>
+                            <ListItemText primary={section.name}/>
+                        </ListItem>
+                    ))}
+                </List>
             </Drawer>
 
             <main className={classes.content}>
                 <EnhancedTable
-                    title={'Sections'}
+                    title={'Players'}
                     parent_id={props.location.state.tourney._id}
                     columns={columns}
                     data={data}
-                    deleteaction={props.deleteSection}
-                    CreateDialog={AddSectionDialog}
+                    deleteaction={props.deletePlayer}
+                    CreateDialog={AddPlayerDialog}
                     EditDialog={EditSectionDialog}
                 />
             </main>
@@ -130,9 +162,9 @@ const Sections = props => {
     );
 };
 
-Sections.propTypes = {
+Dashboard.propTypes = {
     getCurrentSections: PropTypes.func.isRequired,
-    deleteSection: PropTypes.func.isRequired,
+    deletePlayer: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired
 };
@@ -144,5 +176,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     getCurrentSections,
-    deleteSection,
-})(Sections);
+    deletePlayer,
+})(Dashboard);

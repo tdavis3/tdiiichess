@@ -75,7 +75,7 @@ const Tournaments = props => {
                     const value = cell.value;
                     const tourney = cell.row.original;
                     return (
-                        <Link to={{pathname: "/tournaments/sections", state: {tourney}}}>
+                        <Link to={{pathname: "/tournaments/dashboard", state: {tourney}}}>
                             {value}
                         </Link>
                     );

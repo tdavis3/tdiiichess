@@ -41,11 +41,8 @@ const AddTournamentDialog = props => {
 
 
     const handleStartDateChange = (date) => {
-        console.log(date);
         setStartDateChange(date);
-        console.log(selectedStartDate);
         setTournament({...tournament, start_date: date});
-        console.log(tournament);
     };
 
     const handleEndDateChange = (date) => {
@@ -63,8 +60,6 @@ const AddTournamentDialog = props => {
     };
 
     const handleSave = event => {
-        console.log("Saving tournament");
-        console.log(tournament);
         createTournament(tournament);
         setTournament(initialTournament);
         setOpen(false);

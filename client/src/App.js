@@ -6,7 +6,6 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import SimpleAlert from "./components/layout/SimpleAlert";
 import Tournaments from "./components/dashboard/Tournaments";
-import Sections from "./components/dashboard/Sections";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Account from "./components/user/Account";
 import SectionDash from "./components/dashboard/SectionDash";
@@ -22,7 +21,7 @@ import setAuthToken from "./utils/setAuthToken";
 
 import "./App.css";
 import {makeStyles} from "@material-ui/core/styles";
-import NavbarPrivate from "./components/layout/NavbarPrivate";
+import Dashboard from "./components/dashboard/Dashboard";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -58,8 +57,6 @@ const App = () => {
                             <Route exact path="/" component={Navbar}/>
                             <Route exact path="/register" component={Navbar}/>
                             <Route exact path="/login" component={Navbar}/>
-                            {/*<PrivateRoute exact path="/tournaments" component={NavbarPrivate}/>*/}
-                            {/*<PrivateRoute exact path="/account" component={NavbarPrivate}/>*/}
                         </Switch>
                         <Route exact path="/" component={Landing}/>
                         <section>
@@ -70,8 +67,8 @@ const App = () => {
                                 <PrivateRoute exact path="/tournaments" component={Tournaments}/>
                                 <PrivateRoute
                                     exact
-                                    path="/tournaments/sections"
-                                    component={Sections}
+                                    path="/tournaments/dashboard"
+                                    component={Dashboard}
                                 />
                                 <PrivateRoute
                                     exact
