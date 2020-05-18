@@ -19,14 +19,14 @@ import {createSection} from "../../actions/sections";
 import {connect} from "react-redux";
 
 const initialSection = {
-    sectionname: "",
-    printingname: "",
-    eventtype: "Regular Swiss",
+    name: "",
+    printing_name: "",
+    event_type: "Regular Swiss",
     style: "Regular",
-    ratingtype: "Regular/Standard",
-    cointoss: "--",
-    timecontrol: "",
-    numberofrounds: 1
+    rating_type: "Regular/Standard",
+    coin_toss: "--",
+    time_control: "",
+    number_of_rounds: 1
 };
 
 const AddSectionDialog = props => {
@@ -76,8 +76,8 @@ const AddSectionDialog = props => {
                         label="Name"
                         type="text"
                         fullWidth
-                        value={section.sectionname}
-                        onChange={handleChange('sectionname')}
+                        value={section.name}
+                        onChange={handleChange('name')}
                     />
                     <TextField
                         autoFocus
@@ -85,8 +85,8 @@ const AddSectionDialog = props => {
                         label="Printing Name"
                         type="text"
                         fullWidth
-                        value={section.printingname}
-                        onChange={handleChange('printingname')}
+                        value={section.printing_name}
+                        onChange={handleChange('printing_name')}
                     />
                     <TextField
                         autoFocus
@@ -94,15 +94,15 @@ const AddSectionDialog = props => {
                         label="Time Control"
                         type="text"
                         fullWidth
-                        value={section.timecontrol}
-                        onChange={handleChange('timecontrol')}
+                        value={section.time_control}
+                        onChange={handleChange('time_control')}
                     />
-                    <InputLabel htmlFor="eventtype">Event Type</InputLabel>
+                    <InputLabel htmlFor="event_type">Event Type</InputLabel>
                     <Select
                         native
-                        value={section.eventtype}
-                        onChange={handleChange('eventtype')}
-                        input={<Input id="eventtype"/>}
+                        value={section.event_type}
+                        onChange={handleChange('event_type')}
+                        input={<Input id="event_type"/>}
                     >
                         <option value="Regular Swiss">Regular Swiss</option>
                         <option value="Round Robin">Round Robin</option>
@@ -119,24 +119,24 @@ const AddSectionDialog = props => {
                         <option value="Double">Double</option>
                     </Select>
 
-                    <InputLabel htmlFor="ratingtype">Rating Type</InputLabel>
+                    <InputLabel htmlFor="rating_type">Rating Type</InputLabel>
                     <Select
                         native
                         value={section.ratingtype}
-                        onChange={handleChange('ratingtype')}
-                        input={<Input id="ratingtype"/>}
+                        onChange={handleChange('rating_type')}
+                        input={<Input id="rating_type"/>}
                     >
                         <option value="Regular/Standard">Regular/Standard</option>
                         <option value="Quick/Rapid">Quick/Rapid</option>
                         <option value="Blitz">Blitz</option>
                     </Select>
 
-                    <InputLabel htmlFor="cointoss">Coin Toss</InputLabel>
+                    <InputLabel htmlFor="coin_toss">Coin Toss</InputLabel>
                     <Select
                         native
-                        value={section.cointoss}
-                        onChange={handleChange('cointoss')}
-                        input={<Input id="cointoss"/>}
+                        value={section.coin_toss}
+                        onChange={handleChange('coin_toss')}
+                        input={<Input id="coin_toss"/>}
                     >
                         <option value="--">--</option>
                         <option value="High">High</option>
@@ -149,8 +149,8 @@ const AddSectionDialog = props => {
                         label="Number or Rounds"
                         type="number"
                         fullWidth
-                        value={section.numberofrounds}
-                        onChange={handleChange('numberofrounds')}
+                        value={section.number_of_rounds}
+                        onChange={handleChange('number_of_rounds')}
                     />
 
                 </DialogContent>

@@ -33,10 +33,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
-    // appBar: {
-    //     width: `calc(100% - ${drawerWidth}px)`,
-    //     marginLeft: drawerWidth,
-    // },
     drawer: {
         width: drawerWidth,
         flexShrink: 0
@@ -113,9 +109,6 @@ const Tournaments = props => {
                 Header: 'Date',
                 accessor: 'date',
                 Cell: props => {
-                    // const formatted_start_date = <Moment
-                    //     format="MM/DD/YYYY">{props.cell.row.original.start_date}</Moment>;
-                    // const formatted_end_date = <Moment format="MM/DD/YYYY">{props.cell.row.original.end_date}</Moment>;
                     return (
                         <div>
                             <Moment

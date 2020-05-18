@@ -23,10 +23,8 @@ router.get("/:tournament_id", auth, async (req, res) => {
                 }
             })
             .select("section_ids");
-        console.log("Neri");
-        console.log(sections);
         if (sections) {
-            return res.json(sections.sectionids);
+            return res.json(sections.section_ids);
         }
 
         await res.status(404).json({msg: "No sections found in this tournament"});
@@ -44,7 +42,7 @@ router.post(
     [
         auth,
         [
-            check("section_name", "Section name is required")
+            check("name", "Section name is required")
                 .not()
                 .isEmpty(),
             check("event_type", "Event type is required")
@@ -64,7 +62,7 @@ router.post(
             return res.status(400).json({errors: errors.array()});
         }
         const {
-            section_name,
+            name,
             printing_name,
             event_type,
             style,
@@ -77,7 +75,7 @@ router.post(
         const sectionFields = {};
 
         sectionFields.tournamentid = req.params.tournament_id;
-        if (section_name) sectionFields.name = section_name;
+        if (name) sectionFields.name = name;
         if (printing_name) sectionFields.printing_name = printing_name;
         if (event_type) sectionFields.event_type = event_type;
         if (style) sectionFields.style = style;
@@ -119,7 +117,7 @@ router.post(
 // @access  Private (A token is needed)
 router.put("/:section_id", auth, async (req, res) => {
     const {
-        section_name,
+        name,
         printing_name,
         event_type,
         style,
@@ -131,7 +129,7 @@ router.put("/:section_id", auth, async (req, res) => {
 
     const sectionFields = {};
 
-    if (section_name) sectionFields.name = section_name;
+    if (name) sectionFields.name = name;
     if (printing_name) sectionFields.printing_name = printing_name;
     if (event_type) sectionFields.event_type = event_type;
     if (style) sectionFields.style = style;

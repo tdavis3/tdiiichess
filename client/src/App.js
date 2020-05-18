@@ -59,7 +59,7 @@ const App = () => {
                             <Route exact path="/register" component={Navbar}/>
                             <Route exact path="/login" component={Navbar}/>
                             {/*<PrivateRoute exact path="/tournaments" component={NavbarPrivate}/>*/}
-                            <PrivateRoute exact path="/account" component={NavbarPrivate}/>
+                            {/*<PrivateRoute exact path="/account" component={NavbarPrivate}/>*/}
                         </Switch>
                         <Route exact path="/" component={Landing}/>
                         <section>
