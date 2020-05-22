@@ -3,7 +3,7 @@ import {Link} from "react-router-dom";
 
 import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
-import {CssBaseline, Menu, MenuItem, IconButton, Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
+import {CssBaseline, Menu, MenuItem, IconButton, Box, Grid, Typography} from "@material-ui/core";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

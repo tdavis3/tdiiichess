@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 
+import {
+    Tooltip,
+    TextField,
+    Button,
+    IconButton,
+    Grid,
+    Dialog,
+    DialogTitle,
+    DialogActions,
+    DialogContent,
+    DialogContentText
+} from "@material-ui/core";
 import AddIcon from '@material-ui/icons/Add';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import Tooltip from '@material-ui/core/Tooltip';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
@@ -61,9 +62,7 @@ const AddPlayerDialog = ({createPlayer, parent_id}) => {
         setOpen(false);
     };
 
-    const handleSave = event => {
-        console.log("parent id here");
-        console.log(parent_id);
+    const handleSave = _ => {
         createPlayer(parent_id, player);
         setPlayer(initialPlayer);
         setOpen(false);

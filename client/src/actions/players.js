@@ -2,7 +2,6 @@ import axios from "axios";
 import {setAlert} from "./alert";
 import {
     GET_PLAYERS,
-    CREATE_PLAYER,
     EDIT_PLAYER,
     DELETE_PLAYER,
     PLAYERS_ERROR,

@@ -1,13 +1,16 @@
 import React from 'react'
 
+import {
+    Tooltip,
+    Toolbar,
+    Typography,
+    IconButton
+} from "@material-ui/core";
 import clsx from 'clsx';
 import DeleteIcon from '@material-ui/icons/Delete';
-import IconButton from '@material-ui/core/IconButton';
 import {lighten, makeStyles} from '@material-ui/core/styles';
+
 import PropTypes from 'prop-types';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
 
 
 const useToolbarStyles = makeStyles(theme => ({

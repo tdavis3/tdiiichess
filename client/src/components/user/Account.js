@@ -1,13 +1,10 @@
 import React from "react";
+
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {CssBaseline, Drawer, Divider, List, ListItem, ListItemText} from '@material-ui/core';
+
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Drawer from "@material-ui/core/Drawer";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const drawerWidth = 220;
 
@@ -35,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Account = props => {
+const Account = ({auth}) => {
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -58,7 +55,7 @@ const Account = props => {
                 <Divider/>
             </Drawer>
             <main className={classes.content}>
-                <h1>Hi {props.auth.isAuthenticated ? props.auth.user.firstname : null} </h1>
+                <h1>Hi {auth.isAuthenticated ? auth.user.firstname : null} </h1>
             </main>
         </div>
     );
