@@ -1,38 +1,37 @@
 import React, {useState} from 'react';
 
-import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
+
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-
-import {editPlayer} from "../../actions/players";
 import {connect} from "react-redux";
+import {editPlayer} from "../../actions/players";
 
-
-const EditPlayerDialog = ({editPlayer, selectededit}) => {
+const EditPlayerDialog = ({editPlayer, selected_edit}) => {
 
     const originalPlayer = {
-        first_name: selectededit.playerid.first_name,
-        last_name: selectededit.playerid.last_name,
-        suffix: selectededit.playerid.suffix,
-        uscf_id: selectededit.playerid.uscf_id,
-        uscf_reg_rating: selectededit.playerid.uscf_reg_rating,
-        uscf_blitz_rating: selectededit.playerid.uscf_blitz_rating,
-        uscf_quick_rating: selectededit.playerid.uscf_quick_rating,
-        state: selectededit.playerid.state,
-        fide_id: selectededit.playerid.fide_id,
-        fide_rating: selectededit.playerid.fide_rating,
-        expired: selectededit.playerid.expired,
-        email: selectededit.playerid.email,
-        cell: selectededit.playerid.cell,
-        dob: selectededit.playerid.dob
+        first_name: selected_edit.player_id.first_name,
+        last_name: selected_edit.player_id.last_name,
+        suffix: selected_edit.player_id.suffix,
+        uscf_id: selected_edit.player_id.uscf_id,
+        uscf_reg_rating: selected_edit.player_id.uscf_reg_rating,
+        uscf_blitz_rating: selected_edit.player_id.uscf_blitz_rating,
+        uscf_quick_rating: selected_edit.player_id.uscf_quick_rating,
+        state: selected_edit.player_id.state,
+        fide_id: selected_edit.player_id.fide_id,
+        fide_rating: selected_edit.player_id.fide_rating,
+        expired: selected_edit.player_id.expired,
+        email: selected_edit.player_id.email,
+        cell: selected_edit.player_id.cell,
+        dob: selected_edit.player_id.dob
     };
 
     const [player, setPlayer] = useState(originalPlayer);
@@ -50,7 +49,7 @@ const EditPlayerDialog = ({editPlayer, selectededit}) => {
     };
 
     const handleSave = event => {
-        editPlayer(selectededit.playerid._id, player);
+        editPlayer(selected_edit.player_id._id, player);
         setPlayer(originalPlayer);
         setOpen(false);
     };

@@ -1,25 +1,23 @@
 import React from 'react';
 
-import {makeStyles} from '@material-ui/core/styles';
-import Checkbox from '@material-ui/core/Checkbox';
-import MaUTable from '@material-ui/core/Table';
-import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-
-
 import {
-    useRowSelect,
-    useSortBy,
-    useTable,
-} from 'react-table';
+    Paper,
+    Checkbox,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TableSortLabel
+} from "@material-ui/core";
+import {makeStyles} from '@material-ui/core/styles';
+import MaUTable from '@material-ui/core/Table';
+import {useRowSelect, useSortBy, useTable} from 'react-table';
 
 import TableToolbar from "./TableToolbar";
+
+import PropTypes from 'prop-types';
+
 
 const IndeterminateCheckbox = React.forwardRef(
     ({indeterminate, ...rest}, ref) => {
@@ -47,9 +45,7 @@ const useStyles = makeStyles({
         width: '100%',
         borderSpacing: 0
     },
-    tr: {
-
-    }
+    tr: {}
 });
 
 const EnhancedTable = ({
@@ -59,7 +55,7 @@ const EnhancedTable = ({
                            deleteaction,
                            CreateDialog,
                            EditDialog,
-                           parent_id  // Not required
+                           parent_id
                        }) => {
     const {
         getTableProps,
@@ -139,7 +135,7 @@ const EnhancedTable = ({
                 numSelected={Object.keys(selectedRowIds).length}
                 deleteHandler={deleteHandler}
                 CreateDialog={<CreateDialog parent_id={parent_id}/>}
-                EditDialog={<EditDialog selectededit={getselectededitData()}/>}
+                EditDialog={<EditDialog selected_edit={getselectededitData()}/>}
             />
 
             <MaUTable stickyHeader aria-label="enhanced table" {...getTableProps()}>
@@ -184,7 +180,6 @@ const EnhancedTable = ({
             </MaUTable>
         </TableContainer>
         // </Paper>
-
     )
 };
 

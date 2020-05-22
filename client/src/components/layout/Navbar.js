@@ -1,9 +1,6 @@
 import React, {Fragment} from "react";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import {logout} from "../../actions/auth";
-import {makeStyles} from '@material-ui/core/styles';
+
 import {
     AppBar,
     Toolbar,
@@ -14,7 +11,12 @@ import {
     Menu,
     Box
 } from '@material-ui/core';
+import {makeStyles} from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {logout} from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -48,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Navbar = props => {
+const Navbar = ({logout, auth}) => {
 
     const classes = useStyles();
 
@@ -86,7 +88,7 @@ const Navbar = props => {
             <Button href="/account">
                 Account
             </Button>
-            <Button href="/" onClick={props.logout}>
+            <Button href="/" onClick={logout}>
                 Sign Out
             </Button>
         </Container>
@@ -116,7 +118,7 @@ const Navbar = props => {
             <MenuItem component={Link} to={'/account'}>
                 Account
             </MenuItem>
-            <MenuItem component={Link} to={'/'} onClick={props.logout}>
+            <MenuItem component={Link} to={'/'} onClick={logout}>
                 Sign Out
             </MenuItem>
         </Container>
@@ -132,9 +134,9 @@ const Navbar = props => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            {!props.auth.loading && (
+            {!auth.loading && (
                 <Fragment>
-                    {props.auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
+                    {auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
                 </Fragment>
             )}
         </Menu>
@@ -149,9 +151,9 @@ const Navbar = props => {
                     </Box>
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>
-                        {!props.auth.loading && (
+                        {!auth.loading && (
                             <Fragment>
-                                {props.auth.isAuthenticated ? authLinks : guestLinks}
+                                {auth.isAuthenticated ? authLinks : guestLinks}
                             </Fragment>
                         )}
                     </div>

@@ -1,34 +1,34 @@
 import React, {useState} from 'react';
 
-import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
+
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import Input from "@material-ui/core/Input";
 import {connect} from "react-redux";
 import {editSection} from "../../actions/sections";
 
-
-const EditSectionDialog = ({editSection, selectededit}) => {
+const EditSectionDialog = ({editSection, selected_edit}) => {
 
     const originalSection = {
-        sectionname: selectededit.name,
-        printingname: selectededit.printingname,
-        eventtype: selectededit.eventtype,
-        style: selectededit.style,
-        ratingtype: selectededit.ratingtype,
-        cointoss: selectededit.cointoss,
-        timecontrol: selectededit.timecontrol,
-        numberofrounds: selectededit.numberofrounds
+        name: selected_edit.name,
+        printing_name: selected_edit.printing_name,
+        event_type: selected_edit.event_type,
+        style: selected_edit.style,
+        rating_type: selected_edit.rating_type,
+        coin_toss: selected_edit.coin_toss,
+        time_control: selected_edit.time_control,
+        number_of_rounds: selected_edit.number_of_rounds
     };
 
     const [section, setSection] = useState(originalSection);
@@ -46,7 +46,7 @@ const EditSectionDialog = ({editSection, selectededit}) => {
     };
 
     const handleSave = event => {
-        editSection(selectededit._id, section);
+        editSection(selected_edit._id, section);
         setOpen(false);
     };
 
@@ -75,8 +75,8 @@ const EditSectionDialog = ({editSection, selectededit}) => {
                         label="Name"
                         type="text"
                         fullWidth
-                        value={section.sectionname}
-                        onChange={handleChange('sectionname')}
+                        value={section.name}
+                        onChange={handleChange('name')}
                     />
                     <TextField
                         autoFocus
@@ -84,8 +84,8 @@ const EditSectionDialog = ({editSection, selectededit}) => {
                         label="Printing Name"
                         type="text"
                         fullWidth
-                        value={section.printingname}
-                        onChange={handleChange('printingname')}
+                        value={section.printing_name}
+                        onChange={handleChange('printing_name')}
                     />
                     <TextField
                         autoFocus
@@ -93,15 +93,15 @@ const EditSectionDialog = ({editSection, selectededit}) => {
                         label="Time Control"
                         type="text"
                         fullWidth
-                        value={section.timecontrol}
-                        onChange={handleChange('timecontrol')}
+                        value={section.time_control}
+                        onChange={handleChange('time_control')}
                     />
-                    <InputLabel htmlFor="eventtype">Event Type</InputLabel>
+                    <InputLabel htmlFor="event_type">Event Type</InputLabel>
                     <Select
                         native
-                        value={section.eventtype}
-                        onChange={handleChange('eventtype')}
-                        input={<Input id="eventtype"/>}
+                        value={section.event_type}
+                        onChange={handleChange('event_type')}
+                        input={<Input id="event_type"/>}
                     >
                         <option value="Regular Swiss">Regular Swiss</option>
                         <option value="Round Robin">Round Robin</option>
@@ -118,24 +118,24 @@ const EditSectionDialog = ({editSection, selectededit}) => {
                         <option value="Double">Double</option>
                     </Select>
 
-                    <InputLabel htmlFor="ratingtype">Rating Type</InputLabel>
+                    <InputLabel htmlFor="rating_type">Rating Type</InputLabel>
                     <Select
                         native
-                        value={section.ratingtype}
-                        onChange={handleChange('ratingtype')}
-                        input={<Input id="ratingtype"/>}
+                        value={section.rating_type}
+                        onChange={handleChange('rating_type')}
+                        input={<Input id="rating_type"/>}
                     >
                         <option value="Regular/Standard">Regular/Standard</option>
                         <option value="Quick/Rapid">Quick/Rapid</option>
                         <option value="Blitz">Blitz</option>
                     </Select>
 
-                    <InputLabel htmlFor="cointoss">Coin Toss</InputLabel>
+                    <InputLabel htmlFor="coin_toss">Coin Toss</InputLabel>
                     <Select
                         native
-                        value={section.cointoss}
-                        onChange={handleChange('cointoss')}
-                        input={<Input id="cointoss"/>}
+                        value={section.coin_toss}
+                        onChange={handleChange('coin_toss')}
+                        input={<Input id="coin_toss"/>}
                     >
                         <option value="--">--</option>
                         <option value="High">High</option>
@@ -148,8 +148,8 @@ const EditSectionDialog = ({editSection, selectededit}) => {
                         label="Number or Rounds"
                         type="number"
                         fullWidth
-                        value={section.numberofrounds}
-                        onChange={handleChange('numberofrounds')}
+                        value={section.number_of_rounds}
+                        onChange={handleChange('number_of_rounds')}
                     />
 
                 </DialogContent>
@@ -170,6 +170,4 @@ EditSectionDialog.propTypes = {
     editSection: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
-
-export default connect(mapStateToProps, {editSection})(EditSectionDialog);
+export default connect(null, {editSection})(EditSectionDialog);

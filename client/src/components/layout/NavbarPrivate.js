@@ -1,9 +1,6 @@
 import React, {Fragment} from "react";
 import {Link} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import {logout} from "../../actions/auth";
-import {makeStyles} from '@material-ui/core/styles';
+
 import {
     AppBar,
     Toolbar,
@@ -15,6 +12,11 @@ import {
     Box
 } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import {makeStyles} from '@material-ui/core/styles';
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {logout} from "../../actions/auth";
 
 const drawerWidth = 220;
 
@@ -54,7 +56,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const NavbarPrivate = props => {
+const NavbarPrivate = ({logout, auth}) => {
 
     const classes = useStyles();
 
@@ -92,7 +94,7 @@ const NavbarPrivate = props => {
             <Button href="/account">
                 Account
             </Button>
-            <Button href="/" onClick={props.logout}>
+            <Button href="/" onClick={logout}>
                 Sign Out
             </Button>
         </Container>
@@ -122,7 +124,7 @@ const NavbarPrivate = props => {
             <MenuItem component={Link} to={'/account'}>
                 Account
             </MenuItem>
-            <MenuItem component={Link} to={'/'} onClick={props.logout}>
+            <MenuItem component={Link} to={'/'} onClick={logout}>
                 Sign Out
             </MenuItem>
         </Container>
@@ -138,9 +140,9 @@ const NavbarPrivate = props => {
             open={isMobileMenuOpen}
             onClose={handleMobileMenuClose}
         >
-            {!props.auth.loading && (
+            {!auth.loading && (
                 <Fragment>
-                    {props.auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
+                    {auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
                 </Fragment>
             )}
         </Menu>

@@ -5,7 +5,8 @@ import {
     CREATE_PLAYER,
     EDIT_PLAYER,
     DELETE_PLAYER,
-    PLAYERS_ERROR
+    PLAYERS_ERROR,
+    EDIT_SECTION
 } from "./types";
 
 // Get players in a specific section
@@ -30,10 +31,7 @@ export const createPlayer = (section_id, formData) => async dispatch => {
             }
         };
         const res = await axios.post(`/api/players/${section_id}`, formData, config);
-
-        // No need to add to redux state directly just get all the players again??  Which one is faster / better??
-        // Well one should avoid multiple calls to server when able to avoid it
-        dispatch({type: CREATE_PLAYER, payload: res.data});
+        dispatch({type: EDIT_SECTION, payload: res.data});
         dispatch(setAlert("Player Added", "success"));
     } catch (err) {
         dispatch({

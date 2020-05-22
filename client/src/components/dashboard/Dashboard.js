@@ -1,16 +1,9 @@
 import React, {useEffect, useState} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
 
-import CssBaseline from "@material-ui/core/CssBaseline";
+import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Drawer from "@material-ui/core/Drawer";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import {Box, Grid} from "@material-ui/core";
+import Moment from "react-moment";
+import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
@@ -19,9 +12,10 @@ import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
 import AddSectionDialog from "../tournament-forms/AddSectionDialog";
 import EditPlayerDialog from "../tournament-forms/EditPlayerDialog";
 
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
 import {deletePlayer} from "../../actions/players";
 import {getCurrentSections} from "../../actions/sections";
-import Moment from "react-moment";
 
 let moment = require('moment');
 moment().format();
@@ -65,7 +59,7 @@ const Dashboard = ({
 
     useEffect(() => {
         getCurrentSections(location.state.tourney._id);
-    }, [sections.loading]);
+    }, []);
 
     const classes = useStyles();
 
@@ -112,13 +106,14 @@ const Dashboard = ({
         const start = moment(start_date);
         const end = moment(end_date);
         return (
-            <div>
+            <Typography>
+                Date:{" "}
                 {
                     start.isSame(end) ? (<Moment format="MM/DD/YYYY">{start_date}</Moment>) :
                         (<Moment format="MM/DD/YYYY">{start_date}</Moment> -
                             <Moment format="MM/DD/YYYY">{end_date}</Moment>)
                 }
-            </div>
+            </Typography>
         );
     };
 
@@ -154,9 +149,9 @@ const Dashboard = ({
                 <Divider/>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Tournament Info</Typography>
-                    <Typography>{location.state.tourney.name}</Typography>
+                    <Typography>Name: {location.state.tourney.name}</Typography>
                     {date_renderer(location.state.tourney.start_date, location.state.tourney.end_date)}
-                    <Typography>{tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
+                    <Typography>Status: {tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
                 </Box>
                 <Divider/>
 
@@ -165,13 +160,17 @@ const Dashboard = ({
                         <Typography style={{fontSize: 18}}>Sections</Typography>
                     </Grid>
                     <Grid item xs={2}>
-                        <AddSectionDialog parent_id={location.state.tourney._id}/>
+                        <AddSectionDialog
+                            parent_id={location.state.tourney._id}
+                            tournament_time_control={location.state.tourney.time_control}
+                        />
                     </Grid>
                 </Grid>
 
                 <List component="nav" aria-label="secondary mailbox folders">
                     {sections.sections.map((section, index) => (
-                        <ListItem button data-index={index} key={index} onClick={handleSectionClick(index)}>
+                        <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
+                                  onClick={handleSectionClick(index)}>
                             <ListItemText primary={section.name}/>
                         </ListItem>
                     ))}

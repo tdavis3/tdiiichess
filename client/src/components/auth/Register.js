@@ -1,9 +1,6 @@
 import React, {useState} from "react";
 import {Redirect} from "react-router-dom";
-import {connect} from "react-redux";
-import {setAlert} from "../../actions/alert";
-import {register} from "../../actions/auth";
-import PropTypes from "prop-types";
+
 import {
     Avatar,
     Button,
@@ -12,9 +9,15 @@ import {
     Typography,
     Grid
 } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import CssBaseline from "@material-ui/core/CssBaseline";
 import {makeStyles} from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {register} from "../../actions/auth";
+import {setAlert} from "../../actions/alert";
+
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -36,7 +39,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Register = props => {
+const Register = ({setAlert, register, isAuthenticated}) => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState({
@@ -55,13 +58,13 @@ const Register = props => {
     const onSubmit = async e => {
         e.preventDefault();
         if (password !== confirmpassword) {
-            props.setAlert("Passwords do not match", "error");
+            setAlert("Passwords do not match", "error");
         } else {
-            props.register({first_name, last_name, email, password});
+            register({first_name, last_name, email, password});
         }
     };
 
-    if (props.isAuthenticated) {
+    if (isAuthenticated) {
         return <Redirect to="/tournaments"/>;
     }
 

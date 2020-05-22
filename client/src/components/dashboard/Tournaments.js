@@ -1,27 +1,23 @@
 import React, {useEffect} from "react";
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import Moment from "react-moment";
-import {setAlert} from "../../actions/alert";
-import {
-    deleteTournament,
-    getCurrentTournaments,
-} from "../../actions/tournaments";
 import {Link} from "react-router-dom";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import Moment from "react-moment";
+import {Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
+import {red, green, yellow} from '@material-ui/core/colors';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
+import Spinner from "../layout/Spinner";
+import DrawerHeader from "../layout/DrawerHeader";
 import EnhancedTable from "../layout/EnhancedTable";
 import AddTournamentDialog from '../tournament-forms/AddTournamentDialog';
 import EditTournamentDialog from "../tournament-forms/EditTournamentDialog";
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import DrawerHeader from "../layout/DrawerHeader";
-import Typography from "@material-ui/core/Typography";
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import {Box, Grid} from "@material-ui/core";
-import {red, green, yellow} from '@material-ui/core/colors';
-import Spinner from "../layout/Spinner";
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {setAlert} from "../../actions/alert";
+import {deleteTournament, getCurrentTournaments} from "../../actions/tournaments";
 
 let moment = require('moment');
 moment().format();

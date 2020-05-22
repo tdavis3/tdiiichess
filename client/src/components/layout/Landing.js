@@ -1,12 +1,14 @@
 import React, {Fragment} from "react";
 import {Redirect} from "react-router-dom";
-import {connect} from "react-redux";
-import PropTypes from "prop-types";
-import {Button, Container, Grid} from '@material-ui/core';
+
 import {makeStyles} from '@material-ui/core/styles';
+import {Button, Container, Grid} from '@material-ui/core';
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
 
 const useStyles = makeStyles({
-    autho: {
+    auth: {
         margin: '20px'
     },
     card: {
@@ -16,10 +18,10 @@ const useStyles = makeStyles({
     },
 });
 
-const Landing = props => {
+const Landing = ({isAuthenticated}) => {
     const classes = useStyles();
 
-    if (props.isAuthenticated) {
+    if (isAuthenticated) {
         // Won't allow you to go to homepage if logged in
         return <Redirect to="/tournaments"/>;
     }
@@ -34,10 +36,10 @@ const Landing = props => {
                         It seeks to make any tournament director's job super easy.
                     </p>
                     <p>
-                        <Button className={classes.autho} variant={'outlined'} size={'large'} href={'/register'}>
+                        <Button className={classes.auth} variant={'outlined'} size={'large'} href={'/register'}>
                             Register
                         </Button>
-                        <Button className={classes.autho} variant={'outlined'} size={'large'} href={'/login'}>
+                        <Button className={classes.auth} variant={'outlined'} size={'large'} href={'/login'}>
                             Login
                         </Button>
                     </p>

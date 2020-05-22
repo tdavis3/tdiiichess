@@ -1,16 +1,14 @@
 import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
+import {Link} from "react-router-dom";
+
 import {makeStyles} from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
+import {CssBaseline, Menu, MenuItem, IconButton, Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
+
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {Box, MenuItem} from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import MenuIcon from '@material-ui/icons/Menu';
-import Menu from "@material-ui/core/Menu";
-import IconButton from "@material-ui/core/IconButton";
-import {Link} from "react-router-dom";
 import {logout} from "../../actions/auth";
+
 
 const useStyles = makeStyles(theme => ({
     root: {

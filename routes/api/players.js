@@ -108,7 +108,7 @@ router.post("/:section_id", auth, async (req, res) => {
             const player = new Player(playerFields);
             const savedplayer = await player.save();
 
-            const updatedsection = await Section.findByIdAndUpdate(
+            const updated_section = await Section.findByIdAndUpdate(
                 req.params.section_id,
                 {
                     $push: {
@@ -118,10 +118,10 @@ router.post("/:section_id", auth, async (req, res) => {
                             withdrew: false
                         }
                     }
-                }
-            );
-            if (savedplayer && updatedsection) {
-                return res.json(savedplayer);
+                }, {new: true}
+            ).populate("players.player_id");
+            if (savedplayer && updated_section) {
+                return res.json(updated_section);
             }
             res.status(404).json({errors: "This section does not exist"});
         } catch (err) {

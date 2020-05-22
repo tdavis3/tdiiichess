@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
-import Login from "./components/auth/Login";
 import SimpleAlert from "./components/layout/SimpleAlert";
 import Tournaments from "./components/dashboard/Tournaments";
 import PrivateRoute from "./components/routing/PrivateRoute";
@@ -33,9 +33,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'column',
     },
     main: {
-        // flex: '1 0 auto',
-        flexGrow: 1,
-        // width: '100%'
+        flexGrow: 1
     }
 }));
 
@@ -71,12 +69,12 @@ const App = () => {
                                 />
                                 <PrivateRoute
                                     exact
-                                    path="/tournaments/sections/resultpairings"
+                                    path="/tournaments/dashboard/resultpairings"
                                     component={ResultPairings}
                                 />
                                 <PrivateRoute
                                     exact
-                                    path="/tournaments/sections/standings"
+                                    path="/tournaments/dashboard/standings"
                                     component={Standings}
                                 />
                                 <PrivateRoute exact path="/account" component={Account}/>

@@ -1,9 +1,6 @@
 import React, {useState} from "react";
 import {Redirect} from "react-router-dom";
-import {connect} from "react-redux";
-import {login} from "../../actions/auth";
-import PropTypes from "prop-types";
-import {makeStyles} from '@material-ui/core/styles';
+
 import {
     Avatar,
     Button,
@@ -11,8 +8,13 @@ import {
     TextField,
     Typography
 } from '@material-ui/core';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import {makeStyles} from '@material-ui/core/styles';
 import CssBaseline from "@material-ui/core/CssBaseline";
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {login} from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
     paper: {

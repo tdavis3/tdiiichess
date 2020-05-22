@@ -1,37 +1,39 @@
 import React, {Fragment, useState} from 'react';
 
+import Grid from '@material-ui/core/Grid';
+import Tooltip from '@material-ui/core/Tooltip';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Select from "@material-ui/core/Select";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
+
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-
-import {createSection} from "../../actions/sections";
 import {connect} from "react-redux";
-import Grid from "@material-ui/core/Grid";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import {createSection} from "../../actions/sections";
 
-const initialSection = {
-    name: "",
-    printing_name: "",
-    event_type: "Regular Swiss",
-    style: "Regular",
-    rating_type: "Regular/Standard",
-    coin_toss: "--",
-    time_control: "",
-    number_of_rounds: 1
-};
 
-const AddSectionDialog = ({createSection, parent_id}) => {
-    const [section, setSection] = useState(initialSection);
+const AddSectionDialog = ({createSection, parent_id, tournament_time_control}) => {
+
+    const initial_section = {
+        name: "",
+        printing_name: "",
+        event_type: "Regular Swiss",
+        style: "Regular",
+        rating_type: "Regular/Standard",
+        coin_toss: "--",
+        time_control: tournament_time_control,
+        number_of_rounds: 1
+    };
+
+    const [section, setSection] = useState(initial_section);
 
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
@@ -47,7 +49,7 @@ const AddSectionDialog = ({createSection, parent_id}) => {
 
     const handleSave = event => {
         createSection(parent_id, section);
-        setSection(initialSection);
+        setSection(initial_section);
         setOpen(false);
     };
 

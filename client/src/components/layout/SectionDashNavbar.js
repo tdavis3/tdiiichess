@@ -38,7 +38,7 @@ const SectionDashNavbar = props => {
                     variant="body2"
                     // href={section.url}
                     to={{
-                        pathname: "/tournaments/sections/dashboard",
+                        pathname: "/tournaments/dashboard/dashboard",
                         state: {section}
                     }}
                     className={classes.toolbarLink}
@@ -50,7 +50,7 @@ const SectionDashNavbar = props => {
                     noWrap
                     variant="body2"
                     to={{
-                        pathname: "/tournaments/sections/resultpairings",
+                        pathname: "/tournaments/dashboard/resultpairings",
                         state: {section}
                     }}
                     className={classes.toolbarLink}
@@ -62,7 +62,7 @@ const SectionDashNavbar = props => {
                     noWrap
                     variant="body2"
                     to={{
-                        pathname: "/tournaments/sections/standings",
+                        pathname: "/tournaments/dashboard/standings",
                         state: {section}
                     }}
                     className={classes.toolbarLink}

@@ -1,33 +1,30 @@
 import React, {useState} from 'react';
 
-import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import IconButton from '@material-ui/core/IconButton';
+
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Tooltip from '@material-ui/core/Tooltip';
 import {connect} from "react-redux";
 import {editTournament} from "../../actions/tournaments";
 
+const EditTournamentDialog = ({editTournament, selected_edit}) => {
 
-const EditTournamentDialog = ({editTournament, selectededit}) => {
-
-
-    const originalTournament = {
-        tournamentname: selectededit.name,
-        printingname: selectededit.printingname,
-        timecontrol: selectededit.timecontrol
+    const initial_tournament = {
+        name: selected_edit.name,
+        printing_name: selected_edit.printing_name,
+        time_control: selected_edit.time_control
     };
 
-    const [tournament, setTournament] = useState(originalTournament);
+    const [tournament, setTournament] = useState(initial_tournament);
 
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -39,8 +36,9 @@ const EditTournamentDialog = ({editTournament, selectededit}) => {
     };
 
     const handleSave = event => {
-        editTournament(selectededit._id, tournament);
+        editTournament(selected_edit._id, tournament);
         setOpen(false);
+        setTournament(initial_tournament);
     };
 
     const handleChange = name => ({target: {value}}) => {
@@ -68,8 +66,8 @@ const EditTournamentDialog = ({editTournament, selectededit}) => {
                         label="Name"
                         type="text"
                         fullWidth
-                        value={tournament.tournamentname}
-                        onChange={handleChange('tournamentname')}
+                        value={tournament.name}
+                        onChange={handleChange('name')}
                     />
                     <TextField
                         autoFocus
@@ -77,8 +75,8 @@ const EditTournamentDialog = ({editTournament, selectededit}) => {
                         label="Printing Name"
                         type="text"
                         fullWidth
-                        value={tournament.printingname}
-                        onChange={handleChange('printingname')}
+                        value={tournament.printing_name}
+                        onChange={handleChange('printing_name')}
                     />
                     <TextField
                         autoFocus
@@ -86,8 +84,8 @@ const EditTournamentDialog = ({editTournament, selectededit}) => {
                         label="Time Control"
                         type="text"
                         fullWidth
-                        value={tournament.timecontrol}
-                        onChange={handleChange('timecontrol')}
+                        value={tournament.time_control}
+                        onChange={handleChange('time_control')}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -107,6 +105,4 @@ EditTournamentDialog.propTypes = {
     editTournament: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
-
-export default connect(mapStateToProps, {editTournament})(EditTournamentDialog);
+export default connect(null, {editTournament})(EditTournamentDialog);
