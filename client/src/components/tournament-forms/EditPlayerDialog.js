@@ -19,16 +19,16 @@ import {connect} from "react-redux";
 const EditPlayerDialog = ({editPlayer, selectededit}) => {
 
     const originalPlayer = {
-        firstname: selectededit.playerid.firstname,
-        lastname: selectededit.playerid.lastname,
+        first_name: selectededit.playerid.first_name,
+        last_name: selectededit.playerid.last_name,
         suffix: selectededit.playerid.suffix,
-        uscfid: selectededit.playerid.uscfid,
-        uscfregrating: selectededit.playerid.uscfregrating,
-        uscfblitzrating: selectededit.playerid.uscfblitzrating,
-        uscfquickrating: selectededit.playerid.uscfquickrating,
+        uscf_id: selectededit.playerid.uscf_id,
+        uscf_reg_rating: selectededit.playerid.uscf_reg_rating,
+        uscf_blitz_rating: selectededit.playerid.uscf_blitz_rating,
+        uscf_quick_rating: selectededit.playerid.uscf_quick_rating,
         state: selectededit.playerid.state,
-        fideid: selectededit.playerid.fideid,
-        fiderating: selectededit.playerid.fiderating,
+        fide_id: selectededit.playerid.fide_id,
+        fide_rating: selectededit.playerid.fide_rating,
         expired: selectededit.playerid.expired,
         email: selectededit.playerid.email,
         cell: selectededit.playerid.cell,
@@ -80,8 +80,8 @@ const EditPlayerDialog = ({editPlayer, selectededit}) => {
                         label="First Name"
                         type="text"
                         fullWidth
-                        value={player.firstname}
-                        onChange={handleChange('firstname')}
+                        value={player.first_name}
+                        onChange={handleChange('first_name')}
                     />
                     <TextField
                         autoFocus
@@ -89,8 +89,8 @@ const EditPlayerDialog = ({editPlayer, selectededit}) => {
                         label="Last Name"
                         type="text"
                         fullWidth
-                        value={player.lastname}
-                        onChange={handleChange('lastname')}
+                        value={player.last_name}
+                        onChange={handleChange('last_name')}
                     />
                     <TextField
                         autoFocus
@@ -98,8 +98,8 @@ const EditPlayerDialog = ({editPlayer, selectededit}) => {
                         label="USCF ID"
                         type="text"
                         fullWidth
-                        value={player.uscfid}
-                        onChange={handleChange('uscfid')}
+                        value={player.uscf_id}
+                        onChange={handleChange('uscf_id')}
                     />
                     <TextField
                         autoFocus
@@ -107,8 +107,8 @@ const EditPlayerDialog = ({editPlayer, selectededit}) => {
                         label="Rating"
                         type="text"
                         fullWidth
-                        value={player.uscfregrating}
-                        onChange={handleChange('uscfregrating')}
+                        value={player.uscf_reg_rating}
+                        onChange={handleChange('uscf_reg_rating')}
                     />
                     <TextField
                         autoFocus

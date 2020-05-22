@@ -8,9 +8,11 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  GET_TOURNAMENTS,
   CLEAR_TOURNAMENTS
 } from "./types";
 import { setAlert } from "./alert";
+import { getCurrentTournaments } from "./tournaments"
 import setAuthToken from "../utils/setAuthToken";
 
 export const loadUser = () => async dispatch => {
@@ -68,7 +70,7 @@ export const login = (email, password) => async dispatch => {
   try {
     const res = await axios.post("/api/auth", body, config);
     dispatch({ type: LOGIN_SUCCESS, payload: res.data });
-    // dispatch(loadUser());
+    dispatch(getCurrentTournaments());
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
@@ -81,6 +83,6 @@ export const login = (email, password) => async dispatch => {
 // Logout
 export const logout = () => async dispatch => {
   dispatch({ type: CLEAR_USER });
-  dispatch({ type: CLEAR_TOURNAMENTS });
+  // dispatch({ type: CLEAR_TOURNAMENTS });
   dispatch({ type: LOGOUT });
 };

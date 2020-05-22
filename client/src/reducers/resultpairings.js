@@ -2,7 +2,7 @@ import {
     GENERATE_PAIRINGS,
     GET_PAIRINGS,
     DELETE_PAIRING,
-    UPDATE_RESULT,
+    // UPDATE_RESULT,
     PAIRING_ERROR
 } from "../actions/types";
 

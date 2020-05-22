@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 
-import AddIcon from '@material-ui/icons/Add';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -31,9 +30,8 @@ const initialSection = {
     number_of_rounds: 1
 };
 
-const AddSectionDialog = props => {
+const AddSectionDialog = ({createSection, parent_id}) => {
     const [section, setSection] = useState(initialSection);
-    const {createSection, parent_id} = props;
 
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
@@ -181,6 +179,4 @@ AddSectionDialog.propTypes = {
     createSection: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({});
-
-export default connect(mapStateToProps, {createSection})(AddSectionDialog);
+export default connect(null, {createSection})(AddSectionDialog);

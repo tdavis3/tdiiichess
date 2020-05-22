@@ -12,8 +12,10 @@ import {
 export const getCurrentTournaments = () => async dispatch => {
     try {
         const res = await axios.get("/api/tournaments");
+        console.log("passed here");
         dispatch({type: GET_TOURNAMENTS, payload: res.data});
     } catch (err) {
+        console.log(err);
         dispatch({
             type: TOURNAMENTS_ERROR,
             payload: {msg: err.response.statusText, status: err.response.status}

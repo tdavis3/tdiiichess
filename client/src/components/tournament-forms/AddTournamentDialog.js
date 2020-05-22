@@ -1,24 +1,24 @@
 import React, {useState} from 'react'
 
-import AddIcon from '@material-ui/icons/Add'
-import Button from '@material-ui/core/Button'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import IconButton from '@material-ui/core/IconButton'
-import PropTypes from 'prop-types'
-import TextField from '@material-ui/core/TextField'
-import Tooltip from '@material-ui/core/Tooltip'
-import {connect} from 'react-redux';
-import {createTournament} from '../../actions/tournaments';
+import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
-import Typography from "@material-ui/core/Typography";
-import MenuIcon from "@material-ui/icons/Menu";
+
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {createTournament} from '../../actions/tournaments';
+
 
 const initialTournament = {
     name: "",
@@ -38,7 +38,6 @@ const AddTournamentDialog = props => {
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
     const [open, setOpen] = React.useState(false);
-
 
     const handleStartDateChange = (date) => {
         setStartDateChange(date);

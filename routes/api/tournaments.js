@@ -9,17 +9,18 @@ const {check, validationResult} = require("express-validator");
 // @access  Private (A token is needed)
 router.get("/", auth, async (req, res) => {
     try {
+        // console.log("user id here");
+        // console.log(req.user.id);
         // Find all tournaments of the logged in user and return specified fields
         const tournaments = await Tournament.find({user_id: req.user.id}).sort({
             date: -1
         });
+        // console.log(tournaments);
         if (tournaments === []) {
             return res
                 .status(400)
                 .json({msg: "There are no tournaments for this user"});
         }
-        // console.log("get tournaments");
-        // console.log(tournaments);
         await res.json(tournaments);
     } catch (err) {
         console.error(err.message);

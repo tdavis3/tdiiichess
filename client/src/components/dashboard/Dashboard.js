@@ -1,23 +1,29 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getCurrentSections} from "../../actions/sections";
 import {Link} from "react-router-dom";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
-import EnhancedTable from "../layout/EnhancedTable";
-import AddSectionDialog from "../tournament-forms/AddSectionDialog";
-import EditSectionDialog from "../tournament-forms/EditSectionDialog";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 import Drawer from "@material-ui/core/Drawer";
-import DrawerHeader from "../layout/DrawerHeader";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import makeStyles from "@material-ui/core/styles/makeStyles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import {deletePlayer} from "../../actions/players";
 import Grid from "@material-ui/core/Grid";
+
+import DrawerHeader from "../layout/DrawerHeader";
+import EnhancedTable from "../layout/EnhancedTable";
 import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
+import AddSectionDialog from "../tournament-forms/AddSectionDialog";
+import EditPlayerDialog from "../tournament-forms/EditPlayerDialog";
+
+import {deletePlayer} from "../../actions/players";
+import {getCurrentSections} from "../../actions/sections";
+import Spinner from "../layout/Spinner";
+import DonutLargeIcon from "@material-ui/icons/DonutLarge";
+import {yellow} from "@material-ui/core/colors";
 
 const drawerWidth = 260;
 
@@ -50,62 +56,60 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Dashboard = props => {
+const Dashboard = ({
+                       getCurrentSections,
+                       deletePlayer,
+                       auth,
+                       sections,
+                       location
+                   }) => {
+
     useEffect(() => {
-        props.getCurrentSections(props.location.state.tourney._id);
-    }, []);
+        getCurrentSections(location.state.tourney._id);
+    }, [sections.loading]);
 
     const classes = useStyles();
 
-    // const [open, setOpen] = React.useState(false);
-    //
-    // const handleClickOpen = () => {
-    //     setOpen(true)
-    // };
-    //
-    // const handleClose = () => {
-    //     setOpen(false);
-    // };
+    const [sectionDisplayedIndex, setsectionDisplayedIndex] = React.useState(0);
+
+    const handleSectionClick = (index) => () => {
+        if (index !== sectionDisplayedIndex) {  // Prevent unnecessary re-renders
+            setsectionDisplayedIndex(index);
+        }
+    };
 
     const columns = React.useMemo(
         () => [
             {
-                Header: 'Name',
-                accessor: 'name',
-                Cell: ({cell}) => {
-                    const value = cell.value;
-                    const section = cell.row.original;
+                Header: 'Player',
+                accessor: 'player_id',
+                Cell: ({cell: {value: {first_name, last_name, suffix, uscf_id, uscf_reg_rating}}}) => {
                     return (
-                        <Link to={{pathname: "/tournaments/sections/dashboard", state: {section}}}>
-                            {value}
-                        </Link>
+                        <Grid container spacing={1}>
+                            <Grid item xs={10}>
+                                <Typography>{first_name.concat(" ", last_name, " ", suffix)}</Typography>
+                            </Grid>
+                            <Grid item xs={5}>
+                                <Typography>{uscf_id}</Typography>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Typography>{uscf_reg_rating}</Typography>
+                            </Grid>
+                        </Grid>
                     );
                 }
-            },
-            {
-                Header: 'Event Type',
-                accessor: 'event_type',
-            },
-            {
-                Header: 'Time Control',
-                accessor: 'time_control',
-            },
-            {
-                Header: 'Players',
-                accessor: 'players',
-                Cell: ({cell: {value}}) => {
-                    return (
-                        <>{value.length}</>
-                    );
-                }
-            },
+            }
         ],
         []
     );
 
-    const data = React.useMemo(() => props.sections.sections, [props.sections.sections]);
-
-    console.log(props.sections.sections);
+    const data = React.useMemo(() => {
+        if (sections.loading) {
+            return [];
+        } else {
+            return sections.sections[sectionDisplayedIndex].players;
+        }
+    }, [sections.loading, sections.sections]);
 
     return (
         <div className={classes.root}>
@@ -119,44 +123,45 @@ const Dashboard = props => {
                 anchor="left"
             >
                 <DrawerHeader
-                    first_name={props.auth.user.first_name}
-                    last_name={props.auth.user.last_name}
-                    email={props.auth.user.email}
+                    first_name={auth.user.first_name}
+                    last_name={auth.user.last_name}
+                    email={auth.user.email}
                 />
                 <Divider/>
                 <Typography className={classes.center}>Tournament Info</Typography>
-                <Typography>{props.location.state.tourney.name}</Typography>
+                <Typography>{location.state.tourney.name}</Typography>
                 <Divider/>
 
                 <Grid container spacing={2}>
-                    // Or textAlign: right
+                    {/* TODO or textAlign: right */}
                     <Grid item xs={5} style={{display: 'flex', alignItems: 'center', justifyContent: 'right'}}>
                         <Typography className={classes.center}>Sections</Typography>
                     </Grid>
                     <Grid item xs={3}>
-                        <AddSectionDialog/>
+                        <AddSectionDialog parent_id={location.state.tourney._id}/>
                     </Grid>
                 </Grid>
 
                 <List component="nav" aria-label="secondary mailbox folders">
-                    {props.sections.sections.map((section, index) => (
-                        <ListItem button>
+                    {sections.sections.map((section, index) => (
+                        <ListItem button data-index={index} key={index} onClick={handleSectionClick(index)}>
                             <ListItemText primary={section.name}/>
                         </ListItem>
                     ))}
                 </List>
             </Drawer>
-
             <main className={classes.content}>
-                <EnhancedTable
-                    title={'Players'}
-                    parent_id={props.location.state.tourney._id}
-                    columns={columns}
-                    data={data}
-                    deleteaction={props.deletePlayer}
-                    CreateDialog={AddPlayerDialog}
-                    EditDialog={EditSectionDialog}
-                />
+                {sections.loading ? (<Spinner/>) : (
+                    <EnhancedTable
+                        title={'Players'}
+                        parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
+                        columns={columns}
+                        data={data}
+                        deleteaction={deletePlayer}
+                        CreateDialog={AddPlayerDialog}
+                        EditDialog={EditPlayerDialog}
+                    />
+                )}
             </main>
         </div>
     );

@@ -8,7 +8,6 @@ import SimpleAlert from "./components/layout/SimpleAlert";
 import Tournaments from "./components/dashboard/Tournaments";
 import PrivateRoute from "./components/routing/PrivateRoute";
 import Account from "./components/user/Account";
-import SectionDash from "./components/dashboard/SectionDash";
 import ResultPairings from "./components/dashboard/ResultPairings";
 import Standings from "./components/dashboard/Standings";
 import Footer from "./components/layout/Footer";
@@ -69,11 +68,6 @@ const App = () => {
                                     exact
                                     path="/tournaments/dashboard"
                                     component={Dashboard}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path="/tournaments/sections/dashboard"
-                                    component={SectionDash}
                                 />
                                 <PrivateRoute
                                     exact

@@ -1,10 +1,10 @@
 import axios from "axios";
-import {setAlert} from "./alert";
+// import {setAlert} from "./alert";
 import {
-    GENERATE_PAIRINGS,
+    // GENERATE_PAIRINGS,
     GET_PAIRINGS,
-    DELETE_PAIRING,
-    UPDATE_RESULT,
+    // DELETE_PAIRING,
+    // UPDATE_RESULT,
     PAIRING_ERROR
 } from "./types";
 

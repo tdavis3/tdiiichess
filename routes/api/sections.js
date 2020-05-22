@@ -23,6 +23,8 @@ router.get("/:tournament_id", auth, async (req, res) => {
                 }
             })
             .select("section_ids");
+        // console.log("print sections api")
+        // console.log(sections.section_ids[0].players);
         if (sections) {
             return res.json(sections.section_ids);
         }

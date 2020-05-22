@@ -23,6 +23,7 @@ import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import {Grid} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
+import Spinner from "../layout/Spinner";
 
 let moment = require('moment');
 moment().format();
@@ -58,10 +59,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Tournaments = props => {
+const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament}) => {
     useEffect(() => {
-        // store.dispatch(loadUser());
-        props.getCurrentTournaments();
+        getCurrentTournaments();
     }, []);
 
     const classes = useStyles();
@@ -71,9 +71,8 @@ const Tournaments = props => {
             {
                 Header: 'Name',
                 accessor: 'name',
-                Cell: ({cell}) => {
-                    const value = cell.value;
-                    const tourney = cell.row.original;
+                Cell: ({cell: {value, row}}) => {
+                    const tourney = row.original;
                     return (
                         <Link to={{pathname: "/tournaments/dashboard", state: {tourney}}}>
                             {value}
@@ -108,16 +107,26 @@ const Tournaments = props => {
             {
                 Header: 'Date',
                 accessor: 'date',
-                Cell: props => {
-                    return (
-                        <div>
-                            <Moment
-                                format="MM/DD/YYYY">{props.cell.row.original.start_date}</Moment> - <Moment
-                            format="MM/DD/YYYY">{props.cell.row.original.end_date}</Moment>
-                        </div>
-                    );
+                Cell: ({cell: {row: {original: {start_date, end_date}}}}) => {
+                    const start = moment(start_date);
+                    const end = moment(end_date);
+                    if (start.isSame(end)) {
+                        return (
+                            <div>
+                                <Moment
+                                    format="MM/DD/YYYY">{start_date}</Moment>
+                            </div>
+                        );
+                    } else {
+                        return (
+                            <div>
+                                <Moment
+                                    format="MM/DD/YYYY">{start_date}</Moment> - <Moment
+                                format="MM/DD/YYYY">{end_date}</Moment>
+                            </div>
+                        );
+                    }
                 },
-
                 sortType: (a, b) => {  // Date Comparison function
                     const x = new Date(a);
                     const y = new Date(b);
@@ -127,11 +136,11 @@ const Tournaments = props => {
             {
                 Header: 'Status',
                 accessor: 'start_date',
-                Cell: props => {
+                Cell: ({cell}) => {
                     // TODO Do this calculation server-side; Add "status field" to Tournament model
                     const today = moment();
-                    const start = moment(props.cell.row.original.start_date);
-                    const end = moment(props.cell.row.original.end_date);
+                    const start = moment(cell.row.original.start_date);
+                    const end = moment(cell.row.original.end_date);
                     if (today.isBefore(start)) {
                         return (
                             <Grid container spacing={1}>
@@ -154,7 +163,6 @@ const Tournaments = props => {
                                 </Grid>
                             </Grid>
                         );
-
                     } else if (today.isAfter(end)) {
                         return (
                             <Grid container spacing={1}>
@@ -166,7 +174,7 @@ const Tournaments = props => {
                                 </Grid>
                             </Grid>);
                     } else {
-                        return null
+                        return null;
                     }
                 },
             },
@@ -174,7 +182,13 @@ const Tournaments = props => {
         []
     );
 
-    const data = React.useMemo(() => props.tournaments.tournaments, [props.tournaments.tournaments]);
+    const data = React.useMemo(() => {
+        if (tournaments.loading) {
+            return [];
+        } else {
+            return tournaments.tournaments;
+        }
+    }, [tournaments.loading, tournaments.tournaments]);
 
     return (
         <div className={classes.root}>
@@ -188,23 +202,25 @@ const Tournaments = props => {
                 anchor="left"
             >
                 <DrawerHeader
-                    first_name={props.auth.user.first_name}
-                    last_name={props.auth.user.last_name}
-                    email={props.auth.user.email}
+                    first_name={auth.user.first_name}
+                    last_name={auth.user.last_name}
+                    email={auth.user.email}
                 />
                 <Divider/>
                 <Typography className={classes.center}>Welcome!</Typography>
             </Drawer>
 
             <main className={classes.content}>
-                <EnhancedTable
-                    title={"Tournaments"}
-                    columns={columns}
-                    data={data}
-                    deleteaction={props.deleteTournament}
-                    CreateDialog={AddTournamentDialog}
-                    EditDialog={EditTournamentDialog}
-                />
+                {tournaments.loading ? (<Spinner/>) : (
+                    <EnhancedTable
+                        title={"Tournaments"}
+                        columns={columns}
+                        data={data}
+                        deleteaction={deleteTournament}
+                        CreateDialog={AddTournamentDialog}
+                        EditDialog={EditTournamentDialog}
+                    />
+                )}
             </main>
         </div>
     );
