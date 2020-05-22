@@ -72,65 +72,6 @@ const SectionDashNavbar = props => {
             </Toolbar>
         </Fragment>
     );
-
-    // return (
-    //     <div className="nav-scroller bg-white shadow-sm">
-    //         <nav className="nav nav-underline justify-content-between">
-    //             <div>
-    //                 <Link
-    //                     to={{
-    //                         pathname: "/tournaments/sections/dashboard",
-    //                         state: {section}
-    //                     }}
-    //                     className="nav-link active"
-    //                 >
-    //                     Section Dashboard
-    //                 </Link>
-    //                 <Link
-    //                     to={{
-    //                         pathname: "/tournaments/sections/resultpairings",
-    //                         state: {section}
-    //                     }}
-    //                     className="nav-link"
-    //                 >
-    //                     Pairings
-    //                 </Link>
-    //                 <Link
-    //                     to={{
-    //                         pathname: "/tournaments/sections/standings",
-    //                         state: {section}
-    //                     }}
-    //                     className="nav-link"
-    //                 >
-    //                     Standings
-    //                 </Link>
-    //             </div>
-    //             <div className="btn-group section-dashboard" role="group">
-    //                 <button
-    //                     type="button"
-    //                     className="btn btn-outline-primary btn-sm h-75"
-    //                     onClick={() => {
-    //                         props.generatePairings(
-    //                             section._id,
-    //                             1,
-    //                             section.players
-    //                         );
-    //                     }}
-    //                 >
-    //                     Pair Round
-    //                 </button>
-    //                 <button
-    //                     type="button"
-    //                     className="btn btn-outline-primary btn-sm h-75"
-    //                     data-toggle="modal"
-    //                     data-target="#createNewSectionModal"
-    //                 >
-    //                     Print
-    //                 </button>
-    //             </div>
-    //         </nav>
-    //     </div>
-    // );
 };
 
 SectionDashNavbar.propTypes = {

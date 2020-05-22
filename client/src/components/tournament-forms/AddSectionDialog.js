@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -56,7 +56,7 @@ const AddSectionDialog = ({createSection, parent_id}) => {
     };
 
     return (
-        <div>
+        <Fragment>
             <Tooltip title="Add">
                 <IconButton aria-label="add" onClick={handleClickOpen}>
                     <AddCircleOutlineIcon/>
@@ -171,7 +171,7 @@ const AddSectionDialog = ({createSection, parent_id}) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </Fragment>
     )
 };
 

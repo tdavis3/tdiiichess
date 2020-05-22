@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {Link} from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -11,8 +10,9 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import Grid from "@material-ui/core/Grid";
+import {Box, Grid} from "@material-ui/core";
 
+import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import EnhancedTable from "../layout/EnhancedTable";
 import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
@@ -21,9 +21,10 @@ import EditPlayerDialog from "../tournament-forms/EditPlayerDialog";
 
 import {deletePlayer} from "../../actions/players";
 import {getCurrentSections} from "../../actions/sections";
-import Spinner from "../layout/Spinner";
-import DonutLargeIcon from "@material-ui/icons/DonutLarge";
-import {yellow} from "@material-ui/core/colors";
+import Moment from "react-moment";
+
+let moment = require('moment');
+moment().format();
 
 const drawerWidth = 260;
 
@@ -42,17 +43,15 @@ const useStyles = makeStyles(theme => ({
         overflow: 'auto',
     },
     toolbar: theme.mixins.toolbar,
-    content: {
-        // flexGrow: 1,
-        // backgroundColor: theme.palette.background.default,
-        // padding: theme.spacing(3),
-    },
     logo: {
         width: '60px',
     },
     center: {
         textAlign: 'center',
         fontSize: 18
+    },
+    box: {
+        padding: theme.spacing(1)
     }
 }));
 
@@ -70,12 +69,10 @@ const Dashboard = ({
 
     const classes = useStyles();
 
-    const [sectionDisplayedIndex, setsectionDisplayedIndex] = React.useState(0);
+    const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
 
     const handleSectionClick = (index) => () => {
-        if (index !== sectionDisplayedIndex) {  // Prevent unnecessary re-renders
-            setsectionDisplayedIndex(index);
-        }
+        setSectionDisplayedIndex(index);
     };
 
     const columns = React.useMemo(
@@ -109,7 +106,34 @@ const Dashboard = ({
         } else {
             return sections.sections[sectionDisplayedIndex].players;
         }
-    }, [sections.loading, sections.sections]);
+    }, [sectionDisplayedIndex, sections.loading, sections.sections]);
+
+    const date_renderer = (start_date, end_date) => {
+        const start = moment(start_date);
+        const end = moment(end_date);
+        return (
+            <div>
+                {
+                    start.isSame(end) ? (<Moment format="MM/DD/YYYY">{start_date}</Moment>) :
+                        (<Moment format="MM/DD/YYYY">{start_date}</Moment> -
+                            <Moment format="MM/DD/YYYY">{end_date}</Moment>)
+                }
+            </div>
+        );
+    };
+
+    const tournament_status = (start_date, end_date) => {
+        const today = moment();
+        const start = moment(start_date);
+        const end = moment(end_date);
+        if (today.isBefore(start)) {
+            return 'Not started';
+        } else if (today.isBetween(start, end)) {
+            return 'In progress';
+        } else if (today.isAfter(end)) {
+            return 'Completed';
+        }
+    };
 
     return (
         <div className={classes.root}>
@@ -128,16 +152,19 @@ const Dashboard = ({
                     email={auth.user.email}
                 />
                 <Divider/>
-                <Typography className={classes.center}>Tournament Info</Typography>
-                <Typography>{location.state.tourney.name}</Typography>
+                <Box className={classes.box}>
+                    <Typography className={classes.center}>Tournament Info</Typography>
+                    <Typography>{location.state.tourney.name}</Typography>
+                    {date_renderer(location.state.tourney.start_date, location.state.tourney.end_date)}
+                    <Typography>{tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
+                </Box>
                 <Divider/>
 
-                <Grid container spacing={2}>
-                    {/* TODO or textAlign: right */}
-                    <Grid item xs={5} style={{display: 'flex', alignItems: 'center', justifyContent: 'right'}}>
-                        <Typography className={classes.center}>Sections</Typography>
+                <Grid container spacing={1} justify={'center'}>
+                    <Grid item xs={3} style={{display: 'flex', alignItems: 'center'}}>
+                        <Typography style={{fontSize: 18}}>Sections</Typography>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                         <AddSectionDialog parent_id={location.state.tourney._id}/>
                     </Grid>
                 </Grid>
@@ -150,7 +177,7 @@ const Dashboard = ({
                     ))}
                 </List>
             </Drawer>
-            <main className={classes.content}>
+            <main>
                 {sections.loading ? (<Spinner/>) : (
                     <EnhancedTable
                         title={'Players'}

@@ -14,7 +14,7 @@ import {logout} from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(1)
     },
     logo: {
         textAlign: 'center',

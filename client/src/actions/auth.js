@@ -7,9 +7,7 @@ import {
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
-  LOGOUT,
-  GET_TOURNAMENTS,
-  CLEAR_TOURNAMENTS
+  LOGOUT
 } from "./types";
 import { setAlert } from "./alert";
 import { getCurrentTournaments } from "./tournaments"
@@ -83,6 +81,5 @@ export const login = (email, password) => async dispatch => {
 // Logout
 export const logout = () => async dispatch => {
   dispatch({ type: CLEAR_USER });
-  // dispatch({ type: CLEAR_TOURNAMENTS });
   dispatch({ type: LOGOUT });
 };

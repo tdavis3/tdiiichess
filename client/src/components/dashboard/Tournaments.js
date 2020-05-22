@@ -19,9 +19,7 @@ import Drawer from "@material-ui/core/Drawer";
 import DrawerHeader from "../layout/DrawerHeader";
 import Typography from "@material-ui/core/Typography";
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
-import {Grid} from "@material-ui/core";
+import {Box, Grid} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
 import Spinner from "../layout/Spinner";
 
@@ -45,17 +43,15 @@ const useStyles = makeStyles(theme => ({
         overflow: 'auto',
     },
     toolbar: theme.mixins.toolbar,
-    content: {
-        // flexGrow: 1,
-        // backgroundColor: theme.palette.background.default,
-        // padding: theme.spacing(3),
-    },
     logo: {
         width: '60px',
     },
     center: {
         textAlign: 'center',
         fontSize: 18
+    },
+    box: {
+        padding: theme.spacing(1)
     }
 }));
 
@@ -141,41 +137,29 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
                     const today = moment();
                     const start = moment(cell.row.original.start_date);
                     const end = moment(cell.row.original.end_date);
+                    let status = '';
+                    let stile = {};
                     if (today.isBefore(start)) {
-                        return (
-                            <Grid container spacing={1}>
-                                <Grid item xs={3}>
-                                    <FiberManualRecordIcon style={{color: red[500]}}/>
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <Typography>Not started</Typography>
-                                </Grid>
-                            </Grid>
-                        );
+                        status = 'Not started';
+                        stile = {color: red[500]};
                     } else if (today.isBetween(start, end)) {
-                        return (
-                            <Grid container spacing={1}>
-                                <Grid item xs={3}>
-                                    <DonutLargeIcon style={{color: yellow[500]}}/>
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <Typography>In progress</Typography>
-                                </Grid>
-                            </Grid>
-                        );
+                        status = 'In progress';
+                        stile = {color: yellow[500]};
                     } else if (today.isAfter(end)) {
-                        return (
-                            <Grid container spacing={1}>
-                                <Grid item xs={3}>
-                                    <CheckCircleOutlineIcon style={{color: green[500]}}/>
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <Typography>Completed</Typography>
-                                </Grid>
-                            </Grid>);
+                        status = 'Completed';
+                        stile = {color: green[500]};
                     } else {
                         return null;
                     }
+                    return (
+                        <Grid container spacing={1}>
+                            <Grid item xs={3}>
+                                <CheckCircleOutlineIcon style={stile}/>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Typography>{status}</Typography>
+                            </Grid>
+                        </Grid>);
                 },
             },
         ],
@@ -207,10 +191,12 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
                     email={auth.user.email}
                 />
                 <Divider/>
-                <Typography className={classes.center}>Welcome!</Typography>
+                <Box className={classes.box}>
+                    <Typography className={classes.center}>Welcome!</Typography>
+                </Box>
             </Drawer>
 
-            <main className={classes.content}>
+            <main>
                 {tournaments.loading ? (<Spinner/>) : (
                     <EnhancedTable
                         title={"Tournaments"}
