@@ -53,6 +53,7 @@ const useStyles = makeStyles(theme => ({
 
 const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament}) => {
     useEffect(() => {
+        console.log("client tourney call");
         getCurrentTournaments();
     }, []);
 

@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const Login = props => {
+
+const Login = ({auth, login}) => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState({
@@ -51,11 +52,11 @@ const Login = props => {
 
     const onSubmit = async e => {
         e.preventDefault();
-        props.login(email, password);
+        login(email, password);
     };
 
     // Redirect if logged in
-    if (props.isAuthenticated) {
+    if (auth.isAuthenticated) {
         return <Redirect to="/tournaments"/>;
     }
 
@@ -119,11 +120,11 @@ const Login = props => {
 
 Login.propTypes = {
     login: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool
+    auth: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, {login})(Login);
