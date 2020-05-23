@@ -63,7 +63,7 @@ router.post(
                 {expiresIn: config.get("tokenexpirationsecs")},
                 (err, token) => {
                     if (err) throw err;
-                    res.json({token}); // Return the token
+                    res.json({token : token, user : user}); // Return the token
                 }
             );
         } catch (err) {

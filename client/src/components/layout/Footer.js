@@ -16,7 +16,7 @@ function Copyright() {
 const useStyles = makeStyles(theme => ({
     root: {
         borderTop: '1px solid lightgray',
-        marginTop: theme.spacing(4),
+        marginTop: theme.spacing(3),
         padding: theme.spacing(2, 2),
     },
 }));

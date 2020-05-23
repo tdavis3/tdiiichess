@@ -13,7 +13,6 @@ router.get("/", auth, async (req, res) => {
         const tournaments = await Tournament.find({user_id: req.user.id}).sort({
             date: -1
         });
-        // console.log(tournaments);
         if (tournaments === []) {
             return res
                 .status(400)

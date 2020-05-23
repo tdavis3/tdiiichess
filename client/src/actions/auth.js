@@ -20,7 +20,6 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get("/api/auth");
-    console.log("Getting User");
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
@@ -45,7 +44,6 @@ export const register = ({
   try {
     const res = await axios.post("/api/users", body, config);
     dispatch({ type: REGISTER_SUCCESS, payload: res.data });
-    dispatch(loadUser());  // Automatically login after successful register
   } catch (err) {
     const errors = err.response.data.errors;
     if (errors) {
