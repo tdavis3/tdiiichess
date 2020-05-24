@@ -118,16 +118,9 @@ router.put("/:id", auth, async (req, res) => {
 // @desc    Delete a tournament
 // @access  Private (A token is needed)
 router.delete("/:tournament_id", auth, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
     try {
-        const tournament = await Tournament.findById(req.params.tournament_id);
-        if (tournament.user.toString() !== req.user.id) {
-            return res.status(401).json({msg: "User not authorized"});
-        }
-        await tournament.deleteOne();
+        const tournament = await Tournament.findById(req.params.tournament_id).deleteOne();
+        // await tournament.deleteOne();
         await res.json(tournament);
     } catch (err) {
         console.error(err.message);

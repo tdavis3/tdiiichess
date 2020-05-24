@@ -6,18 +6,18 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Moment from "react-moment";
 import {Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
-import EnhancedTable from "../layout/EnhancedTable";
-import AddTournamentDialog from '../tournament-forms/AddTournamentDialog';
+import TournamentTable from "../tables/TournamentTable";
 import EditTournamentDialog from "../tournament-forms/EditTournamentDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
-import {deleteTournament, getCurrentTournaments} from "../../actions/tournaments";
+import {getCurrentTournaments} from "../../actions/tournaments";
+import DeleteTournamentDialog from "../tournament-forms/DeleteTournamentDialog";
 
 let moment = require('moment');
 moment().format();
@@ -51,9 +51,9 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament}) => {
+
+const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
     useEffect(() => {
-        console.log("client tourney call");
         getCurrentTournaments();
     }, []);
 
@@ -151,7 +151,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
                     return (
                         <Grid container spacing={1}>
                             <Grid item xs={3}>
-                                <CheckCircleOutlineIcon style={stile}/>
+                                <CheckCircleIcon fontSize={"small"} style={stile}/>
                             </Grid>
                             <Grid item xs={3}>
                                 <Typography>{status}</Typography>
@@ -159,6 +159,22 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
                         </Grid>);
                 },
             },
+            {
+                Header: '',
+                accessor: ' ',
+                Cell: ({cell}) => (
+                    <div>
+                        <Grid container spacing={2}>
+                            <Grid item xs={3}>
+                                <EditTournamentDialog selected_edit={cell.row.original}/>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <DeleteTournamentDialog tournament={cell.row.original}/>
+                            </Grid>
+                        </Grid>
+                    </div>
+                ),
+            }
         ],
         []
     );
@@ -167,7 +183,11 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
         if (tournaments.loading) {
             return [];
         } else {
-            return tournaments.tournaments;
+            if (tournaments.tournaments.length === 0) {
+                return [];
+            } else {
+                return tournaments.tournaments;
+            }
         }
     }, [tournaments.loading, tournaments.tournaments]);
 
@@ -195,13 +215,10 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth, deleteTournament
 
             <main>
                 {tournaments.loading ? (<Spinner/>) : (
-                    <EnhancedTable
+                    <TournamentTable
                         title={"Tournaments"}
                         columns={columns}
                         data={data}
-                        deleteaction={deleteTournament}
-                        CreateDialog={AddTournamentDialog}
-                        EditDialog={EditTournamentDialog}
                     />
                 )}
             </main>
@@ -213,7 +230,7 @@ Tournaments.propTypes = {
     setAlert: PropTypes.func.isRequired,
     getCurrentTournaments: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    tournaments: PropTypes.object.isRequired
+    tournaments: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -223,6 +240,5 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     setAlert,
-    getCurrentTournaments,
-    deleteTournament
+    getCurrentTournaments
 })(Tournaments);

@@ -36,22 +36,14 @@ const useToolbarStyles = makeStyles(theme => ({
     },
 }));
 
-const TableToolbar = props => {
+const TableToolbar = ({title, numSelected, deleteHandler, CreateDialog, EditDialog}) => {
     const classes = useToolbarStyles();
-    const {
-        title,
-        numSelected,
-        deleteHandler,
-        CreateDialog,
-        EditDialog
-    } = props;
     return (
         <Toolbar
             className={clsx(classes.root, {
                 [classes.highlight]: numSelected > 0,
             })}
         >
-            {/*<AddTournamentDialog createTournamentHandler={createHandler}/>*/}
             <>
                 {CreateDialog}
             </>
@@ -74,8 +66,6 @@ const TableToolbar = props => {
                 <>
                     {EditDialog}
                 </>
-                // <EditTournamentDialog editTournamentHandler={editHandler}
-                //                       selectededittournament={selectededit}/>
             ) : (
                 <>
                 </>
@@ -96,10 +86,7 @@ const TableToolbar = props => {
 };
 
 TableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-    // createHandler: PropTypes.func.isRequired,
-    // editHandler: PropTypes.func.isRequired,
-    // deleteHandler: PropTypes.func.isRequired,
+    numSelected: PropTypes.number.isRequired
 };
 
 export default TableToolbar;

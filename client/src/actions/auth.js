@@ -10,7 +10,6 @@ import {
   LOGOUT
 } from "./types";
 import { setAlert } from "./alert";
-import { getCurrentTournaments } from "./tournaments"
 import setAuthToken from "../utils/setAuthToken";
 
 export const loadUser = () => async dispatch => {

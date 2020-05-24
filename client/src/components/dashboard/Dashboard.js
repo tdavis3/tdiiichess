@@ -7,14 +7,11 @@ import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography} fr
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
-import EnhancedTable from "../layout/EnhancedTable";
-import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
+import DashboardTable from "../tables/DashboardTable";
 import AddSectionDialog from "../tournament-forms/AddSectionDialog";
-import EditPlayerDialog from "../tournament-forms/EditPlayerDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {deletePlayer} from "../../actions/players";
 import {getCurrentSections} from "../../actions/sections";
 
 let moment = require('moment');
@@ -51,7 +48,6 @@ const useStyles = makeStyles(theme => ({
 
 const Dashboard = ({
                        getCurrentSections,
-                       deletePlayer,
                        auth,
                        sections,
                        location
@@ -98,7 +94,11 @@ const Dashboard = ({
         if (sections.loading) {
             return [];
         } else {
-            return sections.sections[sectionDisplayedIndex].players;
+            if (sections.sections.length === 0) {
+                return [];
+            } else {
+                return sections.sections[sectionDisplayedIndex].players;
+            }
         }
     }, [sectionDisplayedIndex, sections.loading, sections.sections]);
 
@@ -177,15 +177,12 @@ const Dashboard = ({
                 </List>
             </Drawer>
             <main>
+                {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
                 {sections.loading ? (<Spinner/>) : (
-                    <EnhancedTable
-                        title={'Players'}
+                    <DashboardTable
                         parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
                         columns={columns}
                         data={data}
-                        deleteaction={deletePlayer}
-                        CreateDialog={AddPlayerDialog}
-                        EditDialog={EditPlayerDialog}
                     />
                 )}
             </main>
@@ -195,7 +192,6 @@ const Dashboard = ({
 
 Dashboard.propTypes = {
     getCurrentSections: PropTypes.func.isRequired,
-    deletePlayer: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired
 };
@@ -206,6 +202,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-    getCurrentSections,
-    deletePlayer,
+    getCurrentSections
 })(Dashboard);

@@ -78,16 +78,11 @@ export const editTournament = (tournament_id, formData) => async dispatch => {
 };
 
 // Delete a tournament
-export const deleteTournament = data => async dispatch => {
-    const tournaments = data.objs;
-    if (tournaments.length === 0) {
-        dispatch(setAlert("No Tournament Selected", "error"));
-        return;
-    }
+export const deleteTournament = id => async dispatch => {
     if (window.confirm("Are you sure you want to delete the selected?")) {
         try {
-            tournaments.map(async tournamentobj => await axios.delete(`/api/tournaments/${tournamentobj._id}`));
-            dispatch({type: DELETE_TOURNAMENT, payload: tournaments});
+            await axios.delete(`/api/tournaments/${id}`);
+            dispatch({type: DELETE_TOURNAMENT, payload: id});
             dispatch(setAlert("Tournaments Deleted", "success"));
         } catch (err) {
             dispatch({

@@ -12,7 +12,7 @@ import {
     DialogContent,
     DialogContentText
 } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 import {createTournament} from '../../actions/tournaments';
 
 
-const AddTournamentDialog = props => {
+const AddTournamentDialog = ({createTournament}) => {
 
     const initialTournament = {
         name: "",
@@ -33,7 +33,6 @@ const AddTournamentDialog = props => {
     };
 
     const [tournament, setTournament] = useState(initialTournament);
-    const {createTournament} = props;
 
     const [selectedStartDate, setStartDateChange] = useState(new Date());
     const [selectedEndDate, setEndDateChange] = useState(new Date());
@@ -75,7 +74,7 @@ const AddTournamentDialog = props => {
         <div>
             <Tooltip title="Add">
                 <IconButton aria-label="add" onClick={handleClickOpen}>
-                    <AddIcon/>
+                    <AddCircleOutlineIcon/>
                 </IconButton>
             </Tooltip>
             <Dialog

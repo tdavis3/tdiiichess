@@ -49,7 +49,7 @@ const AddSectionDialog = ({createSection, parent_id, tournament_time_control}) =
         setOpen(false);
     };
 
-    const handleSave = _ => {
+    const handleSave = () => {
         createSection(parent_id, section);
         setSection(initial_section);
         setOpen(false);

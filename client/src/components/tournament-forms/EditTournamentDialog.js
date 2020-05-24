@@ -37,7 +37,7 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
         setOpen(false);
     };
 
-    const handleSave = _ => {  // event parameter
+    const handleSave = () => {  // event parameter
         editTournament(selected_edit._id, tournament);
         setOpen(false);
         setTournament(initial_tournament);
@@ -51,7 +51,7 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
         <div>
             <Tooltip title="Edit">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
-                    <EditIcon/>
+                    <EditIcon fontSize={"small"}/>
                 </IconButton>
             </Tooltip>
             <Dialog

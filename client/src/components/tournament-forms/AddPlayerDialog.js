@@ -12,7 +12,7 @@ import {
     DialogContent,
     DialogContentText
 } from "@material-ui/core";
-import AddIcon from '@material-ui/icons/Add';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
@@ -62,7 +62,7 @@ const AddPlayerDialog = ({createPlayer, parent_id}) => {
         setOpen(false);
     };
 
-    const handleSave = _ => {
+    const handleSave = () => {
         createPlayer(parent_id, player);
         setPlayer(initialPlayer);
         setOpen(false);
@@ -76,7 +76,7 @@ const AddPlayerDialog = ({createPlayer, parent_id}) => {
         <div>
             <Tooltip title="Add">
                 <IconButton aria-label="add" onClick={handleClickOpen}>
-                    <AddIcon/>
+                    <AddCircleOutlineIcon/>
                 </IconButton>
             </Tooltip>
             <Dialog

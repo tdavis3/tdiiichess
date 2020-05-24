@@ -47,7 +47,7 @@ const EditSectionDialog = ({editSection, selected_edit}) => {
         setOpen(false);
     };
 
-    const handleSave = event => {
+    const handleSave = () => {
         editSection(selected_edit._id, section);
         setOpen(false);
     };

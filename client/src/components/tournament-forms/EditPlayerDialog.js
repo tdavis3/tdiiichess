@@ -51,7 +51,7 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
         setOpen(false);
     };
 
-    const handleSave = event => {
+    const handleSave = () => {
         editPlayer(selected_edit.player_id._id, player);
         setPlayer(originalPlayer);
         setOpen(false);
