@@ -15,15 +15,15 @@ import {
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
-import {useRowSelect, useSortBy, useTable} from 'react-table';
+import {useRowSelect, useSortBy, useTable, useBlockLayout} from 'react-table';
 
 import PropTypes from 'prop-types';
-import ButtonBase from "@material-ui/core/ButtonBase";
 import IconButton from "@material-ui/core/IconButton";
 import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
+import {Link} from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -85,7 +85,8 @@ const useStyles = makeStyles((theme) => ({
 const DashboardTable = ({
                             columns,
                             data,
-                            parent_id
+                            parent_id,
+                            disabled_add_button
                         }) => {
     const {
         getTableProps,
@@ -99,7 +100,8 @@ const DashboardTable = ({
             data,
         },
         useSortBy,
-        useRowSelect
+        useRowSelect,
+        useBlockLayout
     );
 
     const classes = useStyles();
@@ -109,18 +111,18 @@ const DashboardTable = ({
         // <Paper>
         <TableContainer className={classes.root}>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
-                <IconButton>
-                    <ArrowBackIosIcon fontSize={"small"}/>
+                <IconButton component={Link} to={'/tournaments'}>
+                    <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
-                <Typography>Players</Typography>
-                <AddPlayerDialog parent_id={parent_id}/>
-                <Button size={"small"}>Withdrawls</Button>
-                <Button>Byes</Button>
-                <Button>Move</Button>
+                <Typography variant={'h6'}>Players</Typography>
+                <AddPlayerDialog parent_id={parent_id} disabled={disabled_add_button}/>
+                <Button size={"small"}>Withdrawals</Button>
+                <Button size={"small"}>Byes</Button>
+                <Button size={"small"}>Move</Button>
+                <Button size={"small"}>Pairings</Button>
+                <Button size={"small"}>Standings</Button>
+                <Button size={"small"}>Reports</Button>
                 <Typography className={classes.leftSection}></Typography>
-                <Button>Pairings</Button>
-                <Button>Standings</Button>
-                <Button>Reports</Button>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon/>
@@ -185,6 +187,7 @@ const DashboardTable = ({
 };
 
 DashboardTable.propTypes = {
+    disabled_add_button: PropTypes.bool,
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired
 };

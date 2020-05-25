@@ -79,16 +79,14 @@ export const editTournament = (tournament_id, formData) => async dispatch => {
 
 // Delete a tournament
 export const deleteTournament = id => async dispatch => {
-    if (window.confirm("Are you sure you want to delete the selected?")) {
-        try {
-            await axios.delete(`/api/tournaments/${id}`);
-            dispatch({type: DELETE_TOURNAMENT, payload: id});
-            dispatch(setAlert("Tournaments Deleted", "success"));
-        } catch (err) {
-            dispatch({
-                type: TOURNAMENTS_ERROR,
-                payload: {msg: err.response.statusText, status: err.response.status}
-            });
-        }
+    try {
+        await axios.delete(`/api/tournaments/${id}`);
+        dispatch({type: DELETE_TOURNAMENT, payload: id});
+        dispatch(setAlert("Tournaments Deleted", "success"));
+    } catch (err) {
+        dispatch({
+            type: TOURNAMENTS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };

@@ -37,8 +37,6 @@ const AddTournamentDialog = ({createTournament}) => {
     const [selectedStartDate, setStartDateChange] = useState(new Date());
     const [selectedEndDate, setEndDateChange] = useState(new Date());
 
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
     const [open, setOpen] = React.useState(false);
 
     const handleStartDateChange = (date) => {
@@ -49,7 +47,6 @@ const AddTournamentDialog = ({createTournament}) => {
     const handleEndDateChange = (date) => {
         setEndDateChange(date);
         setTournament({...tournament, end_date: date});
-
     };
 
     const handleClickOpen = () => {

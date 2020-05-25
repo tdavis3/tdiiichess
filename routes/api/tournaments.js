@@ -85,17 +85,15 @@ router.post(
 // @desc    Edit a tournament
 // @access  Private (A token is needed)
 router.put("/:id", auth, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
-    const {tournament_name, printing_name, time_control} = req.body;
+    const {tournament_name, printing_name, time_control, start_date, end_date} = req.body;
 
     const tournamentFields = {};
     tournamentFields.user = req.user.id;
     if (tournament_name) tournamentFields.name = tournament_name;
     if (printing_name) tournamentFields.printing_name = printing_name;
     if (time_control) tournamentFields.time_control = time_control;
+    if (start_date) tournamentFields.start_date = start_date;
+    if (end_date) tournamentFields.end_date = end_date;
 
     try {
         // Returns the new updated tournament object

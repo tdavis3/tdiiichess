@@ -70,17 +70,21 @@ const Dashboard = ({
             {
                 Header: 'Player',
                 accessor: 'player_id',
+                minWidth: 300,
+                maxWidth: 400,
                 Cell: ({cell: {value: {first_name, last_name, suffix, uscf_id, uscf_reg_rating}}}) => {
                     return (
-                        <Grid container spacing={1}>
-                            <Grid item xs={10}>
+                        <Grid container spacing={2} direction={'column'}>
+                            <Grid item xs={12}>
                                 <Typography>{first_name.concat(" ", last_name, " ", suffix)}</Typography>
                             </Grid>
-                            <Grid item xs={5}>
-                                <Typography>{uscf_id}</Typography>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <Typography>{uscf_reg_rating}</Typography>
+                            <Grid item xs={12} container>
+                                <Grid item xs={6}>
+                                    <Typography>{uscf_id}</Typography>
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Typography>{uscf_reg_rating}</Typography>
+                                </Grid>
                             </Grid>
                         </Grid>
                     );
@@ -181,6 +185,7 @@ const Dashboard = ({
                 {sections.loading ? (<Spinner/>) : (
                     <DashboardTable
                         parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
+                        disabled_add_button={sections.sections.length === 0 ? true : false}
                         columns={columns}
                         data={data}
                     />

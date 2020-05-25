@@ -53,7 +53,7 @@ const DeleteTournamentDialog = ({deleteTournament, tournament}) => {
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         When you delete a tournament you will also delete all associated sections, players, pairings and
-                        results from that tournament. This action is irreversible.
+                        results. This action is irreversible.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

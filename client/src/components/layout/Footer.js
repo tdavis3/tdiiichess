@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     root: {
         borderTop: '1px solid lightgray',
         marginTop: theme.spacing(3),
-        padding: theme.spacing(2, 2),
+        padding: 15,
     },
 }));
 

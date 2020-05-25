@@ -6,7 +6,9 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Moment from "react-moment";
 import {Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
+import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
@@ -64,6 +66,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
             {
                 Header: 'Name',
                 accessor: 'name',
+                width: 300,
                 Cell: ({cell: {value, row}}) => {
                     const tourney = row.original;
                     return (
@@ -132,26 +135,26 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                 Cell: ({cell}) => {
                     // TODO Do this calculation server-side; Add "status field" to Tournament model
                     const today = moment();
-                    const start = moment(cell.row.original.start_date);
-                    const end = moment(cell.row.original.end_date);
+                    const start = moment(cell.row.original.start_date).startOf('day');
+                    const end = moment(cell.row.original.end_date).endOf('day');
                     let status = '';
-                    let stile = {};
+                    let icon = null;
                     if (today.isBefore(start)) {
                         status = 'Not started';
-                        stile = {color: red[500]};
+                        icon = <FiberManualRecordIcon fontSize={"small"} style={{color: red[500]}}/>;
                     } else if (today.isBetween(start, end)) {
                         status = 'In progress';
-                        stile = {color: yellow[500]};
+                        icon = <DonutLargeIcon fontSize={"small"} style={{color: yellow[500]}}/>;
                     } else if (today.isAfter(end)) {
                         status = 'Completed';
-                        stile = {color: green[500]};
+                        icon = <CheckCircleIcon fontSize={"small"} style={{color: green[500]}}/>;
                     } else {
                         return null;
                     }
                     return (
                         <Grid container spacing={1}>
                             <Grid item xs={3}>
-                                <CheckCircleIcon fontSize={"small"} style={stile}/>
+                                {icon}
                             </Grid>
                             <Grid item xs={3}>
                                 <Typography>{status}</Typography>

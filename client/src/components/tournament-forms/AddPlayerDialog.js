@@ -40,7 +40,7 @@ const initialPlayer = {
 };
 
 
-const AddPlayerDialog = ({createPlayer, parent_id}) => {
+const AddPlayerDialog = ({parent_id, disabled, createPlayer}) => {
     const [player, setPlayer] = useState(initialPlayer);
 
     const [selectedDOB, setDOB] = useState(null);
@@ -75,7 +75,7 @@ const AddPlayerDialog = ({createPlayer, parent_id}) => {
     return (
         <div>
             <Tooltip title="Add">
-                <IconButton aria-label="add" onClick={handleClickOpen}>
+                <IconButton aria-label="add" onClick={handleClickOpen} disabled={disabled}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
             </Tooltip>
@@ -208,6 +208,7 @@ const AddPlayerDialog = ({createPlayer, parent_id}) => {
 
 AddPlayerDialog.propTypes = {
     createPlayer: PropTypes.func.isRequired,
+    disabled: PropTypes.bool
 };
 
 export default connect(null, {createPlayer})(AddPlayerDialog);
