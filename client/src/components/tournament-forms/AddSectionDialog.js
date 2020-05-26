@@ -22,7 +22,12 @@ import {connect} from "react-redux";
 import {createSection} from "../../actions/sections";
 
 
-const AddSectionDialog = ({createSection, parent_id, tournament_time_control}) => {
+const AddSectionDialog = ({
+                              parent_id,
+                              createSection,
+                              tournament_time_control,
+                              crud_action_progress_handler
+                          }) => {
 
     const initial_section = {
         name: "",
@@ -50,6 +55,7 @@ const AddSectionDialog = ({createSection, parent_id, tournament_time_control}) =
     };
 
     const handleSave = () => {
+        crud_action_progress_handler(1);
         createSection(parent_id, section);
         setSection(initial_section);
         setOpen(false);

@@ -22,7 +22,7 @@ import {connect} from 'react-redux';
 import {createTournament} from '../../actions/tournaments';
 
 
-const AddTournamentDialog = ({createTournament}) => {
+const AddTournamentDialog = ({createTournament, }) => {
 
     const initialTournament = {
         name: "",

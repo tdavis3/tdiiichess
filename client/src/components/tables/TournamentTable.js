@@ -5,7 +5,6 @@ import {
     Typography,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
     TableSortLabel,
@@ -21,11 +20,12 @@ import {useRowSelect, useSortBy, useTable} from 'react-table';
 
 import PropTypes from 'prop-types';
 import AddTournamentDialog from "../tournament-forms/AddTournamentDialog";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        // flexGrow: 1
     },
     leftSection: {
         flexGrow: 1,
@@ -73,11 +73,8 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    table: {
-        width: '100%',
-        borderSpacing: 0
-    },
 }));
+
 
 const TournamentTable = ({
                              columns,
@@ -89,7 +86,7 @@ const TournamentTable = ({
         headerGroups,
         rows,
         prepareRow,
-        state: {selectedRowIds},
+        // state: {selectedRowIds},
     } = useTable(
         {
             columns,
@@ -103,8 +100,8 @@ const TournamentTable = ({
 
     // Render the UI for your table
     return (
-        // <Paper>
-        <TableContainer className={classes.root}>
+        <div>
+            <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
                 <Typography>Tournaments</Typography>
                 <AddTournamentDialog parent_id={parent_id}/>
@@ -126,8 +123,7 @@ const TournamentTable = ({
                     <MoreVertIcon/>
                 </IconButton>
             </Toolbar>
-
-            <MaUTable stickyHeader aria-label="enhanced table" {...getTableProps()}>
+            <MaUTable {...getTableProps()}>
                 <TableHead>
                     {headerGroups.map(headerGroup => (
                         <TableRow {...headerGroup.getHeaderGroupProps()}>
@@ -167,8 +163,7 @@ const TournamentTable = ({
                     })}
                 </TableBody>
             </MaUTable>
-        </TableContainer>
-        // </Paper>
+        </div>
     )
 };
 

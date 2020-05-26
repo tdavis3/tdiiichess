@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Moment from "react-moment";
-import {Box, Grid, Drawer, Divider, Typography} from "@material-ui/core";
+import {Box, Grid, Drawer, Divider, Typography, Container} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
     },
     drawer: {
+        display: "inline-block",
         width: drawerWidth,
         flexShrink: 0
     },
@@ -50,7 +51,16 @@ const useStyles = makeStyles(theme => ({
     },
     box: {
         padding: theme.spacing(1)
-    }
+    },
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        // overflow: 'auto',
+    },
+    container: {
+        // paddingTop: theme.spacing(4),
+        // paddingBottom: theme.spacing(4),
+    },
 }));
 
 
@@ -66,7 +76,8 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
             {
                 Header: 'Name',
                 accessor: 'name',
-                width: 300,
+                // minWidth: 150,
+                // maxWidth: 300,
                 Cell: ({cell: {value, row}}) => {
                     const tourney = row.original;
                     return (
@@ -132,6 +143,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
             {
                 Header: 'Status',
                 accessor: 'start_date',
+                // minWidth: 150,
                 Cell: ({cell}) => {
                     // TODO Do this calculation server-side; Add "status field" to Tournament model
                     const today = moment();
@@ -156,7 +168,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                             <Grid item xs={3}>
                                 {icon}
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={9}>
                                 <Typography>{status}</Typography>
                             </Grid>
                         </Grid>);
@@ -165,6 +177,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
             {
                 Header: '',
                 accessor: ' ',
+                // width: 150,
                 Cell: ({cell}) => (
                     <div>
                         <Grid container spacing={2}>
@@ -215,15 +228,16 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                     <Typography className={classes.center}>Welcome!</Typography>
                 </Box>
             </Drawer>
-
-            <main>
-                {tournaments.loading ? (<Spinner/>) : (
-                    <TournamentTable
-                        title={"Tournaments"}
-                        columns={columns}
-                        data={data}
-                    />
-                )}
+            <main className={classes.content}>
+                <Container className={classes.container}>
+                    {tournaments.loading ? (<Spinner/>) : (
+                        <TournamentTable
+                            title={"Tournaments"}
+                            columns={columns}
+                            data={data}
+                        />
+                    )}
+                </Container>
             </main>
         </div>
     );

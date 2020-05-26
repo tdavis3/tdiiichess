@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Moment from "react-moment";
-import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography} from "@material-ui/core";
+import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography, Container} from "@material-ui/core";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
@@ -13,6 +13,7 @@ import AddSectionDialog from "../tournament-forms/AddSectionDialog";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getCurrentSections} from "../../actions/sections";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 let moment = require('moment');
 moment().format();
@@ -24,6 +25,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
     },
     drawer: {
+        display: "inline-block",
         width: drawerWidth,
         flexShrink: 0
     },
@@ -43,7 +45,16 @@ const useStyles = makeStyles(theme => ({
     },
     box: {
         padding: theme.spacing(1)
-    }
+    },
+    content: {
+        flexGrow: 1,
+        height: '100vh',
+        // overflow: 'auto',
+    },
+    container: {
+        // paddingTop: theme.spacing(4),
+        // paddingBottom: theme.spacing(4),
+    },
 }));
 
 const Dashboard = ({
@@ -59,6 +70,7 @@ const Dashboard = ({
 
     const classes = useStyles();
 
+    const [crudActionProgress, setCrudActionProgress] = useState(0);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
 
     const handleSectionClick = (index) => () => {
@@ -70,8 +82,7 @@ const Dashboard = ({
             {
                 Header: 'Player',
                 accessor: 'player_id',
-                minWidth: 300,
-                maxWidth: 400,
+                width: 150,
                 Cell: ({cell: {value: {first_name, last_name, suffix, uscf_id, uscf_reg_rating}}}) => {
                     return (
                         <Grid container spacing={2} direction={'column'}>
@@ -152,14 +163,13 @@ const Dashboard = ({
                 />
                 <Divider/>
                 <Box className={classes.box}>
-                    <Typography className={classes.center}>Tournament Info</Typography>
+                    <Typography className={classes.center}>Tournament</Typography>
                     <Typography>Name: {location.state.tourney.name}</Typography>
                     {date_renderer(location.state.tourney.start_date, location.state.tourney.end_date)}
                     <Typography>Status: {tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
                 </Box>
                 <Divider/>
-
-                <Grid container spacing={1} justify={'center'}>
+                <Grid container justify={'center'}>
                     <Grid item xs={3} style={{display: 'flex', alignItems: 'center'}}>
                         <Typography style={{fontSize: 18}}>Sections</Typography>
                     </Grid>
@@ -167,10 +177,11 @@ const Dashboard = ({
                         <AddSectionDialog
                             parent_id={location.state.tourney._id}
                             tournament_time_control={location.state.tourney.time_control}
+                            crud_action_progress_handler={setCrudActionProgress}
                         />
                     </Grid>
                 </Grid>
-
+                {crudActionProgress && sections.loading ? <LinearProgress/> : <></>}
                 <List component="nav" aria-label="secondary mailbox folders">
                     {sections.sections.map((section, index) => (
                         <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
@@ -180,16 +191,18 @@ const Dashboard = ({
                     ))}
                 </List>
             </Drawer>
-            <main>
+            <main className={classes.content}>
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
-                {sections.loading ? (<Spinner/>) : (
-                    <DashboardTable
-                        parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
-                        disabled_add_button={sections.sections.length === 0 ? true : false}
-                        columns={columns}
-                        data={data}
-                    />
-                )}
+                <Container className={classes.container}>
+                    {sections.loading ? (<Spinner/>) : (
+                        <DashboardTable
+                            parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
+                            disabled_add_button={sections.sections.length === 0 ? true : false}
+                            columns={columns}
+                            data={data}
+                        />
+                    )}
+                </Container>
             </main>
         </div>
     );

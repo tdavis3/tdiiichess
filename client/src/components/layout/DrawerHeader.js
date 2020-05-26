@@ -100,7 +100,9 @@ const DrawerHeader = ({auth, logout}) => {
                     >
                         <MenuIcon fontSize={"medium"}/>
                     </IconButton>
-                    <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
+                    {/*zIndex to prevent the buttons overlap*/}
+                    <Popper style={{zIndex: 2}} open={open} anchorEl={anchorRef.current} role={undefined} transition
+                            disablePortal>
                         {({TransitionProps, placement}) => (
                             <Grow
                                 {...TransitionProps}

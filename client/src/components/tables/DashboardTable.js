@@ -6,29 +6,31 @@ import {
     Typography,
     TableBody,
     TableCell,
-    TableContainer,
     TableHead,
     TableRow,
     TableSortLabel,
     Toolbar,
     InputBase,
 } from "@material-ui/core";
+
 import SearchIcon from '@material-ui/icons/Search';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
-import {useRowSelect, useSortBy, useTable, useBlockLayout} from 'react-table';
+import {useRowSelect, useSortBy, useTable} from 'react-table';
 
 import PropTypes from 'prop-types';
 import IconButton from "@material-ui/core/IconButton";
 import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
 import {Link} from "react-router-dom";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import {useBlockLayout} from "react-table/src/plugin-hooks/useBlockLayout";
 
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1
+        // flexGrow: 1
     },
     leftSection: {
         flexGrow: 1,
@@ -76,10 +78,6 @@ const useStyles = makeStyles((theme) => ({
             },
         },
     },
-    table: {
-        width: '100%',
-        borderSpacing: 0
-    },
 }));
 
 const DashboardTable = ({
@@ -101,7 +99,9 @@ const DashboardTable = ({
         },
         useSortBy,
         useRowSelect,
-        useBlockLayout
+        // useBlockLayout,
+        // useFlexLayout,
+        // useAbsoluteLayout
     );
 
     const classes = useStyles();
@@ -109,7 +109,8 @@ const DashboardTable = ({
     // Render the UI for your table
     return (
         // <Paper>
-        <TableContainer className={classes.root}>
+        <div>
+            <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
                 <IconButton component={Link} to={'/tournaments'}>
                     <NavigateBeforeIcon fontSize={"large"}/>
@@ -119,10 +120,10 @@ const DashboardTable = ({
                 <Button size={"small"}>Withdrawals</Button>
                 <Button size={"small"}>Byes</Button>
                 <Button size={"small"}>Move</Button>
+                <Typography className={classes.leftSection}></Typography>
                 <Button size={"small"}>Pairings</Button>
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
-                <Typography className={classes.leftSection}></Typography>
                 <div className={classes.search}>
                     <div className={classes.searchIcon}>
                         <SearchIcon/>
@@ -141,7 +142,7 @@ const DashboardTable = ({
                 </IconButton>
             </Toolbar>
 
-            <MaUTable stickyHeader aria-label="enhanced table" {...getTableProps()}>
+            <MaUTable {...getTableProps()}>
                 <TableHead>
                     {headerGroups.map(headerGroup => (
                         <TableRow {...headerGroup.getHeaderGroupProps()}>
@@ -181,7 +182,7 @@ const DashboardTable = ({
                     })}
                 </TableBody>
             </MaUTable>
-        </TableContainer>
+        </div>
         // </Paper>
     )
 };
