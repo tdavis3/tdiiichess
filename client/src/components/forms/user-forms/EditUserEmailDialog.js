@@ -69,7 +69,7 @@ const EditUserEmailDialog = ({auth, change_email}) => {
 
     return (
         <div>
-            <Tooltip title="Edit email">
+            <Tooltip title="Change email">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
                     <EditIcon fontSize={"small"}/>
                 </IconButton>

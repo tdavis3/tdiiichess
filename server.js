@@ -17,6 +17,7 @@ app.use("/api/sections", require("./routes/api/sections"));
 app.use("/api/players", require("./routes/api/players"));
 app.use("/api/resultpairings", require("./routes/api/resultpairings"));
 app.use("/api/pairingalgo", require("./routes/api/pairingalgo"));
+app.use("/api/analytics", require("./routes/api/analytics"));
 
 
 const PORT = process.env.PORT || 5000;

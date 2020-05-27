@@ -66,7 +66,7 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
 
     return (
         <div>
-            <Tooltip title="Edit password">
+            <Tooltip title="Change password">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
                     <EditIcon fontSize={"small"}/>
                 </IconButton>

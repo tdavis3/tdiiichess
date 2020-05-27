@@ -15,17 +15,20 @@ import {
     ListItemText,
     Grid
 } from '@material-ui/core';
+import Alert from "@material-ui/lab/Alert";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Paper from "@material-ui/core/Paper";
+import Snackbar from "@material-ui/core/Snackbar";
+
+import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import EditUserEmailDialog from "../forms/user-forms/EditUserEmailDialog";
+import EditUserPasswordDialog from "../forms/user-forms/EditUserPasswordDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import Snackbar from "@material-ui/core/Snackbar";
-import Alert from "@material-ui/lab/Alert";
-import EditUserPasswordDialog from "../forms/user-forms/EditUserPasswordDialog";
+import {get_user_analytics} from "../../actions/account";
 
 
 const drawerWidth = 260;
@@ -113,17 +116,15 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Account = ({auth, account, dispatch}) => {
+
+const Account = ({auth, account, get_user_analytics, dispatch}) => {
     const classes = useStyles();
 
-    // if (!!(account.change_msg)) {
-    //     // Dispatch dequeue snackbar right after its queued
-    //     dispatch({type: 'REMOVE_ACCOUNT_SNACKBAR'});
-    // }
     useEffect(
         () => {
-            setDisplaySnackbar(account.change_msg)
-        }, [account]
+            get_user_analytics(auth.user._id);
+            setDisplaySnackbar(!!(account.change_msg))
+        }, []
     );
 
     const [displaySnackbar, setDisplaySnackbar] = useState(!!(account.change_msg));
@@ -167,13 +168,13 @@ const Account = ({auth, account, dispatch}) => {
                         <ListItemText primary="Tournaments"/>
                     </ListItem>
                     {auth.user.admin ? (
-                        <ListItem button component={Link} to={'/analytics'}>
-                            <ListItemText primary="Analytics"/>
+                        <ListItem button component={Link} to={'/admin/analytics'}>
+                            <ListItemText primary="Admin Analytics"/>
                         </ListItem>
                     ) : (<></>)}
                 </List>
                 <Box className={classes.box}>
-                    <Typography className={classes.center}>Profile</Typography>
+                    <Typography className={classes.center}>Account</Typography>
                 </Box>
             </Drawer>
             <main className={classes.content}>
@@ -184,7 +185,7 @@ const Account = ({auth, account, dispatch}) => {
                             {account.change_msg}
                         </Alert>
                     </Snackbar>
-                    <Typography variant={"h5"} style={{marginBottom: 20}}>Profile</Typography>
+                    <Typography variant={"h5"} style={{marginBottom: 20}}>Account</Typography>
                     <div className={classes.profile}>
                         <div>
                             <Typography
@@ -195,7 +196,7 @@ const Account = ({auth, account, dispatch}) => {
                                     <Chip
                                         style={{display: 'inline-flex', verticalAlign: "middle", marginLeft: 8}}
                                         size={"small"}
-                                        label={auth.user.admin ? 'Admin' : 'Tournament Director'}
+                                        label={'Admin'}
                                         color={"secondary"}
                                         variant={"outlined"}
                                     />
@@ -214,7 +215,11 @@ const Account = ({auth, account, dispatch}) => {
                                 <Tab label="Profile" {...a11yProps(1)}/>
                             </Tabs>
                             <TabPanel value={tabIndex} index={0}>
-                                Analytics
+                                {account.user_loading ? (
+                                    <Spinner/>
+                                ) : (
+                                    <Typography>Number of Tournaments: {account.user_analytics.tournaments}</Typography>
+                                )}
                             </TabPanel>
                             <TabPanel value={tabIndex} index={1}>
                                 <Grid container direction={"column"}>
@@ -241,13 +246,13 @@ const Account = ({auth, account, dispatch}) => {
                 </Container>
             </main>
         </div>
-
     );
 };
 
 Account.propTypes = {
     auth: PropTypes.object.isRequired,
-    account: PropTypes.object.isRequired
+    account: PropTypes.object.isRequired,
+    get_user_analytics: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -255,4 +260,4 @@ const mapStateToProps = state => ({
     account: state.account
 });
 
-export default connect(mapStateToProps)(Account);
+export default connect(mapStateToProps, {get_user_analytics})(Account);

@@ -24,12 +24,11 @@ import {logout} from "../../actions/auth";
 const useStyles = makeStyles(theme => ({
     root: {
         // display: 'flex',
-        padding: theme.spacing(1)
+        padding: theme.spacing(1.5)
     },
     logo: {
         textAlign: 'center',
-        fontSize: 25,
-        marginBottom: 5
+        paddingBottom: 10
     },
     user: {
         fontSize: 14,
@@ -79,11 +78,11 @@ const DrawerHeader = ({auth, logout}) => {
         <Box className={classes.root}>
             <CssBaseline/>
             <div className={classes.logo}>
-                <Typography>TDIII Chess</Typography>
+                <Typography style={{fontSize: 25}}>TDIII Chess</Typography>
             </div>
             <Grid container spacing={2}>
                 {/*Fix this grid container so a row doesn't move above*/}
-                <Grid item xs={9} container >
+                <Grid item xs={9} container>
                     <Grid item xs={12}>
                         <Typography className={classes.user} noWrap>
                             {auth.user.first_name.concat(" ", auth.user.last_name)}</Typography>

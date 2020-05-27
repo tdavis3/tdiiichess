@@ -1,13 +1,15 @@
 import React, {useEffect} from "react";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import PrivateRoute from "./components/routing/PrivateRoute";
 import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import SimpleAlert from "./components/layout/SimpleAlert";
 import Tournaments from "./components/dashboard/Tournaments";
-import PrivateRoute from "./components/routing/PrivateRoute";
+import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/user/Account";
+import AdminAnalytics from "./components/user/AdminAnalytics";
 import ResultPairings from "./components/dashboard/ResultPairings";
 import Standings from "./components/dashboard/Standings";
 import Footer from "./components/layout/Footer";
@@ -20,7 +22,6 @@ import setAuthToken from "./utils/setAuthToken";
 
 import "./App.css";
 import {makeStyles} from "@material-ui/core/styles";
-import Dashboard from "./components/dashboard/Dashboard";
 
 if (localStorage.token) {
     setAuthToken(localStorage.token);
@@ -78,6 +79,7 @@ const App = () => {
                                     component={Standings}
                                 />
                                 <PrivateRoute exact path="/account" component={Account}/>
+                                <PrivateRoute exact path="/admin/analytics" component={AdminAnalytics}/>
                                 <PrivateRoute exact path="/logout" component={Landing}/>
                             </Switch>
                         </section>

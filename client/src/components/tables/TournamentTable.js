@@ -103,7 +103,7 @@ const TournamentTable = ({
         <div>
             <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
-                <Typography>Tournaments</Typography>
+                <Typography style={{fontSize: 20}}>Tournaments</Typography>
                 <AddTournamentDialog parent_id={parent_id}/>
                 <Typography className={classes.leftSection}></Typography>
                 <div className={classes.search}>

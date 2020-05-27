@@ -14,12 +14,12 @@ import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import TournamentTable from "../tables/TournamentTable";
 import EditTournamentDialog from "../forms/EditTournamentDialog";
+import DeleteTournamentDialog from "../forms/DeleteTournamentDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
 import {getCurrentTournaments} from "../../actions/tournaments";
-import DeleteTournamentDialog from "../forms/DeleteTournamentDialog";
 
 let moment = require('moment');
 moment().format();
@@ -247,7 +247,7 @@ Tournaments.propTypes = {
     setAlert: PropTypes.func.isRequired,
     getCurrentTournaments: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    tournaments: PropTypes.object.isRequired,
+    tournaments: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

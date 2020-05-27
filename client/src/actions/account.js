@@ -4,7 +4,9 @@ import {
     CHANGE_EMAIL_SUCCESS,
     CHANGE_PASSWORD_SUCCESS,
     CHANGE_EMAIL_FAIL,
-    CHANGE_PASSWORD_FAIL
+    CHANGE_PASSWORD_FAIL,
+    GET_USER_ANALYTICS,
+    GET_ADMIN_ANALYTICS
 } from "./types";
 
 
@@ -49,6 +51,24 @@ export const change_password = (user_id, old_password, new_password) => async di
         }
         const snackbar_success_msg = "Your password was successfully changed.";
         dispatch({type: CHANGE_PASSWORD_SUCCESS, payload: {type: 'success', msg: snackbar_success_msg}});
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const get_user_analytics = (user_id) => async dispatch => {
+    try {
+        const res = await axios.get(`/api/analytics/users/${user_id}`);
+        dispatch({type: GET_USER_ANALYTICS, payload: res.data});
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const get_admin_analytics = (user_id) => async dispatch => {
+    try {
+        const res = await axios.get(`/api/analytics/admin/${user_id}`);
+        dispatch({type: GET_ADMIN_ANALYTICS, payload: res.data});
     } catch (err) {
         console.log(err);
     }
