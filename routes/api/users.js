@@ -50,6 +50,9 @@ router.post(
             user.password = await bcrypt.hash(password, salt); // Hash user password
             await user.save(); // Save use to database
 
+            let secure_user = JSON.parse(JSON.stringify(user));  // Deep copy
+            delete secure_user.password;  // Avoid sending password in response
+
             // Return jsonwebtoken (in order to log the user in immediately on the frontend)
             // Create payload
             const payload = {
@@ -64,7 +67,7 @@ router.post(
                 {expiresIn: config.get("tokenexpirationsecs")},
                 (err, token) => {
                     if (err) throw err;
-                    res.json({token: token, user: user}); // Return the token
+                    res.json({token: token, user: secure_user}); // Return the token
                 }
             );
         } catch (err) {
@@ -75,12 +78,12 @@ router.post(
 );
 
 // @route   PUT api/users
-// @desc    Change a user's password
+// @desc    Change a user's email
 // @access  Private (A token is needed)
 router.put("/", auth, async (req, res) => {
     const {old_email, new_email} = req.body;
     try {
-        let updated_user = await User.findOneAndUpdate({email: old_email}, {email: new_email}, {
+        const updated_user = await User.findOneAndUpdate({email: old_email}, {email: new_email}, {
             new: true,
             rawResult: true
         }).select("-password");
@@ -89,6 +92,35 @@ router.put("/", auth, async (req, res) => {
         if (err.code === 11000) {
             return res.json({err: 11000});
         }
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+// @route   PUT api/users
+// @desc    Change a user's password
+// @access  Private (A token is needed)
+router.put("/:user_id", auth, async (req, res) => {
+    const {old_password, new_password} = req.body;
+    try {
+        const user = await User.findById(req.params.user_id);
+
+        const isMatch = await bcrypt.compare(old_password, user.password);
+        if (!isMatch) {
+            return res.json({err: "Passwords don't match"});
+        }
+
+        // Encrypt new password
+        const salt = await bcrypt.genSalt(10); // Recommended to use 10
+        const hashed_password = await bcrypt.hash(new_password, salt); // Hash user password
+
+        const updated_user = await User.findByIdAndUpdate(req.params.user_id, {password: hashed_password}, {
+            new: true,
+            rawResult: true
+        });
+
+        res.json({result: updated_user.lastErrorObject.n, updated_user: updated_user.value});
+    } catch (err) {
         console.error(err.message);
         res.status(500).send("Server error");
     }

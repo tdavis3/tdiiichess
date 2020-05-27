@@ -11,25 +11,24 @@ import {
     DialogContent,
 } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
-import isEmail from 'validator/lib/isEmail';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {change_email} from "../../../actions/account";
+import {change_password} from "../../../actions/account";
 
 
-const EditUserEmailDialog = ({auth, change_email}) => {
+const EditUserPasswordDialog = ({auth, change_password}) => {
 
     const initial_form = {
-        new_email: "",
-        confirm_new_email: ""
+        old_password: "",
+        new_password: "",
+        confirm_new_password: ""
     };
 
     const [formData, setFormData] = useState(initial_form);
 
     const [errorData, setErrorData] = useState({
-        emails_match: true,
-        valid_email: false
+        passwords_match: true
     });
 
     const [open, setOpen] = useState(false);
@@ -43,8 +42,8 @@ const EditUserEmailDialog = ({auth, change_email}) => {
     };
 
     const handleSave = () => {
-        if (errorData.emails_match && errorData.valid_email) {
-            change_email(auth.user.email, formData.new_email);
+        if (errorData.passwords_match) {
+            change_password(auth.user._id, formData.old_password, formData.new_password);
             setOpen(false);
             setFormData(initial_form);
         }
@@ -54,22 +53,20 @@ const EditUserEmailDialog = ({auth, change_email}) => {
         setFormData({...formData, [name]: value});
 
         let newErrorData = {
-            emails_match: null,
-            valid_email: errorData.valid_email
+            passwords_match: null
         };
 
-        if (name === 'new_email') {
-            newErrorData.valid_email = isEmail(value);
-            newErrorData.emails_match = (value === formData.confirm_new_email);
-        } else if (name === 'confirm_new_email') {
-            newErrorData.emails_match = (value === formData.new_email);
+        if (name === 'new_password') {
+            newErrorData.passwords_match = (value === formData.confirm_new_password);
+        } else if (name === 'confirm_new_password') {
+            newErrorData.passwords_match = (value === formData.new_password);
         }
         setErrorData(newErrorData);
     };
 
     return (
         <div>
-            <Tooltip title="Edit email">
+            <Tooltip title="Edit password">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
                     <EditIcon fontSize={"small"}/>
                 </IconButton>
@@ -79,41 +76,41 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Change Email</DialogTitle>
+                <DialogTitle id="form-dialog-title">Change Password</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus
                         margin="dense"
-                        label="Old email"
-                        type="text"
+                        label="Old password"
                         fullWidth
-                        defaultValue={auth.user.email}
                         variant={"outlined"}
-                        disabled={true}
+                        type={"password"}
+                        value={formData.old_password}
+                        onChange={handleChange('old_password')}
+                        required
                     />
                     <TextField
                         variant={"outlined"}
                         autoFocus
                         margin="dense"
-                        label="New email"
-                        type="text"
+                        label="New password"
+                        helperText="Your password must be 8-20 characters long."
+                        type={"password"}
                         fullWidth
-                        value={formData.new_email}
-                        onChange={handleChange('new_email')}
-                        error={!errorData.valid_email}
-                        helperText={errorData.valid_email ? "" : "Not a valid email format"}
+                        value={formData.new_password}
+                        onChange={handleChange('new_password')}
                     />
                     <TextField
                         variant={"outlined"}
                         autoFocus
                         margin="dense"
-                        label="Re-enter your new email"
-                        type="text"
+                        label="Re-enter your new password"
+                        type={"password"}
                         fullWidth
-                        value={formData.confirm_new_email}
-                        onChange={handleChange('confirm_new_email')}
-                        error={!errorData.emails_match}
-                        helperText={errorData.emails_match ? "" : "Does not match email"}
+                        value={formData.confirm_new_password}
+                        onChange={handleChange('confirm_new_password')}
+                        error={!errorData.passwords_match}
+                        helperText={errorData.passwords_match ? "" : "Does not match password"}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -129,8 +126,8 @@ const EditUserEmailDialog = ({auth, change_email}) => {
     )
 };
 
-EditUserEmailDialog.propTypes = {
-    change_email: PropTypes.func.isRequired,
+EditUserPasswordDialog.propTypes = {
+    change_password: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -138,5 +135,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-
-export default connect(mapStateToProps, {change_email})(EditUserEmailDialog);
+export default connect(mapStateToProps, {change_password})(EditUserPasswordDialog);

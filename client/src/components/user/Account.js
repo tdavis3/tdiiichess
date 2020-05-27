@@ -13,14 +13,11 @@ import {
     List,
     ListItem,
     ListItemText,
-    IconButton,
-    Tooltip,
     Grid
 } from '@material-ui/core';
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
 import Paper from "@material-ui/core/Paper";
-import EditIcon from "@material-ui/icons/Edit";
 import DrawerHeader from "../layout/DrawerHeader";
 import EditUserEmailDialog from "../forms/user-forms/EditUserEmailDialog";
 
@@ -28,6 +25,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
+import EditUserPasswordDialog from "../forms/user-forms/EditUserPasswordDialog";
 
 
 const drawerWidth = 260;
@@ -233,11 +231,7 @@ const Account = ({auth, account, dispatch}) => {
                                             <Typography noWrap>Password: ********</Typography>
                                         </Grid>
                                         <Grid item xs={2} md={2}>
-                                            <Tooltip title="Edit password">
-                                                <IconButton aria-label="edit">
-                                                    <EditIcon fontSize={"small"}/>
-                                                </IconButton>
-                                            </Tooltip>
+                                            <EditUserPasswordDialog/>
                                         </Grid>
                                     </Grid>
                                 </Grid>

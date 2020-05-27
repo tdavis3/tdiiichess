@@ -114,7 +114,7 @@ const DrawerHeader = ({auth, logout}) => {
                                         <MenuList autoFocusItem={open} id="menu-list-grow"
                                                   onKeyDown={handleListKeyDown}>
                                             <MenuItem component={Link} to={'/account'}
-                                                      onClick={handleClose}>Profile</MenuItem>
+                                                      onClick={handleClose}>Account</MenuItem>
                                             <MenuItem onClick={logout}>Logout</MenuItem>
                                         </MenuList>
                                     </ClickAwayListener>
