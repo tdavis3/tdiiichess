@@ -2,6 +2,7 @@
 import {combineReducers} from "redux";
 import alert from "./alert";
 import auth from "./auth";
+import account from "./account";
 import players from "./players";
 import resultpairings from "./resultpairings";
 import sections from "./sections";
@@ -10,6 +11,7 @@ import tournaments from "./tournaments";
 const appReducer = combineReducers({
         alert,
         auth,
+        account,
         players,
         resultpairings,
         sections,

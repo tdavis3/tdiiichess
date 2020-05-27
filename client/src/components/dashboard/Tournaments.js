@@ -13,13 +13,13 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import TournamentTable from "../tables/TournamentTable";
-import EditTournamentDialog from "../tournament-forms/EditTournamentDialog";
+import EditTournamentDialog from "../forms/EditTournamentDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
 import {getCurrentTournaments} from "../../actions/tournaments";
-import DeleteTournamentDialog from "../tournament-forms/DeleteTournamentDialog";
+import DeleteTournamentDialog from "../forms/DeleteTournamentDialog";
 
 let moment = require('moment');
 moment().format();

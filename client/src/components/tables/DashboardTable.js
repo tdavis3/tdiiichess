@@ -22,7 +22,7 @@ import {useRowSelect, useSortBy, useTable} from 'react-table';
 
 import PropTypes from 'prop-types';
 import IconButton from "@material-ui/core/IconButton";
-import AddPlayerDialog from "../tournament-forms/AddPlayerDialog";
+import AddPlayerDialog from "../forms/AddPlayerDialog";
 import {Link} from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {useBlockLayout} from "react-table/src/plugin-hooks/useBlockLayout";

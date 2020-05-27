@@ -3,7 +3,6 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   USER_LOADED,
-  CLEAR_USER,
   AUTH_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
@@ -76,6 +75,5 @@ export const login = (email, password) => async dispatch => {
 
 // Logout
 export const logout = () => async dispatch => {
-  dispatch({ type: CLEAR_USER });
   dispatch({ type: LOGOUT });
 };

@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const auth = require("../../middleware/auth");
 const {check, validationResult} = require("express-validator");
 
 const User = require("../../models/User");
@@ -34,7 +35,7 @@ router.post(
         const {first_name, last_name, email, password} = req.body;
 
         try {
-            let user = await User.findOne({email}); // See if a User exists already with same email
+            let user = await User.findOne({email}).select("-password"); // See if a User exists already with same email
             if (user) {
                 return res
                     .status(400)
@@ -63,7 +64,7 @@ router.post(
                 {expiresIn: config.get("tokenexpirationsecs")},
                 (err, token) => {
                     if (err) throw err;
-                    res.json({token : token, user : user}); // Return the token
+                    res.json({token: token, user: user}); // Return the token
                 }
             );
         } catch (err) {
@@ -72,5 +73,25 @@ router.post(
         }
     }
 );
+
+// @route   PUT api/users
+// @desc    Change a user's password
+// @access  Private (A token is needed)
+router.put("/", auth, async (req, res) => {
+    const {old_email, new_email} = req.body;
+    try {
+        let updated_user = await User.findOneAndUpdate({email: old_email}, {email: new_email}, {
+            new: true,
+            rawResult: true
+        }).select("-password");
+        res.json({result: updated_user.lastErrorObject.n, updated_user: updated_user.value});
+    } catch (err) {
+        if (err.code === 11000) {
+            return res.json({err: 11000});
+        }
+        console.error(err.message);
+        res.status(500).send("Server error");
+    }
+});
 
 module.exports = router; // Export the router. Must do this.

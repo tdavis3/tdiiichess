@@ -32,7 +32,6 @@ export default function(state = initialState, action) {
       setAuthToken(payload.token);
       return {
         ...state,
-        ...payload,
         isAuthenticated: true,
         loading: false,
         user: payload.user

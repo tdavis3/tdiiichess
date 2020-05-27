@@ -19,7 +19,7 @@ import MaUTable from '@material-ui/core/Table';
 import {useRowSelect, useSortBy, useTable} from 'react-table';
 
 import PropTypes from 'prop-types';
-import AddTournamentDialog from "../tournament-forms/AddTournamentDialog";
+import AddTournamentDialog from "../forms/AddTournamentDialog";
 import CssBaseline from "@material-ui/core/CssBaseline";
 
 
@@ -164,7 +164,7 @@ const TournamentTable = ({
                 </TableBody>
             </MaUTable>
         </div>
-    )
+    );
 };
 
 TournamentTable.propTypes = {

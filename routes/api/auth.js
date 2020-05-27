@@ -56,6 +56,9 @@ router.post(
           .json({ errors: [{ msg: "Invalid credentials" }] });
       }
 
+      let secure_user = JSON.parse(JSON.stringify(user));  // Deep copy
+      delete secure_user.password;  // Avoid sending password in response
+
       // Generate jwt token to return to browser
 
       const payload = {  // jwt payload
@@ -70,7 +73,7 @@ router.post(
         { expiresIn: config.get("tokenexpirationsecs") },  // TODO - What's the appropriate expire duration?
         (err, token) => {
           if (err) throw err;
-          res.json({ token : token, user : user }); // Set the response to the token
+          res.json({ token : token, user : secure_user }); // Set the response to the token
         }
       );
 

@@ -82,12 +82,13 @@ const DrawerHeader = ({auth, logout}) => {
                 <Typography>TDIII Chess</Typography>
             </div>
             <Grid container spacing={2}>
-                <Grid item xs={9} container direction={"column"}>
-                    <Grid item xs={6}>
+                {/*Fix this grid container so a row doesn't move above*/}
+                <Grid item xs={9} container >
+                    <Grid item xs={12}>
                         <Typography className={classes.user} noWrap>
                             {auth.user.first_name.concat(" ", auth.user.last_name)}</Typography>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <Typography className={classes.user} noWrap>{auth.user.email}</Typography>
                     </Grid>
                 </Grid>

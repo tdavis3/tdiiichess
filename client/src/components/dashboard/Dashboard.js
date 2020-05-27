@@ -8,7 +8,7 @@ import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography, Co
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import DashboardTable from "../tables/DashboardTable";
-import AddSectionDialog from "../tournament-forms/AddSectionDialog";
+import AddSectionDialog from "../forms/AddSectionDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

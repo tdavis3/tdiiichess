@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Link} from "react-router-dom";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -12,15 +12,58 @@ import {
     Container,
     List,
     ListItem,
-    ListItemText
+    ListItemText,
+    IconButton,
+    Tooltip,
+    Grid
 } from '@material-ui/core';
+import Tab from "@material-ui/core/Tab";
+import Tabs from "@material-ui/core/Tabs";
+import Paper from "@material-ui/core/Paper";
+import EditIcon from "@material-ui/icons/Edit";
 import DrawerHeader from "../layout/DrawerHeader";
+import EditUserEmailDialog from "../forms/user-forms/EditUserEmailDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 
 
 const drawerWidth = 260;
+
+function TabPanel(props) {
+    const {children, value, index, ...other} = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box p={3}>
+                    {children}
+                </Box>
+            )}
+        </div>
+    );
+}
+
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -59,11 +102,48 @@ const useStyles = makeStyles(theme => ({
     },
     profile: {
         marginLeft: 100
+    },
+    tabRoot: {
+        flexGrow: 1
+    },
+    tabPanel: {
+        marginTop: 20,
+    },
+    gridVerticalCenter: {
+        display: "flex",
+        alignItems: "center"
     }
 }));
 
-const Account = ({auth}) => {
+const Account = ({auth, account, dispatch}) => {
     const classes = useStyles();
+
+    // if (!!(account.change_msg)) {
+    //     // Dispatch dequeue snackbar right after its queued
+    //     dispatch({type: 'REMOVE_ACCOUNT_SNACKBAR'});
+    // }
+    useEffect(
+        () => {
+            setDisplaySnackbar(account.change_msg)
+        }, [account]
+    );
+
+    const [displaySnackbar, setDisplaySnackbar] = useState(!!(account.change_msg));
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setDisplaySnackbar(false);
+        dispatch({type: "REMOVE_ACCOUNT_SNACKBAR"});
+    };
+
+    const [tabIndex, setTabIndex] = React.useState(0);
+
+    const handleChange = (event, newIndex) => {
+        setTabIndex(newIndex);
+    };
+
     return (
         <div className={classes.root}>
             <CssBaseline/>
@@ -80,7 +160,6 @@ const Account = ({auth}) => {
                     last_name={auth.user.last_name}
                     email={auth.user.email}
                 />
-                {/*TODO DrawerHeader buttons overlaps the menu buttons in main drawer*/}
                 <Divider/>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Menu</Typography>
@@ -101,6 +180,12 @@ const Account = ({auth}) => {
             </Drawer>
             <main className={classes.content}>
                 <Container className={classes.container}>
+                    <Snackbar open={displaySnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
+                        <Alert onClose={handleSnackbarClose}
+                               severity={!!(account.change_type) ? account.change_type : "success"}>
+                            {account.change_msg}
+                        </Alert>
+                    </Snackbar>
                     <Typography variant={"h5"} style={{marginBottom: 20}}>Profile</Typography>
                     <div className={classes.profile}>
                         <div>
@@ -119,10 +204,45 @@ const Account = ({auth}) => {
                                 ) : ('')
                             }
                         </div>
-                        <div>
-                            <Typography>Email: {auth.user.email}</Typography>
-                            <Typography>Password: ********</Typography>
-                        </div>
+                        <Box className={classes.tabPanel}>
+                            <Tabs
+                                value={tabIndex}
+                                onChange={handleChange}
+                                indicatorColor="primary"
+                                textColor="primary"
+                                // centered
+                            >
+                                <Tab label="Analytics" {...a11yProps(0)}/>
+                                <Tab label="Profile" {...a11yProps(1)}/>
+                            </Tabs>
+                            <TabPanel value={tabIndex} index={0}>
+                                Analytics
+                            </TabPanel>
+                            <TabPanel value={tabIndex} index={1}>
+                                <Grid container direction={"column"}>
+                                    <Grid item xs={12} container>
+                                        <Grid item xs={9} md={5} className={classes.gridVerticalCenter}>
+                                            <Typography noWrap>Email: {auth.user.email}</Typography>
+                                        </Grid>
+                                        <Grid item xs={2} md={2}>
+                                            <EditUserEmailDialog/>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={12} container>
+                                        <Grid item xs={9} md={5} className={classes.gridVerticalCenter}>
+                                            <Typography noWrap>Password: ********</Typography>
+                                        </Grid>
+                                        <Grid item xs={2} md={2}>
+                                            <Tooltip title="Edit password">
+                                                <IconButton aria-label="edit">
+                                                    <EditIcon fontSize={"small"}/>
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </TabPanel>
+                        </Box>
                     </div>
                 </Container>
             </main>
@@ -132,11 +252,13 @@ const Account = ({auth}) => {
 };
 
 Account.propTypes = {
-    auth: PropTypes.object.isRequired
+    auth: PropTypes.object.isRequired,
+    account: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    auth: state.auth,
+    account: state.account
 });
 
 export default connect(mapStateToProps)(Account);
