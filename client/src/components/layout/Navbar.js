@@ -44,7 +44,8 @@ const useStyles = makeStyles(theme => ({
         },
     },
     logo: {
-        width: '60px',
+        width: '120px',
+        height: '30px',
         float: 'left',
         marginLeft: theme.spacing(3),
     }
@@ -147,7 +148,7 @@ const Navbar = ({logout, auth}) => {
             <AppBar position="fixed" color={"inherit"}>
                 <Toolbar>
                     <Box component={Link} to={'/'}>
-                        <img className={classes.logo} src={require("../../img/kchess_logosvg.svg")} alt="KCHESS logo"/>
+                        <img className={classes.logo} src={require("../../img/tdiii_chess_logo.png")} alt="TDIII Chess logo"/>
                     </Box>
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>

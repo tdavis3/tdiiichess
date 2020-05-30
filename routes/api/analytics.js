@@ -35,7 +35,6 @@ router.get("/admin/:user_id", auth, async (req, res) => {
         const number_of_sections = await Section.countDocuments({});
         const number_of_players = await Player.countDocuments({});
         const number_of_resultpairings = await Resultpairing.countDocuments({});
-        console.log("api call admin");
         return res.json({
             number_of_users,
             number_of_tournaments,

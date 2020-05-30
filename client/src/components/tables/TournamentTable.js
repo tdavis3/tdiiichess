@@ -16,7 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
-import {useRowSelect, useSortBy, useTable} from 'react-table';
+import {useRowSelect, useSortBy, useTable, useFilters, useGlobalFilter, useAsyncDebounce} from 'react-table';
 
 import PropTypes from 'prop-types';
 import AddTournamentDialog from "../forms/AddTournamentDialog";
@@ -37,9 +37,9 @@ const useStyles = makeStyles((theme) => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
+        backgroundColor: fade(theme.palette.common.black, 0.15),
         '&:hover': {
-            backgroundColor: fade(theme.palette.common.white, 0.25),
+            backgroundColor: fade(theme.palette.common.black, 0.25),
         },
         marginLeft: 0,
         width: '100%',
@@ -75,28 +75,102 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Define a default UI for filtering
+function GlobalFilter({
+                          preGlobalFilteredRows,
+                          globalFilter,
+                          setGlobalFilter,
+                      }) {
+    const classes = useStyles();
+    const count = preGlobalFilteredRows.length
+    const [value, setValue] = React.useState(globalFilter)
+    const onChange = useAsyncDebounce(value => {
+        setGlobalFilter(value || undefined)
+    }, 200)
+
+    return (
+        <div className={classes.search}>
+            <div className={classes.searchIcon}>
+                <SearchIcon/>
+            </div>
+            <InputBase
+                value={value || ""}
+                onChange={e => {
+                    setValue(e.target.value);
+                    onChange(e.target.value);
+                }}
+                // placeholder={`${count} tournaments...`}
+                placeholder={"Search..."}
+                classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput
+                }}
+                inputProps={{'aria-label': 'search'}}
+            />
+        </div>
+    )
+}
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+                                 column: {filterValue, preFilteredRows, setFilter},
+                             }) {
+    const count = preFilteredRows.length
+
+    return (
+        <input
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Search ${count} records...`}
+        />
+    )
+}
+
 
 const TournamentTable = ({
                              columns,
                              data,
                              parent_id
                          }) => {
+
+    const defaultColumn = React.useMemo(
+        () => ({
+            // Let's set up our default Filter UI
+            Filter: DefaultColumnFilter,
+        }),
+        []
+    )
+
     const {
         getTableProps,
+        getTableBodyProps,
         headerGroups,
         rows,
         prepareRow,
+        state,
+        visibleColumns,
+        preGlobalFilteredRows,
+        setGlobalFilter,
         // state: {selectedRowIds},
     } = useTable(
         {
             columns,
             data,
+            defaultColumn
         },
+        useFilters,
+        useGlobalFilter,
         useSortBy,
         useRowSelect
     );
 
     const classes = useStyles();
+
+    // We don't want to render all of the rows for this example, so cap
+    // it for this use case
+    // const firstPageRows = rows.slice(0, 10);
 
     // Render the UI for your table
     return (
@@ -106,19 +180,11 @@ const TournamentTable = ({
                 <Typography style={{fontSize: 20}}>Tournaments</Typography>
                 <AddTournamentDialog parent_id={parent_id}/>
                 <Typography className={classes.leftSection}></Typography>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon/>
-                    </div>
-                    <InputBase
-                        placeholder="Search…"
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        inputProps={{'aria-label': 'search'}}
-                    />
-                </div>
+                <GlobalFilter
+                    preGlobalFilteredRows={preGlobalFilteredRows}
+                    globalFilter={state.globalFilter}
+                    setGlobalFilter={setGlobalFilter}
+                />
                 <IconButton>
                     <MoreVertIcon/>
                 </IconButton>
@@ -146,7 +212,8 @@ const TournamentTable = ({
                         </TableRow>
                     ))}
                 </TableHead>
-                <TableBody>
+                <TableBody {...getTableBodyProps()}>
+                    {/*firstPageRows.map((row, i) =>*/}
                     {rows.map((row, i) => {
                         prepareRow(row);
                         return (

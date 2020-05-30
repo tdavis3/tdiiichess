@@ -30,9 +30,9 @@ const Landing = ({isAuthenticated}) => {
         <Fragment>
             <div className="jumbotron text-center">
                 <div className="container">
-                    <h1 className="jumbotron-heading">Chess Pairing Software</h1>
+                    <h1 className="jumbotron-heading">Chess Tournament Software</h1>
                     <p className="lead text-muted">
-                        A new, powerful, and lightweight chess tournament pairing software.
+                        A new, powerful, and lightweight chess tournament management & pairing software.
                         It seeks to make any tournament director's job super easy.
                     </p>
                     <p>
@@ -66,7 +66,7 @@ const Landing = ({isAuthenticated}) => {
                                 Most of the current chess pairing software is old, difficult to
                                 manage, and frankly unappealing. The learning curve for those
                                 technologies is too high for commonplace tournament directors.
-                                KCHESS is simple and visually appealing allowing for a quick
+                                TDIII Chess is simple and visually appealing allowing for a quick
                                 entry.
                             </p>
                         </div>

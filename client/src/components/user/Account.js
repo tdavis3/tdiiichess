@@ -224,18 +224,18 @@ const Account = ({auth, account, get_user_analytics, dispatch}) => {
                             <TabPanel value={tabIndex} index={1}>
                                 <Grid container direction={"column"}>
                                     <Grid item xs={12} container>
-                                        <Grid item xs={9} md={5} className={classes.gridVerticalCenter}>
+                                        <Grid item xs={9} md={5} lg={3} className={classes.gridVerticalCenter}>
                                             <Typography noWrap>Email: {auth.user.email}</Typography>
                                         </Grid>
-                                        <Grid item xs={2} md={2}>
+                                        <Grid item xs={2} md={2} lg={2}>
                                             <EditUserEmailDialog/>
                                         </Grid>
                                     </Grid>
                                     <Grid item xs={12} container>
-                                        <Grid item xs={9} md={5} className={classes.gridVerticalCenter}>
+                                        <Grid item xs={9} md={5} lg={3} className={classes.gridVerticalCenter}>
                                             <Typography noWrap>Password: ********</Typography>
                                         </Grid>
-                                        <Grid item xs={2} md={2}>
+                                        <Grid item xs={2} md={2} lg={2}>
                                             <EditUserPasswordDialog/>
                                         </Grid>
                                     </Grid>
