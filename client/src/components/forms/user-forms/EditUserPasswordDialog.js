@@ -110,7 +110,7 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
                         value={formData.confirm_new_password}
                         onChange={handleChange('confirm_new_password')}
                         error={!errorData.passwords_match}
-                        helperText={errorData.passwords_match ? "" : "Does not match password"}
+                        helperText={errorData.passwords_match ? "" : "Passwords do not match."}
                     />
                 </DialogContent>
                 <DialogActions>

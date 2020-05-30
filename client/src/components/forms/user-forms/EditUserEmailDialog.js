@@ -101,7 +101,7 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                         value={formData.new_email}
                         onChange={handleChange('new_email')}
                         error={!errorData.valid_email}
-                        helperText={errorData.valid_email ? "" : "Not a valid email format"}
+                        helperText={errorData.valid_email ? "" : "Not a valid email format."}
                     />
                     <TextField
                         variant={"outlined"}
@@ -113,7 +113,7 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                         value={formData.confirm_new_email}
                         onChange={handleChange('confirm_new_email')}
                         error={!errorData.emails_match}
-                        helperText={errorData.emails_match ? "" : "Does not match email"}
+                        helperText={errorData.emails_match ? "" : "Emails do not match."}
                     />
                 </DialogContent>
                 <DialogActions>

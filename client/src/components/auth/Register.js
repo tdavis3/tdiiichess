@@ -47,17 +47,32 @@ const Register = ({setAlert, register, isAuthenticated}) => {
         last_name: "",
         email: "",
         password: "",
-        confirmpassword: ""
+        confirm_password: ""
     });
 
-    const {first_name, last_name, email, password, confirmpassword} = formData;
+    const {first_name, last_name, email, password, confirm_password} = formData;
 
-    const onChange = e =>
+    const [errorData, setErrorData] = useState({
+        passwords_match: true
+    });
+
+    const onChange = e => {
         setFormData({...formData, [e.target.id]: e.target.value});
+        let newErrorData = {
+            passwords_match: null
+        };
+
+        if (e.target.id === 'password') {
+            newErrorData.passwords_match = (e.target.value === confirm_password);
+        } else if (e.target.id === 'confirm_password') {
+            newErrorData.passwords_match = (e.target.value === password);
+        }
+        setErrorData(newErrorData);
+    }
 
     const onSubmit = async e => {
         e.preventDefault();
-        if (password !== confirmpassword) {
+        if (password !== confirm_password) {
             setAlert("Passwords do not match", "error");
         } else {
             register({first_name, last_name, email, password});
@@ -144,12 +159,14 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="confirmpassword"
+                                name="confirm_password"
                                 label="Confirm Password"
                                 type="password"
-                                id="confirmpassword"
-                                value={confirmpassword}
+                                id="confirm_password"
+                                value={confirm_password}
                                 onChange={e => onChange(e)}
+                                error={!errorData.passwords_match}
+                                helperText={errorData.passwords_match ? "" : "Passwords do not match."}
                                 autoComplete="current-password"
                             />
                         </Grid>
