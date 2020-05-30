@@ -1,7 +1,6 @@
 # TDIII Chess
-Chess Tournament Director Software
 
-TDIII Chess is a new, powerful, and aesthetic chess tournament pairing software. It seeks to make any tournament director's job super easy.
+TDIII Chess is a new, powerful, and aesthetic chess tournament management and pairing software. It seeks to make any tournament director's job super easy.
 
 MERN Stack: MongoDB, Express, React.js, Node.js
 
