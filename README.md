@@ -12,3 +12,7 @@ Current tournament director softwares:
 - https://www.swisssys.com/
 - https://www.estima.com/chess/index.shtml
 - https://www.vegachess.com/ns/home
+
+---
+
+Run the command `npm run dev` to run the frontend and backend concurrently
