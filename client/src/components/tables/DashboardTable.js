@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {
     // Paper,
@@ -18,14 +18,16 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
-import {useRowSelect, useSortBy, useTable} from 'react-table';
+import {useRowSelect, useSortBy, useTable, useFlexLayout, useResizeColumns} from 'react-table';
 
 import PropTypes from 'prop-types';
 import IconButton from "@material-ui/core/IconButton";
 import AddPlayerDialog from "../forms/AddPlayerDialog";
 import {Link} from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import {useBlockLayout} from "react-table/src/plugin-hooks/useBlockLayout";
+import Checkbox from "@material-ui/core/Checkbox";
+import {connect} from "react-redux";
+import MovePlayerDialog from "../forms/player/MovePlayerDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -80,9 +82,27 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const IndeterminateCheckbox = React.forwardRef(
+    ({indeterminate, ...rest}, ref) => {
+        const defaultRef = React.useRef();
+        const resolvedRef = ref || defaultRef;
+
+        React.useEffect(() => {
+            resolvedRef.current.indeterminate = indeterminate
+        }, [resolvedRef, indeterminate]);
+
+        return (
+            <>
+                <Checkbox size="small" ref={resolvedRef} {...rest} />
+            </>
+        )
+    }
+);
+
 const DashboardTable = ({
                             columns,
                             data,
+                            sections,
                             parent_id,
                             disabled_add_button
                         }) => {
@@ -99,9 +119,29 @@ const DashboardTable = ({
         },
         useSortBy,
         useRowSelect,
-        // useBlockLayout,
-        // useFlexLayout,
-        // useAbsoluteLayout
+        hooks => {
+            hooks.allColumns.push(columns => [
+                // A column for selection
+                {
+                    id: 'selection',
+                    width: 10,
+                    maxWidth: 20,
+                    Header: ({getToggleAllRowsSelectedProps}) => (
+                        <div>
+                            <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+                        </div>
+                    ),
+                    Cell: ({row}) => (
+                        <div>
+                            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+                        </div>
+                    ),
+                },
+                ...columns,
+            ])
+        },
+        useResizeColumns,
+        useFlexLayout,
     );
 
     const classes = useStyles();
@@ -119,7 +159,7 @@ const DashboardTable = ({
                 <AddPlayerDialog parent_id={parent_id} disabled={disabled_add_button}/>
                 <Button size={"small"}>Withdrawals</Button>
                 <Button size={"small"}>Byes</Button>
-                <Button size={"small"}>Move</Button>
+                <MovePlayerDialog selectedRowIds={selectedRowIds} data={data} sections={sections}/>
                 <Typography className={classes.leftSection}></Typography>
                 <Button size={"small"}>Pairings</Button>
                 <Button size={"small"}>Standings</Button>
@@ -190,7 +230,12 @@ const DashboardTable = ({
 DashboardTable.propTypes = {
     disabled_add_button: PropTypes.bool,
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    sections: PropTypes.object.isRequired
 };
 
-export default DashboardTable;
+const mapStateToProps = state => ({
+    sections: state.sections
+});
+
+export default connect(mapStateToProps)(DashboardTable);

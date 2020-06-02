@@ -11,9 +11,9 @@ const partialuscfURI = config.get("uscfURI");
 // @route   GET api/players
 // @desc    Get one specific player
 // @access  Private (A token is needed)
-router.get("/playerget/:player_id", auth, async (req, res) => {
+router.get("/player/:playerId", auth, async (req, res) => {
     try {
-        const player = await Player.findById(req.params.player_id);
+        const player = await Player.findById(req.params.playerId);
         if (player) {
             return res.json(player);
         }
@@ -24,12 +24,12 @@ router.get("/playerget/:player_id", auth, async (req, res) => {
     }
 });
 
-// @route   GET api/players
+// @route   GET api/players/{sectionId}
 // @desc    Get all players from a section
 // @access  Private (A token is needed)
-router.get("/:section_id", auth, async (req, res) => {
+router.get("/:sectionId", auth, async (req, res) => {
     try {
-        const players = await Section.findById(req.params.section_id)
+        const players = await Section.findById(req.params.sectionId)
             .populate("players.player_id")
             .select("players");
         if (players) {
@@ -43,10 +43,10 @@ router.get("/:section_id", auth, async (req, res) => {
     }
 });
 
-// @route   POST api/players
+// @route   POST api/players/{sectionId}
 // @desc    Add player to a section
 // @access  Private (A token is needed)
-router.post("/:section_id", auth, async (req, res) => {
+router.post("/:sectionId", auth, async (req, res) => {
     const {
         first_name,
         last_name,
@@ -106,22 +106,22 @@ router.post("/:section_id", auth, async (req, res) => {
         }
         try {
             const player = new Player(playerFields);
-            const savedplayer = await player.save();
+            const savedPlayer = await player.save();
 
-            const updated_section = await Section.findByIdAndUpdate(
-                req.params.section_id,
+            const updatedSection = await Section.findByIdAndUpdate(
+                req.params.sectionId,
                 {
                     $push: {
                         players: {
-                            player_id: savedplayer._id,
+                            player_id: savedPlayer._id,
                             total_points: 0,
                             withdrew: false
                         }
                     }
                 }, {new: true}
             ).populate("players.player_id");
-            if (savedplayer && updated_section) {
-                return res.json(updated_section);
+            if (savedPlayer && updatedSection) {
+                return res.json(updatedSection);
             }
             res.status(404).json({errors: "This section does not exist"});
         } catch (err) {
@@ -134,7 +134,7 @@ router.post("/:section_id", auth, async (req, res) => {
 // @route   PUT api/players
 // @desc    Edit player in a section
 // @access  Private (A token is needed)
-router.put("/:player_id", auth, async (req, res) => {
+router.put("/:playerId", auth, async (req, res) => {
     const {
         first_name,
         last_name,
@@ -153,7 +153,7 @@ router.put("/:player_id", auth, async (req, res) => {
     } = req.body;
 
     const playerFields = {};
-    const separateplayerFields = {};
+    const separatePlayerFields = {};
 
     if (first_name) playerFields.first_name = first_name;
     if (last_name) playerFields.last_name = last_name;
@@ -172,25 +172,25 @@ router.put("/:player_id", auth, async (req, res) => {
 
     try {
         const updatedPlayer = await Player.findByIdAndUpdate(
-            req.params.player_id,
+            req.params.playerId,
             {
                 $set: playerFields
             },
             {new: true}
         );
         // Update section specific player fields in another route
-        // separateplayerFields.player_id = updatedPlayer._id;
+        // separatePlayerFields.player_id = updatedPlayer._id;
         //
         // const updatedSectionPlayer = await Section.findByIdAndUpdate(
-        //   updatedPlayer.section_id,
-        //   { $set: { "players.$[player]": separateplayerFields } },
+        //   updatedPlayer.sectionId,
+        //   { $set: { "players.$[player]": separatePlayerFields } },
         //   {
         //     new: true,
-        //     arrayFilters: [{ "player.player_id": { $eq: req.params.player_id } }]
+        //     arrayFilters: [{ "player.player_id": { $eq: req.params.playerId } }]
         //   }
         // );
         if (updatedPlayer) {
-            // TODO - Add the separateplayerFields to the updatedPlayer object
+            // TODO - Add the separatePlayerFields to the updatedPlayer object
             return res.json(updatedPlayer);
         }
         await res.status(404).send("Could not find player");
@@ -200,20 +200,30 @@ router.put("/:player_id", auth, async (req, res) => {
     }
 });
 
+// @route   PUT api/players/{oldSection}/{player}/{newSection}
+// @desc    Move a player from one section to another
+// @access  Private (A token is needed)
+router.put("/:oldSectionId/:playerId/newSectionId", auth, async (req, res) => {
+    const oldSectionId = req.params.oldSectionId;
+    const playerId = req.params.playerId;
+    const newSectionId = req.params.newSectionId;
+    // TODO - Move the player object, but only keep their totalpoints
+});
+
 // @route   PUT api/players
 // @desc    Delete player from a section
 // @access  Private (A token is needed)
-router.put("/:section_id/:play_id", auth, async (req, res) => {
+router.put("/:sectionId/:playerId", auth, async (req, res) => {
     try {
-        const updatedsection = await Section.findByIdAndUpdate(
-            req.params.section_id,
+        const updatedSection = await Section.findByIdAndUpdate(
+            req.params.sectionId,
             {
-                $pull: {players: {player_id: req.params.play_id}}
+                $pull: {players: {player_id: req.params.playerId}}
             },
             {new: true, multi: true}
         );
-        if (updatedsection) {
-            return res.send(updatedsection);
+        if (updatedSection) {
+            return res.send(updatedSection);
         }
         await res.status(400).send("Could not delete player");
     } catch (err) {
@@ -223,7 +233,7 @@ router.put("/:section_id/:play_id", auth, async (req, res) => {
 });
 
 // @route   POST api/players
-// @desc    Add a player
+// @desc    Add a player to Player collection
 // @access  Private (A token is needed)
 router.post("/", auth, async (req, res) => {
     const {
@@ -295,24 +305,24 @@ router.post("/", auth, async (req, res) => {
 });
 
 // @route   DELETE api/players
-// @desc    Delete a player
+// @desc    Delete a player from Player collection
 // @access  Private (A token is needed)
-router.delete("/:player_id", auth, async (req, res) => {
+router.delete("/:playerId", auth, async (req, res) => {
     const {uscf_id} = req.body;
 
     try {
-        const deletedplayer = await Player.findByIdAndDelete(req.params.player_id);
+        const deletedPlayer = await Player.findByIdAndDelete(req.params.playerId);
 
-        if (deletedplayer) {
-            return res.json(deletedplayer);
+        if (deletedPlayer) {
+            return res.json(deletedPlayer);
         }
 
-        const deletedplayerbyuscf = await Player.findOneAndDelete({
+        const deletedPlayerByUscf = await Player.findOneAndDelete({
             uscf_id: uscf_id
         });
 
-        if (deletedplayerbyuscf) {
-            return res.json(deletedplayerbyuscf);
+        if (deletedPlayerByUscf) {
+            return res.json(deletedPlayerByUscf);
         }
 
         // Bad request

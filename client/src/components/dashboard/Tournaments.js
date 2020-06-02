@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
 import {getCurrentTournaments} from "../../actions/tournaments";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 let moment = require('moment');
 moment().format();
@@ -230,7 +231,9 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
             </Drawer>
             <main className={classes.content}>
                 <Container className={classes.container}>
-                    {tournaments.loading ? (<Spinner/>) : (
+                    {tournaments.loading ? (
+                        <Spinner/>
+                    ) : (
                         <TournamentTable
                             title={"Tournaments"}
                             columns={columns}

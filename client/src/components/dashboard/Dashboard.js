@@ -82,18 +82,22 @@ const Dashboard = ({
             {
                 Header: 'Player',
                 accessor: 'player_id',
+                // disableResizing: true,
                 width: 150,
+                minWidth: 150,
+                maxWidth: 150,
+                // collapse: true,
                 Cell: ({cell: {value: {first_name, last_name, suffix, uscf_id, uscf_reg_rating}}}) => {
                     return (
                         <Grid container spacing={2} direction={'column'}>
-                            <Grid item xs={12}>
+                            <Grid item xs={5} md={3}>
                                 <Typography>{first_name.concat(" ", last_name, " ", suffix)}</Typography>
                             </Grid>
-                            <Grid item xs={12} container>
-                                <Grid item xs={6}>
+                            <Grid item xs={5} container>
+                                <Grid item xs={4} md={3}>
                                     <Typography>{uscf_id}</Typography>
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={2}>
                                     <Typography>{uscf_reg_rating}</Typography>
                                 </Grid>
                             </Grid>
@@ -117,7 +121,7 @@ const Dashboard = ({
         }
     }, [sectionDisplayedIndex, sections.loading, sections.sections]);
 
-    const date_renderer = (start_date, end_date) => {
+    const dateRenderer = (start_date, end_date) => {
         const start = moment(start_date);
         const end = moment(end_date);
         return (
@@ -165,7 +169,7 @@ const Dashboard = ({
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Tournament</Typography>
                     <Typography>Name: {location.state.tourney.name}</Typography>
-                    {date_renderer(location.state.tourney.start_date, location.state.tourney.end_date)}
+                    {dateRenderer(location.state.tourney.start_date, location.state.tourney.end_date)}
                     <Typography>Status: {tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
                 </Box>
                 <Divider/>

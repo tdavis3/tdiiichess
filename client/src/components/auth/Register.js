@@ -151,7 +151,7 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                 value={password}
                                 onChange={e => onChange(e)}
                                 autoComplete="current-password"
-                                helperText="Your password must be 8-20 characters long."
+                                helperText="Must be 8-20 characters."
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>

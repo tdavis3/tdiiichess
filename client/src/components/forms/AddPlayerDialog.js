@@ -52,7 +52,7 @@ const AddPlayerDialog = ({parent_id, disabled, createPlayer}) => {
 
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true)
