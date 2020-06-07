@@ -15,7 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {editPlayer} from "../../actions/players";
+import {editPlayer} from "../../../actions/players";
 
 
 const EditPlayerDialog = ({editPlayer, selected_edit}) => {

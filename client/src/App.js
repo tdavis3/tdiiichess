@@ -5,7 +5,6 @@ import Login from "./components/auth/Login";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
-import SimpleAlert from "./components/layout/SimpleAlert";
 import Tournaments from "./components/dashboard/Tournaments";
 import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/user/Account";
@@ -58,7 +57,6 @@ const App = () => {
                         </Switch>
                         <Route exact path="/" component={Landing}/>
                         <section>
-                            <SimpleAlert/>
                             <Switch>
                                 <Route exact path="/register" component={Register}/>
                                 <Route exact path="/login" component={Login}/>

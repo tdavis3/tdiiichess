@@ -13,8 +13,8 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import TournamentTable from "../tables/TournamentTable";
-import EditTournamentDialog from "../forms/EditTournamentDialog";
-import DeleteTournamentDialog from "../forms/DeleteTournamentDialog";
+import EditTournamentDialog from "../forms/tournament/EditTournamentDialog";
+import DeleteTournamentDialog from "../forms/tournament/DeleteTournamentDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

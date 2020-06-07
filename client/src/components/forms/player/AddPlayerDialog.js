@@ -19,7 +19,7 @@ import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers'
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {createPlayer} from "../../actions/players";
+import {createPlayer} from "../../../actions/players";
 
 
 const initialPlayer = {

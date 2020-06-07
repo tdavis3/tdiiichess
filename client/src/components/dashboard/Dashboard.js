@@ -8,12 +8,14 @@ import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography, Co
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import DashboardTable from "../tables/DashboardTable";
-import AddSectionDialog from "../forms/AddSectionDialog";
+import AddSectionDialog from "../forms/section/AddSectionDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getCurrentSections} from "../../actions/sections";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import SimpleAlert from "../layout/SnackbarAlert";
+import SnackbarAlert from "../layout/SnackbarAlert";
 
 let moment = require('moment');
 moment().format();
@@ -206,6 +208,7 @@ const Dashboard = ({
                             data={data}
                         />
                     )}
+                    <SnackbarAlert/>
                 </Container>
             </main>
         </div>

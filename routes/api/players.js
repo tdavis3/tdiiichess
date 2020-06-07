@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require('mongoose');
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const Player = require("../../models/Player");
@@ -200,14 +201,42 @@ router.put("/:playerId", auth, async (req, res) => {
     }
 });
 
-// @route   PUT api/players/{oldSection}/{player}/{newSection}
+// @route   PUT api/players/{oldSectionId}/{playerId}/{newSectionId}
 // @desc    Move a player from one section to another
 // @access  Private (A token is needed)
-router.put("/:oldSectionId/:playerId/newSectionId", auth, async (req, res) => {
+router.put("/move/:oldSectionId/:newSectionId", auth, async (req, res) => {
     const oldSectionId = req.params.oldSectionId;
-    const playerId = req.params.playerId;
     const newSectionId = req.params.newSectionId;
-    // TODO - Move the player object, but only keep their totalpoints
+    const {movingPlayerObj} = req.body;
+    movingPlayerObj.previous_opponents = [];  // Reset previous opponents
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    try {
+        /*
+        Use transactions to maintain atomicity
+         */
+        const updatedOldSection = await Section.findOneAndUpdate(
+            {_id: oldSectionId},  // Find section
+            {$pull: {players: {player_id: movingPlayerObj.player_id._id}}},
+            {new: true, multi: true}
+        ).populate("players.player_id").session(session);
+
+        const updatedNewSection = await Section.findOneAndUpdate(
+            {_id: newSectionId},  // Find section
+            {$push: {players: movingPlayerObj}},
+            {new: true, multi: true}
+        ).populate("players.player_id").session(session);
+
+        await session.commitTransaction();
+
+        res.json({updatedOldSection, updatedNewSection});
+    } catch (err) {
+        await session.abortTransaction();
+        console.error(err.message);
+        res.status(500).send("Server Error");
+    } finally {
+        await session.endSession();
+    }
 });
 
 // @route   PUT api/players

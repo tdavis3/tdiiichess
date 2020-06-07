@@ -18,7 +18,7 @@ import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers"
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {editTournament} from "../../actions/tournaments";
+import {editTournament} from "../../../actions/tournaments";
 
 
 const EditTournamentDialog = ({editTournament, selected_edit}) => {

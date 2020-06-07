@@ -23,8 +23,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
-import EditUserEmailDialog from "../forms/user-forms/EditUserEmailDialog";
-import EditUserPasswordDialog from "../forms/user-forms/EditUserPasswordDialog";
+import EditUserEmailDialog from "../forms/user/EditUserEmailDialog";
+import EditUserPasswordDialog from "../forms/user/EditUserPasswordDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";

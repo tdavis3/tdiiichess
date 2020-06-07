@@ -17,6 +17,8 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import PropTypes from "prop-types";
 import {makeStyles} from "@material-ui/core/styles";
+import {connect} from "react-redux";
+import {movePlayer} from "../../../actions/players";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,15 +28,15 @@ const useStyles = makeStyles((theme) => ({
     }
 ));
 
-const MovePlayerDialog = ({selectedRowIds, data, sections}) => {
+const MovePlayerDialog = ({selectedRowIds, data, sections, oldSectionId, movePlayer}) => {
     const classes = useStyles();
 
     const movingPlayerInitial = {
-        firstName: "",
-        lastName: "",
+        first_name: "",
+        last_name: "",
         state: "",
-        uscfRating: "",
-        uscfId: ""
+        uscf_reg_rating: "",
+        uscf_id: ""
     };
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -54,15 +56,7 @@ const MovePlayerDialog = ({selectedRowIds, data, sections}) => {
             // Display MovePlayer modal
             setDisplayOpen(true);
             const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-            const player = data[selectedIndex].player_id;
-            const playerInfoToDisplay = {
-                firstName: player.first_name,
-                lastName: player.last_name,
-                state: player.state,
-                uscfRating: player.uscf_reg_rating,
-                uscfId: player.uscf_id
-            };
-            setMovingPlayerInfo(playerInfoToDisplay);  // Get the data at the selected index
+            setMovingPlayerInfo(data[selectedIndex].player_id);  // Get the data at the selected index
         }
     };
 
@@ -72,7 +66,10 @@ const MovePlayerDialog = ({selectedRowIds, data, sections}) => {
     };
 
     const handleMove = () => {
-        // TODO Dispatch move player action.
+        const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
+        const newSectionId = sections.sections[sectionDisplayedIndex]._id;
+        movePlayer(oldSectionId, data[selectedIndex], newSectionId);
+        handleClose();
     };
 
     const popoverOpen = Boolean(anchorEl);
@@ -115,16 +112,16 @@ const MovePlayerDialog = ({selectedRowIds, data, sections}) => {
                         <Grid item xs={4}>
                             <Card>
                                 <CardContent>
-                                    <Typography>{movingPlayerInfo.firstName.concat(" ", movingPlayerInfo.lastName)}</Typography>
+                                    <Typography>{movingPlayerInfo.first_name.concat(" ", movingPlayerInfo.last_name)}</Typography>
                                     <Grid container spacing={2}>
                                         <Grid item xs={3}>
                                             <Typography>{movingPlayerInfo.state}</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Typography>{movingPlayerInfo.uscfRating}</Typography>
+                                            <Typography>{movingPlayerInfo.uscf_reg_rating}</Typography>
                                         </Grid>
                                     </Grid>
-                                    <Typography>{movingPlayerInfo.uscfId}</Typography>
+                                    <Typography>{movingPlayerInfo.uscf_id}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -156,7 +153,9 @@ const MovePlayerDialog = ({selectedRowIds, data, sections}) => {
 MovePlayerDialog.propTypes = {
     selectedRowIds: PropTypes.object.isRequired,
     data: PropTypes.array.isRequired,
-    sections: PropTypes.object.isRequired
+    sections: PropTypes.object.isRequired,
+    oldSectionId: PropTypes.string.isRequired,
+    movePlayer: PropTypes.func.isRequired
 };
 
-export default MovePlayerDialog;
+export default connect(null, {movePlayer})(MovePlayerDialog);

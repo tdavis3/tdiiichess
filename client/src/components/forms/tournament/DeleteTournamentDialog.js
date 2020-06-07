@@ -14,7 +14,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {deleteTournament} from '../../actions/tournaments';
+import {deleteTournament} from '../../../actions/tournaments';
 
 
 const DeleteTournamentDialog = ({deleteTournament, tournament}) => {

@@ -18,7 +18,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {editSection} from "../../actions/sections";
+import {editSection} from "../../../actions/sections";
 
 const EditSectionDialog = ({editSection, selected_edit}) => {
 

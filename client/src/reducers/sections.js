@@ -4,6 +4,7 @@ import {
     EDIT_SECTION,
     DELETE_SECTION,
     CLEAR_SECTIONS,
+    MOVE_PLAYER,
     SECTIONS_ERROR
 } from "../actions/types";
 
@@ -29,19 +30,37 @@ export default function (state = initialState, action) {
                 loading: false
             };
         case EDIT_SECTION:
-            const updated_sections = [];
+            const updatedSections = [];
             state.sections.forEach(section => {
                 if (section._id === payload._id) {
-                    updated_sections.push(payload);
+                    updatedSections.push(payload);
                 } else {
-                    updated_sections.push(section);
+                    updatedSections.push(section);
                 }
             });
             return {
                 ...state,
-                sections: updated_sections,
+                sections: updatedSections,
                 loading: false
             };
+        case MOVE_PLAYER:
+            const oldSectionId = payload.updatedOldSection._id;
+            const newSectionId = payload.updatedNewSection._id;
+            const newSections = [];
+            // Replace the old and new sections
+            state.sections.forEach(section => {
+                if (section._id === oldSectionId) {
+                    newSections.push(payload.updatedOldSection);
+                } else if (section._id === newSectionId) {
+                    newSections.push(payload.updatedNewSection);
+                } else {
+                    newSections.push(section);
+                }
+            });
+            return {
+                ...state,
+                sections: newSections
+            }
         case DELETE_SECTION:
             return {
                 ...state,

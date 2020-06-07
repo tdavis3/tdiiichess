@@ -3,6 +3,7 @@ import {setAlert} from "./alert";
 import {
     GET_PLAYERS,
     EDIT_PLAYER,
+    MOVE_PLAYER,
     DELETE_PLAYER,
     PLAYERS_ERROR,
     EDIT_SECTION
@@ -65,6 +66,25 @@ export const editPlayer = (player_id, formData) => async dispatch => {
     }
 };
 
+// Move a player to another section
+export const movePlayer = (oldSectionId, movingPlayerObj, newSectionId) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await axios.put(`/api/players/move/${oldSectionId}/${newSectionId}`, {movingPlayerObj}, config);
+        dispatch({type: MOVE_PLAYER, payload: res.data});
+        dispatch(setAlert(true, "Player moved", "success"));
+    } catch (err) {
+        dispatch({
+            type: PLAYERS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
+    }
+};
+
 // Delete a player
 export const deletePlayer = data => async dispatch => {
     const players = data.objs;
@@ -79,7 +99,7 @@ export const deletePlayer = data => async dispatch => {
                 async playerobj => await axios.put(`/api/players/${parent_id}/${playerobj.player_id._id}`)
             );
             dispatch({type: DELETE_PLAYER, payload: players});
-            dispatch(setAlert("Players Deleted", "success"));
+            dispatch(setAlert(true, "Players Deleted", "success"));
         } catch (err) {
             dispatch({
                 type: PLAYERS_ERROR,

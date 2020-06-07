@@ -22,7 +22,7 @@ import {useRowSelect, useSortBy, useTable, useFlexLayout, useResizeColumns} from
 
 import PropTypes from 'prop-types';
 import IconButton from "@material-ui/core/IconButton";
-import AddPlayerDialog from "../forms/AddPlayerDialog";
+import AddPlayerDialog from "../forms/player/AddPlayerDialog";
 import {Link} from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -159,7 +159,8 @@ const DashboardTable = ({
                 <AddPlayerDialog parent_id={parent_id} disabled={disabled_add_button}/>
                 <Button size={"small"}>Withdrawals</Button>
                 <Button size={"small"}>Byes</Button>
-                <MovePlayerDialog selectedRowIds={selectedRowIds} data={data} sections={sections}/>
+                <MovePlayerDialog oldSectionId={parent_id} selectedRowIds={selectedRowIds} data={data}
+                                  sections={sections}/>
                 <Typography className={classes.leftSection}></Typography>
                 <Button size={"small"}>Pairings</Button>
                 <Button size={"small"}>Standings</Button>

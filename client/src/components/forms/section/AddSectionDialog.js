@@ -19,7 +19,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {createSection} from "../../actions/sections";
+import {createSection} from "../../../actions/sections";
 
 
 const AddSectionDialog = ({
