@@ -23,10 +23,10 @@ import {createSection} from "../../../actions/sections";
 
 
 const AddSectionDialog = ({
-                              parent_id,
+                              tournamentId,
                               createSection,
                               tournament_time_control,
-                              crud_action_progress_handler
+                              crudActionProgressHandler
                           }) => {
 
     const initial_section = {
@@ -44,7 +44,7 @@ const AddSectionDialog = ({
 
     // Any change to the state vis call to setOpen() will re-render the component
     // Closing the modal for example
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -55,8 +55,9 @@ const AddSectionDialog = ({
     };
 
     const handleSave = () => {
-        crud_action_progress_handler(1);
-        createSection(parent_id, section);
+        console.log("AddSectionDialog tournamentId: ".concat(tournamentId));
+        crudActionProgressHandler(true);
+        createSection(tournamentId, section);
         setSection(initial_section);
         setOpen(false);
     };
@@ -187,6 +188,8 @@ const AddSectionDialog = ({
 
 AddSectionDialog.propTypes = {
     createSection: PropTypes.func.isRequired,
+    crudActionProgressHandler: PropTypes.func.isRequired,
+    tournamentId: PropTypes.string.isRequired,
 };
 
 export default connect(null, {createSection})(AddSectionDialog);

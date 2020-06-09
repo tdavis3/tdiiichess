@@ -23,16 +23,16 @@ export const getCurrentPlayers = section_id => async dispatch => {
 };
 
 // Create a player
-export const createPlayer = (section_id, formData) => async dispatch => {
+export const createPlayer = (sectionId, formData) => async dispatch => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        const res = await axios.post(`/api/players/${section_id}`, formData, config);
-        dispatch({type: EDIT_SECTION, payload: res.data});
-        dispatch(setAlert("Player Added", "success"));
+        const res = await axios.post(`/api/players/${sectionId}`, formData, config);
+        dispatch({type: EDIT_SECTION, payload: res.data});  // Since the response returns the updated section object
+        dispatch(setAlert("Player added", "success"));
     } catch (err) {
         dispatch({
             type: PLAYERS_ERROR,
@@ -53,16 +53,13 @@ export const editPlayer = (player_id, formData) => async dispatch => {
         const res = await axios.put(`/api/players/${player_id}`, formData, config);
 
         dispatch({type: EDIT_PLAYER, payload: res.data});
-        dispatch(setAlert("Player Edited", "success"));
+        dispatch(setAlert(res.data.msg, "success"));
     } catch (err) {
-        const errors = err.response.data.errors;
-        if (errors) {
-            errors.forEach(error => dispatch(setAlert(error.msg, "error")));
-        }
-        dispatch({
-            type: PLAYERS_ERROR,
-            payload: {msg: err.response.statusText, status: err.response.status}
-        });
+        dispatch(setAlert(err.response.data.msg, "error"));
+        // dispatch({
+        //     type: PLAYERS_ERROR,
+        //     payload: {msg: err.response.statusText, status: err.response.status}
+        // });
     }
 };
 
@@ -76,12 +73,14 @@ export const movePlayer = (oldSectionId, movingPlayerObj, newSectionId) => async
         };
         const res = await axios.put(`/api/players/move/${oldSectionId}/${newSectionId}`, {movingPlayerObj}, config);
         dispatch({type: MOVE_PLAYER, payload: res.data});
-        dispatch(setAlert(true, "Player moved", "success"));
+        dispatch(setAlert(res.data.msg, "success"));
     } catch (err) {
-        dispatch({
-            type: PLAYERS_ERROR,
-            payload: {msg: err.response.statusText, status: err.response.status}
-        });
+        console.log(err);
+        dispatch(setAlert(err.response.data.msg, "error"));
+        // dispatch({
+        //     type: PLAYERS_ERROR,
+        //     payload: {msg: err.response.statusText, status: err.response.status}
+        // });
     }
 };
 
@@ -99,7 +98,7 @@ export const deletePlayer = data => async dispatch => {
                 async playerobj => await axios.put(`/api/players/${parent_id}/${playerobj.player_id._id}`)
             );
             dispatch({type: DELETE_PLAYER, payload: players});
-            dispatch(setAlert(true, "Players Deleted", "success"));
+            dispatch(setAlert(true, "Players deleted", "success"));
         } catch (err) {
             dispatch({
                 type: PLAYERS_ERROR,

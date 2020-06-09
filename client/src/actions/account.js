@@ -1,10 +1,7 @@
 import axios from "axios";
+import {setAlert} from "./alert";
 import {
     USER_LOADED,
-    CHANGE_EMAIL_SUCCESS,
-    CHANGE_PASSWORD_SUCCESS,
-    CHANGE_EMAIL_FAIL,
-    CHANGE_PASSWORD_FAIL,
     GET_USER_ANALYTICS,
     GET_ADMIN_ANALYTICS
 } from "./types";
@@ -22,11 +19,11 @@ export const change_email = (old_email, new_email) => async dispatch => {
         // Check if res.data.result === 1
         if (res.data.err === 11000) {
             const snackbar_fail_msg = "There is already an account associated with this email.";
-            dispatch({type: CHANGE_EMAIL_FAIL, payload: {type: 'error', msg: snackbar_fail_msg}});
+            dispatch(setAlert(snackbar_fail_msg, "error"));
             return;
         }
         const snackbar_success_msg = "Your email was successfully changed.";
-        dispatch({type: CHANGE_EMAIL_SUCCESS, payload: {type: 'success', msg: snackbar_success_msg}});
+        dispatch(setAlert(snackbar_success_msg, "success"));
         // Load the updated user
         dispatch({type: USER_LOADED, payload: res.data.updated_user});
     } catch (err) {
@@ -46,11 +43,11 @@ export const change_password = (user_id, old_password, new_password) => async di
         // Check if res.data.result === 1
         if (res.data.err === "Passwords don't match") {
             const snackbar_fail_msg = "You entered an incorrect old password. Try again.";
-            dispatch({type: CHANGE_PASSWORD_FAIL, payload: {type: 'error', msg: snackbar_fail_msg}});
+            dispatch(setAlert(snackbar_fail_msg, "error"));
             return;
         }
         const snackbar_success_msg = "Your password was successfully changed.";
-        dispatch({type: CHANGE_PASSWORD_SUCCESS, payload: {type: 'success', msg: snackbar_success_msg}});
+        dispatch(setAlert(snackbar_success_msg, "error"));
     } catch (err) {
         console.log(err);
     }

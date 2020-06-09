@@ -16,12 +16,12 @@ router.get("/", auth, async (req, res) => {
         if (tournaments === []) {
             return res
                 .status(400)
-                .json({msg: "There are no tournaments for this user"});
+                .send({msg: "There are no tournaments for this user"});
         }
         await res.json(tournaments);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not retrieve tournaments."});
     }
 });
 
@@ -32,12 +32,12 @@ router.get("/:tournament_id", auth, async (req, res) => {
     try {
         const tournament = await Tournament.findById(req.params.tournament_id);
         if (tournament === []) {
-            return res.status(400).json({msg: "This tournament does not exist"});
+            return res.status(400).send({msg: "This tournament does not exist"});
         }
         await res.json(tournament);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not retrieve tournament."});
     }
 });
 
@@ -76,7 +76,7 @@ router.post(
             await res.json(tournament);
         } catch (err) {
             console.error(err.message);
-            res.status(500).send("Server Error");
+            res.status(500).send({msg: "Could not add tournament. Try again!"});
         }
     }
 );
@@ -85,16 +85,14 @@ router.post(
 // @desc    Edit a tournament
 // @access  Private (A token is needed)
 router.put("/:id", auth, async (req, res) => {
-    const {tournament_name, printing_name, time_control, start_date, end_date} = req.body;
-
+    const {name, printing_name, time_control, start_date, end_date} = req.body;
     const tournamentFields = {};
     tournamentFields.user = req.user.id;
-    if (tournament_name) tournamentFields.name = tournament_name;
+    if (name) tournamentFields.name = name;
     if (printing_name) tournamentFields.printing_name = printing_name;
     if (time_control) tournamentFields.time_control = time_control;
     if (start_date) tournamentFields.start_date = start_date;
     if (end_date) tournamentFields.end_date = end_date;
-
     try {
         // Returns the new updated tournament object
         const updated_tournament = await Tournament.findByIdAndUpdate(
@@ -105,10 +103,9 @@ router.put("/:id", auth, async (req, res) => {
         if (updated_tournament) {
             return res.json(updated_tournament);
         }
-        await res.status(404).send("Tournament does not exist");
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not edit tournament. Try again!"});
     }
 });
 
@@ -117,12 +114,12 @@ router.put("/:id", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.delete("/:tournament_id", auth, async (req, res) => {
     try {
-        const tournament = await Tournament.findById(req.params.tournament_id).deleteOne();
-        // await tournament.deleteOne();
+        const tournament = await Tournament.findById(req.params.tournament_id);
+        await tournament.deleteOne();  // Will trigger cascade deletion of Sections
         await res.json(tournament);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not delete tournament. Try again!"});
     }
 });
 

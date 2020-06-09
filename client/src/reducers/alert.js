@@ -13,7 +13,7 @@ export default function (state = initialState, action) {
         case SET_ALERT:
             return {
                 ...state,
-                display: payload.display,
+                display: true,
                 msg: payload.msg,
                 alertType: payload.alertType,
                 id: payload.id

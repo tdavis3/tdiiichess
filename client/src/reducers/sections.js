@@ -26,7 +26,7 @@ export default function (state = initialState, action) {
         case CREATE_SECTION:
             return {
                 ...state,
-                sections: [payload, ...state.sections],
+                sections: [...state.sections, payload],
                 loading: false
             };
         case EDIT_SECTION:

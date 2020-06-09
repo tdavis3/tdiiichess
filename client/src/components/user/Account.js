@@ -29,6 +29,7 @@ import EditUserPasswordDialog from "../forms/user/EditUserPasswordDialog";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {get_user_analytics} from "../../actions/account";
+import SnackbarAlert from "../layout/SnackbarAlert";
 
 
 const drawerWidth = 260;
@@ -117,25 +118,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Account = ({auth, account, get_user_analytics, dispatch}) => {
+const Account = ({auth, account, get_user_analytics}) => {
     const classes = useStyles();
 
     useEffect(
         () => {
             get_user_analytics(auth.user._id);
-            setDisplaySnackbar(!!(account.change_msg))
         }, []
     );
-
-    const [displaySnackbar, setDisplaySnackbar] = useState(!!(account.change_msg));
-
-    const handleSnackbarClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setDisplaySnackbar(false);
-        dispatch({type: "REMOVE_ACCOUNT_SNACKBAR"});
-    };
 
     const [tabIndex, setTabIndex] = React.useState(0);
 
@@ -179,12 +169,7 @@ const Account = ({auth, account, get_user_analytics, dispatch}) => {
             </Drawer>
             <main className={classes.content}>
                 <Container className={classes.container}>
-                    <Snackbar open={displaySnackbar} autoHideDuration={5000} onClose={handleSnackbarClose}>
-                        <Alert onClose={handleSnackbarClose}
-                               severity={!!(account.change_type) ? account.change_type : "success"}>
-                            {account.change_msg}
-                        </Alert>
-                    </Snackbar>
+                    <SnackbarAlert/>
                     <Typography variant={"h5"} style={{marginBottom: 20}}>Account</Typography>
                     <div className={classes.profile}>
                         <div>

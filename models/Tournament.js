@@ -36,9 +36,9 @@ TournamentSchema.pre(
     async function (next) {
         try {
             // Delete each section referenced in this Tournament
-            for (section_id of this.section_ids) {
-                const section = await mongoose.model("Section").findById(section_id);
-                section.deleteOne(); // Trigger cascading for sections as well
+            for (sectionId of this.section_ids) {
+                const section = await mongoose.model("Section").findById(sectionId);
+                section.deleteOne();
             }
             next();
         } catch (err) {

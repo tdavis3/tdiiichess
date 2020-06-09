@@ -26,11 +26,9 @@ router.get("/:tournament_id", auth, async (req, res) => {
         if (sections) {
             return res.json(sections.section_ids);
         }
-
-        await res.status(404).json({msg: "No sections found in this tournament"});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not retrieve sections."});
     }
 });
 
@@ -107,7 +105,7 @@ router.post(
                 .json({msg: "No sections found in this tournament"});
         } catch (err) {
             console.error(err.message);
-            await res.status(500).send("Server Error");
+            res.status(500).send({msg: "Could not create section. Try again!"});
         }
     }
 );
@@ -148,10 +146,9 @@ router.put("/:section_id", auth, async (req, res) => {
         if (updatedsection) {
             return res.json(updatedsection);
         }
-        await res.status(404).json({errors: "This section not found"});
     } catch (err) {
         console.error(err.message);
-        await res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not edit section. Try again!"});
     }
 });
 
@@ -174,7 +171,7 @@ router.delete("/:section_id", auth, async (req, res) => {
         await res.status(400).json({errors: "Delete failure"});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not delete section. Try again!"});
     }
 });
 

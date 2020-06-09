@@ -40,7 +40,7 @@ const initialPlayer = {
 };
 
 
-const AddPlayerDialog = ({parent_id, disabled, createPlayer}) => {
+const AddPlayerDialog = ({sectionId, disabled, createPlayer}) => {
     const [player, setPlayer] = useState(initialPlayer);
 
     const [selectedDOB, setDOB] = useState(null);
@@ -63,7 +63,9 @@ const AddPlayerDialog = ({parent_id, disabled, createPlayer}) => {
     };
 
     const handleSave = () => {
-        createPlayer(parent_id, player);
+        console.log("sectionId");
+        console.log(sectionId); // what type is this put in Proptypes
+        createPlayer(sectionId, player);
         setPlayer(initialPlayer);
         setOpen(false);
     };
@@ -208,7 +210,8 @@ const AddPlayerDialog = ({parent_id, disabled, createPlayer}) => {
 
 AddPlayerDialog.propTypes = {
     createPlayer: PropTypes.func.isRequired,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
+    sectionId: PropTypes.string.isRequired
 };
 
 export default connect(null, {createPlayer})(AddPlayerDialog);

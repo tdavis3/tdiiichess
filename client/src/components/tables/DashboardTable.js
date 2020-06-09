@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import {
     // Paper,
@@ -103,9 +103,10 @@ const DashboardTable = ({
                             columns,
                             data,
                             sections,
-                            parent_id,
-                            disabled_add_button
+                            sectionId,
+                            disabledAddButton
                         }) => {
+
     const {
         getTableProps,
         headerGroups,
@@ -156,10 +157,10 @@ const DashboardTable = ({
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
-                <AddPlayerDialog parent_id={parent_id} disabled={disabled_add_button}/>
+                <AddPlayerDialog sectionId={sectionId} disabled={disabledAddButton}/>
                 <Button size={"small"}>Withdrawals</Button>
                 <Button size={"small"}>Byes</Button>
-                <MovePlayerDialog oldSectionId={parent_id} selectedRowIds={selectedRowIds} data={data}
+                <MovePlayerDialog oldSectionId={sectionId} selectedRowIds={selectedRowIds} players={data}
                                   sections={sections}/>
                 <Typography className={classes.leftSection}></Typography>
                 <Button size={"small"}>Pairings</Button>
@@ -229,10 +230,11 @@ const DashboardTable = ({
 };
 
 DashboardTable.propTypes = {
-    disabled_add_button: PropTypes.bool,
+    disabledAddButton: PropTypes.bool.isRequired,
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
-    sections: PropTypes.object.isRequired
+    sections: PropTypes.object.isRequired,
+    sectionId: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({

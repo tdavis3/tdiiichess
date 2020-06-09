@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     }
 ));
 
-const MovePlayerDialog = ({selectedRowIds, data, sections, oldSectionId, movePlayer}) => {
+const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, movePlayer}) => {
     const classes = useStyles();
 
     const movingPlayerInitial = {
@@ -56,7 +56,7 @@ const MovePlayerDialog = ({selectedRowIds, data, sections, oldSectionId, movePla
             // Display MovePlayer modal
             setDisplayOpen(true);
             const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-            setMovingPlayerInfo(data[selectedIndex].player_id);  // Get the data at the selected index
+            setMovingPlayerInfo(players[selectedIndex].player_id);  // Get the data at the selected index
         }
     };
 
@@ -68,7 +68,7 @@ const MovePlayerDialog = ({selectedRowIds, data, sections, oldSectionId, movePla
     const handleMove = () => {
         const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
         const newSectionId = sections.sections[sectionDisplayedIndex]._id;
-        movePlayer(oldSectionId, data[selectedIndex], newSectionId);
+        movePlayer(oldSectionId, players[selectedIndex], newSectionId);
         handleClose();
     };
 
@@ -152,7 +152,7 @@ const MovePlayerDialog = ({selectedRowIds, data, sections, oldSectionId, movePla
 
 MovePlayerDialog.propTypes = {
     selectedRowIds: PropTypes.object.isRequired,
-    data: PropTypes.array.isRequired,
+    players: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
     oldSectionId: PropTypes.string.isRequired,
     movePlayer: PropTypes.func.isRequired

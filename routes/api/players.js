@@ -18,10 +18,10 @@ router.get("/player/:playerId", auth, async (req, res) => {
         if (player) {
             return res.json(player);
         }
-        await res.status(404).json({msg: "No player found"});
+        await res.status(404).send({msg: "No player found"});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not retrieve player."});
     }
 });
 
@@ -37,10 +37,10 @@ router.get("/:sectionId", auth, async (req, res) => {
             // Return ARRAY of players in the specified section
             return res.json(players.players);
         }
-        await res.status(404).json({msg: "No players in this section"});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Player all players could not be retrieved."});
+
     }
 });
 
@@ -85,22 +85,25 @@ router.post("/:sectionId", auth, async (req, res) => {
             if (cell) playerFields.cell = cell;
             if (dob) playerFields.dob = dob;
         } else {
-            if (playerobject.firstname)
-                playerFields.first_name = playerobject.firstname;
-            if (playerobject.lastname) playerFields.last_name = playerobject.lastname;
+            console.log(playerobject);
+            if (playerobject.firstName)
+                playerFields.first_name = playerobject.firstName;
+            if (playerobject.middleName)
+                playerFields.middle_name = playerobject.middleName;
+            if (playerobject.lastName) playerFields.last_name = playerobject.lastName;
             if (playerobject.suffix) playerFields.suffix = playerobject.suffix;
-            if (playerobject.uscfid) playerFields.uscf_id = playerobject.uscfid;
-            if (playerobject.regrating)
-                playerFields.uscf_reg_rating = playerobject.regrating;
-            if (playerobject.blitzrating)
-                playerFields.uscf_blitz_rating = playerobject.blitzrating;
-            if (playerobject.quickrating)
-                playerFields.uscf_quick_rating = playerobject.quickrating;
+            if (playerobject.uscfId) playerFields.uscf_id = playerobject.uscfId;
+            if (playerobject.regRating)
+                playerFields.uscf_reg_rating = playerobject.regRating;
+            if (playerobject.blitzRating)
+                playerFields.uscf_blitz_rating = playerobject.blitzRating;
+            if (playerobject.quickRating)
+                playerFields.uscf_quick_rating = playerobject.quickRating;
             if (playerobject.state) playerFields.state = playerobject.state;
             if (playerobject.expires) playerFields.expires = playerobject.expires;
-            if (playerobject.fidecountry)
-                playerFields.fide_country = playerobject.fidecountry;
-            if (playerobject.fideid) playerFields.fide_id = playerobject.fideid;
+            if (playerobject.fideCountry)
+                playerFields.fide_country = playerobject.fideCountry;
+            if (playerobject.fideId) playerFields.fide_id = playerobject.fideId;
             if (email) playerFields.email = email;
             if (cell) playerFields.cell = cell;
             if (dob) playerFields.dob = dob;
@@ -109,6 +112,8 @@ router.post("/:sectionId", auth, async (req, res) => {
             const player = new Player(playerFields);
             const savedPlayer = await player.save();
 
+            console.log("Add player - sectionId");
+            console.log(req.params.sectionId);
             const updatedSection = await Section.findByIdAndUpdate(
                 req.params.sectionId,
                 {
@@ -124,10 +129,9 @@ router.post("/:sectionId", auth, async (req, res) => {
             if (savedPlayer && updatedSection) {
                 return res.json(updatedSection);
             }
-            res.status(404).json({errors: "This section does not exist"});
         } catch (err) {
             console.error(err.message);
-            res.status(500).send("Server Error");
+            res.status(500).send({msg: "Player could not be added. Try again!"});
         }
     });
 });
@@ -194,10 +198,9 @@ router.put("/:playerId", auth, async (req, res) => {
             // TODO - Add the separatePlayerFields to the updatedPlayer object
             return res.json(updatedPlayer);
         }
-        await res.status(404).send("Could not find player");
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Player could not be edited. Try again!"});
     }
 });
 
@@ -212,28 +215,28 @@ router.put("/move/:oldSectionId/:newSectionId", auth, async (req, res) => {
     const session = await mongoose.startSession();
     await session.startTransaction();
     try {
-        /*
-        Use transactions to maintain atomicity
-         */
+        // Use transactions to maintain atomicity
         const updatedOldSection = await Section.findOneAndUpdate(
             {_id: oldSectionId},  // Find section
             {$pull: {players: {player_id: movingPlayerObj.player_id._id}}},
             {new: true, multi: true}
         ).populate("players.player_id").session(session);
-
         const updatedNewSection = await Section.findOneAndUpdate(
             {_id: newSectionId},  // Find section
             {$push: {players: movingPlayerObj}},
             {new: true, multi: true}
         ).populate("players.player_id").session(session);
-
         await session.commitTransaction();
-
-        res.json({updatedOldSection, updatedNewSection});
+        /*
+         TODO:
+          Consider adding a check here to ensure that all changes were ACTUALLY made by inspecting the rawResult -
+           nModified, nChanged, etc.
+         */
+        res.json({msg: "Player moved successfully", updatedOldSection, updatedNewSection});
     } catch (err) {
         await session.abortTransaction();
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Player could not be moved. Try again!"});
     } finally {
         await session.endSession();
     }
@@ -254,10 +257,9 @@ router.put("/:sectionId/:playerId", auth, async (req, res) => {
         if (updatedSection) {
             return res.send(updatedSection);
         }
-        await res.status(400).send("Could not delete player");
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not delete player. Try again!"});
     }
 });
 
@@ -301,35 +303,37 @@ router.post("/", auth, async (req, res) => {
         if (cell) playerFields.cell = cell;
         if (dob) playerFields.dob = dob;
     } else {
-        if (playerobject.firstname) playerFields.first_name = playerobject.firstname;
-        if (playerobject.lastname) playerFields.last_name = playerobject.lastname;
-        if (playerobject.regrating)
-            playerFields.uscf_reg_rating = playerobject.regrating;
-        if (playerobject.blitzrating)
-            playerFields.uscf_blitz_rating = playerobject.blitzrating;
-        if (playerobject.quickrating)
-            playerFields.uscf_quick_rating = playerobject.quickrating;
+        if (playerobject.firstName)
+            playerFields.first_name = playerobject.firstName;
+        if (playerobject.middleName)
+            playerFields.middle_name = playerobject.middleName;
+        if (playerobject.lastName) playerFields.last_name = playerobject.lastName;
+        if (playerobject.suffix) playerFields.suffix = playerobject.suffix;
+        if (playerobject.uscfId) playerFields.uscf_id = playerobject.uscfId;
+        if (playerobject.regRating)
+            playerFields.uscf_reg_rating = playerobject.regRating;
+        if (playerobject.blitzRating)
+            playerFields.uscf_blitz_rating = playerobject.blitzRating;
+        if (playerobject.quickRating)
+            playerFields.uscf_quick_rating = playerobject.quickRating;
         if (playerobject.state) playerFields.state = playerobject.state;
         if (playerobject.expires) playerFields.expires = playerobject.expires;
-        if (playerobject.fidecountry)
-            playerFields.fide_country = playerobject.fidecountry;
-        if (playerobject.fideid) playerFields.fide_id = playerobject.fideid;
+        if (playerobject.fideCountry)
+            playerFields.fide_country = playerobject.fideCountry;
+        if (playerobject.fideId) playerFields.fide_id = playerobject.fideId;
         if (email) playerFields.email = email;
         if (cell) playerFields.cell = cell;
         if (dob) playerFields.dob = dob;
     }
-
     try {
         const player = new Player(playerFields);
         const savedplayer = await player.save();
-
         if (savedplayer) {
             return res.json(savedplayer);
         }
-        res.status(400).json({errors: "Cannot add player"});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not add player to internal Players db."});
     }
 });
 
@@ -338,27 +342,20 @@ router.post("/", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.delete("/:playerId", auth, async (req, res) => {
     const {uscf_id} = req.body;
-
     try {
         const deletedPlayer = await Player.findByIdAndDelete(req.params.playerId);
-
         if (deletedPlayer) {
             return res.json(deletedPlayer);
         }
-
         const deletedPlayerByUscf = await Player.findOneAndDelete({
             uscf_id: uscf_id
         });
-
         if (deletedPlayerByUscf) {
             return res.json(deletedPlayerByUscf);
         }
-
-        // Bad request
-        await res.status(400).send("Could not delete player");
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server Error");
+        res.status(500).send({msg: "Could not delete player from internal Players db"});
     }
 });
 

@@ -12,9 +12,8 @@ import AddSectionDialog from "../forms/section/AddSectionDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {getCurrentSections} from "../../actions/sections";
+import {getSections} from "../../actions/sections";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import SimpleAlert from "../layout/SnackbarAlert";
 import SnackbarAlert from "../layout/SnackbarAlert";
 
 let moment = require('moment');
@@ -60,20 +59,22 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = ({
-                       getCurrentSections,
+                       getSections,
                        auth,
                        sections,
                        location
                    }) => {
+    const tournament = location.state.tournament
 
     useEffect(() => {
-        getCurrentSections(location.state.tourney._id);
+        getSections(tournament._id);
     }, []);
 
     const classes = useStyles();
 
-    const [crudActionProgress, setCrudActionProgress] = useState(0);
+    const [crudActionInProgress, setCrudActionInProgress] = useState(false);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
+    let selectedSectionId = (sections.loading) ? 0 : sections.sections[sectionDisplayedIndex]._id;
 
     const handleSectionClick = (index) => () => {
         setSectionDisplayedIndex(index);
@@ -170,9 +171,9 @@ const Dashboard = ({
                 <Divider/>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Tournament</Typography>
-                    <Typography>Name: {location.state.tourney.name}</Typography>
-                    {dateRenderer(location.state.tourney.start_date, location.state.tourney.end_date)}
-                    <Typography>Status: {tournament_status(location.state.tourney.start_date, location.state.tourney.end_date)}</Typography>
+                    <Typography>Name: {tournament.name}</Typography>
+                    {dateRenderer(tournament.start_date, tournament.end_date)}
+                    <Typography>Status: {tournament_status(tournament.start_date, tournament.end_date)}</Typography>
                 </Box>
                 <Divider/>
                 <Grid container justify={'center'}>
@@ -181,13 +182,14 @@ const Dashboard = ({
                     </Grid>
                     <Grid item xs={2}>
                         <AddSectionDialog
-                            parent_id={location.state.tourney._id}
-                            tournament_time_control={location.state.tourney.time_control}
-                            crud_action_progress_handler={setCrudActionProgress}
+                            tournamentId={tournament._id}
+                            tournament_time_control={tournament.time_control}
+                            crudActionProgressHandler={setCrudActionInProgress}
                         />
                     </Grid>
                 </Grid>
-                {crudActionProgress && sections.loading ? <LinearProgress/> : <></>}
+                {/* TODO Figure out a way to maintain multiple loading indicators for adding a section */}
+                {/*{crudActionInProgress || sections.loading ? <LinearProgress/> : <></>}*/}
                 <List component="nav" aria-label="secondary mailbox folders">
                     {sections.sections.map((section, index) => (
                         <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
@@ -202,8 +204,8 @@ const Dashboard = ({
                 <Container className={classes.container}>
                     {sections.loading ? (<Spinner/>) : (
                         <DashboardTable
-                            parent_id={location.state.tourney.section_ids[sectionDisplayedIndex]}
-                            disabled_add_button={sections.sections.length === 0 ? true : false}
+                            sectionId={selectedSectionId}
+                            disabledAddButton={sections.sections.length === 0 ? true : false}
                             columns={columns}
                             data={data}
                         />
@@ -216,7 +218,7 @@ const Dashboard = ({
 };
 
 Dashboard.propTypes = {
-    getCurrentSections: PropTypes.func.isRequired,
+    getSections: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired
 };
@@ -227,5 +229,5 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, {
-    getCurrentSections
+    getSections
 })(Dashboard);

@@ -21,6 +21,7 @@ import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
 import {getCurrentTournaments} from "../../actions/tournaments";
 import Skeleton from "@material-ui/lab/Skeleton";
+import SnackbarAlert from "../layout/SnackbarAlert";
 
 let moment = require('moment');
 moment().format();
@@ -80,9 +81,9 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                 // minWidth: 150,
                 // maxWidth: 300,
                 Cell: ({cell: {value, row}}) => {
-                    const tourney = row.original;
+                    const tournament = row.original;
                     return (
-                        <Link to={{pathname: "/tournaments/dashboard", state: {tourney}}}>
+                        <Link to={{pathname: "/tournaments/dashboard", state: {tournament}}}>
                             {value}
                         </Link>
                     );
@@ -240,6 +241,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                             data={data}
                         />
                     )}
+                    <SnackbarAlert/>
                 </Container>
             </main>
         </div>

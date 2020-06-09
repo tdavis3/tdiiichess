@@ -15,6 +15,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {login} from "../../actions/auth";
+import SnackbarAlert from "../layout/SnackbarAlert";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -63,6 +64,7 @@ const Login = ({auth, login}) => {
     return (
         <Container component={"main"} maxWidth={"xs"}>
             <CssBaseline/>
+            <SnackbarAlert/>
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon/>
