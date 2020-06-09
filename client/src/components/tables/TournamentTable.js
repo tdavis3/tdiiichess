@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useMemo} from 'react';
 
 import {
     // Paper,
@@ -83,7 +83,7 @@ function GlobalFilter({
                       }) {
     const classes = useStyles();
     const count = preGlobalFilteredRows.length
-    const [value, setValue] = React.useState(globalFilter)
+    const [value, setValue] = useState(globalFilter)
     const onChange = useAsyncDebounce(value => {
         setGlobalFilter(value || undefined)
     }, 200)
@@ -135,7 +135,7 @@ const TournamentTable = ({
                              parent_id
                          }) => {
 
-    const defaultColumn = React.useMemo(
+    const defaultColumn = useMemo(
         () => ({
             // Let's set up our default Filter UI
             Filter: DefaultColumnFilter,

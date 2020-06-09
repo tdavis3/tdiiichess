@@ -4,8 +4,9 @@ import {
     GET_SECTIONS,
     CREATE_SECTION,
     EDIT_SECTION,
+    DELETE_SECTION,
+    CLEAR_SECTIONS,
     SECTIONS_ERROR,
-    DELETE_SECTION
 } from "./types";
 
 // Get sections
@@ -90,5 +91,14 @@ export const deleteSection = data => async dispatch => {
             //     payload: {msg: err.response.statusText, status: err.response.status}
             // });
         }
+    }
+};
+
+// Clear sections in state
+export const clearSections = () => async dispatch => {
+    try {
+        dispatch({type: CLEAR_SECTIONS});
+    } catch (err) {
+
     }
 };

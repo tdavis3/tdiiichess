@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
     // Paper,
@@ -28,6 +28,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Checkbox from "@material-ui/core/Checkbox";
 import {connect} from "react-redux";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
+import {clearSections} from "../../actions/sections";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -87,7 +88,7 @@ const IndeterminateCheckbox = React.forwardRef(
         const defaultRef = React.useRef();
         const resolvedRef = ref || defaultRef;
 
-        React.useEffect(() => {
+        useEffect(() => {
             resolvedRef.current.indeterminate = indeterminate
         }, [resolvedRef, indeterminate]);
 
@@ -104,7 +105,8 @@ const DashboardTable = ({
                             data,
                             sections,
                             sectionId,
-                            disabledAddButton
+                            disabledAddButton,
+                            clearSections
                         }) => {
 
     const {
@@ -147,13 +149,17 @@ const DashboardTable = ({
 
     const classes = useStyles();
 
+    const handleBackButtonClick = () => {
+        clearSections();
+    };
+
     // Render the UI for your table
     return (
         // <Paper>
         <div>
             <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
-                <IconButton component={Link} to={'/tournaments'}>
+                <IconButton component={Link} to={'/tournaments'} onClick={handleBackButtonClick}>
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
@@ -234,11 +240,12 @@ DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
-    sectionId: PropTypes.string.isRequired
+    sectionId: PropTypes.string.isRequired,
+    clearSections: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     sections: state.sections
 });
 
-export default connect(mapStateToProps)(DashboardTable);
+export default connect(mapStateToProps, {clearSections})(DashboardTable);

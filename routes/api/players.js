@@ -85,7 +85,6 @@ router.post("/:sectionId", auth, async (req, res) => {
             if (cell) playerFields.cell = cell;
             if (dob) playerFields.dob = dob;
         } else {
-            console.log(playerobject);
             if (playerobject.firstName)
                 playerFields.first_name = playerobject.firstName;
             if (playerobject.middleName)
@@ -111,9 +110,6 @@ router.post("/:sectionId", auth, async (req, res) => {
         try {
             const player = new Player(playerFields);
             const savedPlayer = await player.save();
-
-            console.log("Add player - sectionId");
-            console.log(req.params.sectionId);
             const updatedSection = await Section.findByIdAndUpdate(
                 req.params.sectionId,
                 {

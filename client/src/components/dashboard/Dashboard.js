@@ -74,7 +74,7 @@ const Dashboard = ({
 
     const [crudActionInProgress, setCrudActionInProgress] = useState(false);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
-    let selectedSectionId = (sections.loading) ? 0 : sections.sections[sectionDisplayedIndex]._id;
+    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? 0 : sections.sections[sectionDisplayedIndex]._id;
 
     const handleSectionClick = (index) => () => {
         setSectionDisplayedIndex(index);
@@ -113,14 +113,10 @@ const Dashboard = ({
     );
 
     const data = React.useMemo(() => {
-        if (sections.loading) {
-            return [];
+        if (sections.loading || sections.sections.length === 0) {
+            return []
         } else {
-            if (sections.sections.length === 0) {
-                return [];
-            } else {
-                return sections.sections[sectionDisplayedIndex].players;
-            }
+            return sections.sections[sectionDisplayedIndex].players;
         }
     }, [sectionDisplayedIndex, sections.loading, sections.sections]);
 

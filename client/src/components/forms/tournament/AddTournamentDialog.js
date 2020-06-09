@@ -37,7 +37,7 @@ const AddTournamentDialog = ({createTournament}) => {
     const [selectedStartDate, setStartDateChange] = useState(new Date());
     const [selectedEndDate, setEndDateChange] = useState(new Date());
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleStartDateChange = (date) => {
         setStartDateChange(date);

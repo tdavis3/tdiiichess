@@ -15,11 +15,8 @@ import {
     ListItemText,
     Grid
 } from '@material-ui/core';
-import Alert from "@material-ui/lab/Alert";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
-import Paper from "@material-ui/core/Paper";
-import Snackbar from "@material-ui/core/Snackbar";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
@@ -127,7 +124,7 @@ const Account = ({auth, account, get_user_analytics}) => {
         }, []
     );
 
-    const [tabIndex, setTabIndex] = React.useState(0);
+    const [tabIndex, setTabIndex] = useState(0);
 
     const handleChange = (event, newIndex) => {
         setTabIndex(newIndex);

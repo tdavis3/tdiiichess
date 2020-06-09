@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import {Link} from "react-router-dom";
 
 import {
@@ -55,7 +55,7 @@ const Navbar = ({logout, auth}) => {
 
     const classes = useStyles();
 
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -148,7 +148,8 @@ const Navbar = ({logout, auth}) => {
             <AppBar position="fixed" color={"inherit"}>
                 <Toolbar>
                     <Box component={Link} to={'/'}>
-                        <img className={classes.logo} src={require("../../img/tdiii_chess_logo.png")} alt="TDIII Chess logo"/>
+                        <img className={classes.logo} src={require("../../img/tdiii_chess_logo.png")}
+                             alt="TDIII Chess logo"/>
                     </Box>
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>

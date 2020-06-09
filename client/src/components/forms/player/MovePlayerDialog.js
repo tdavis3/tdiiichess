@@ -40,7 +40,7 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, move
     };
 
     const [anchorEl, setAnchorEl] = useState(null);
-    const [displayOpen, setDisplayOpen] = useState(null);
+    const [displayOpen, setDisplayOpen] = useState(false);
     const [movingPlayerInfo, setMovingPlayerInfo] = useState(movingPlayerInitial);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
 

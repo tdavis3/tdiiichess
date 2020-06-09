@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, {Fragment, useState} from "react";
 import {Link} from "react-router-dom";
 
 import {
@@ -60,7 +60,7 @@ const NavbarPrivate = ({logout, auth}) => {
 
     const classes = useStyles();
 
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 

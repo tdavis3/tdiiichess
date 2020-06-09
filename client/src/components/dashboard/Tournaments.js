@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useMemo} from "react";
 import {Link} from "react-router-dom";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -73,7 +73,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
 
     const classes = useStyles();
 
-    const columns = React.useMemo(
+    const columns = useMemo(
         () => [
             {
                 Header: 'Name',
@@ -197,7 +197,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
         []
     );
 
-    const data = React.useMemo(() => {
+    const data = useMemo(() => {
         if (tournaments.loading) {
             return [];
         } else {
