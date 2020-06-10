@@ -176,7 +176,7 @@ const AddSectionDialog = ({
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button onClick={handleSave} disabled={(section.name === "") ? true : false} color="primary">
                         Save
                     </Button>
                 </DialogActions>

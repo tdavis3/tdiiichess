@@ -154,7 +154,7 @@ const AddTournamentDialog = ({createTournament}) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button onClick={handleSave} disabled={(tournament.name === "") ? true : false} color="primary">
                         Save
                     </Button>
                 </DialogActions>
