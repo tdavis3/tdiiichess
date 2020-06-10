@@ -37,6 +37,7 @@ import Checkbox from "@material-ui/core/Checkbox";
 import {connect} from "react-redux";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
 import {clearSections} from "../../actions/sections";
+import SectionTableOptions from "./SectionTableOptions";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -224,9 +225,7 @@ const DashboardTable = ({
                     globalFilter={globalFilter}
                     setGlobalFilter={setGlobalFilter}
                 />
-                <IconButton>
-                    <MoreVertIcon/>
-                </IconButton>
+                <SectionTableOptions/>
             </Toolbar>
 
             <MaUTable {...getTableProps()}>

@@ -53,7 +53,6 @@ const DrawerHeader = ({auth, logout}) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
             return;
         }
-
         setOpen(false);
     };
 

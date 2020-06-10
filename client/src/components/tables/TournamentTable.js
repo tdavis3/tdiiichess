@@ -14,13 +14,14 @@ import {
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import TournamentTableOptions from "./TournamentTableOptions";
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
 import {useRowSelect, useSortBy, useTable, useFilters, useGlobalFilter, useAsyncDebounce} from 'react-table';
 
 import PropTypes from 'prop-types';
 import AddTournamentDialog from "../forms/tournament/AddTournamentDialog";
-import CssBaseline from "@material-ui/core/CssBaseline";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -180,9 +181,7 @@ const TournamentTable = ({
                     globalFilter={globalFilter}
                     setGlobalFilter={setGlobalFilter}
                 />
-                <IconButton>
-                    <MoreVertIcon/>
-                </IconButton>
+                <TournamentTableOptions/>
             </Toolbar>
             <MaUTable {...getTableProps()}>
                 <TableHead>

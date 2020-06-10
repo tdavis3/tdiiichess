@@ -9,8 +9,6 @@ import Tournaments from "./components/dashboard/Tournaments";
 import Dashboard from "./components/dashboard/Dashboard";
 import Account from "./components/user/Account";
 import AdminAnalytics from "./components/user/AdminAnalytics";
-import ResultPairings from "./components/dashboard/ResultPairings";
-import Standings from "./components/dashboard/Standings";
 import Footer from "./components/layout/Footer";
 
 // Redux
@@ -61,21 +59,7 @@ const App = () => {
                                 <Route exact path="/register" component={Register}/>
                                 <Route exact path="/login" component={Login}/>
                                 <PrivateRoute exact path="/tournaments" component={Tournaments}/>
-                                <PrivateRoute
-                                    exact
-                                    path="/tournaments/dashboard"
-                                    component={Dashboard}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path="/tournaments/dashboard/resultpairings"
-                                    component={ResultPairings}
-                                />
-                                <PrivateRoute
-                                    exact
-                                    path="/tournaments/dashboard/standings"
-                                    component={Standings}
-                                />
+                                <PrivateRoute exact path="/tournaments/dashboard" component={Dashboard}/>
                                 <PrivateRoute exact path="/account" component={Account}/>
                                 <PrivateRoute exact path="/admin/analytics" component={AdminAnalytics}/>
                                 <PrivateRoute exact path="/logout" component={Landing}/>
