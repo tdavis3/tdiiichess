@@ -131,8 +131,7 @@ function DefaultColumnFilter({
 
 const TournamentTable = ({
                              columns,
-                             data,
-                             parent_id
+                             data
                          }) => {
 
     const defaultColumn = useMemo(
@@ -149,11 +148,10 @@ const TournamentTable = ({
         headerGroups,
         rows,
         prepareRow,
-        state,
         visibleColumns,
         preGlobalFilteredRows,
         setGlobalFilter,
-        // state: {selectedRowIds},
+        state: {globalFilter},
     } = useTable(
         {
             columns,
@@ -168,21 +166,18 @@ const TournamentTable = ({
 
     const classes = useStyles();
 
-    // We don't want to render all of the rows for this example, so cap
-    // it for this use case
-    // const firstPageRows = rows.slice(0, 10);
-
     // Render the UI for your table
     return (
         <div>
             <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
                 <Typography style={{fontSize: 20}}>Tournaments</Typography>
-                <AddTournamentDialog parent_id={parent_id}/>
+                {/* Understand why exactly this dialog does not need a userId reference?? */}
+                <AddTournamentDialog/>
                 <Typography className={classes.leftSection}></Typography>
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}
-                    globalFilter={state.globalFilter}
+                    globalFilter={globalFilter}
                     setGlobalFilter={setGlobalFilter}
                 />
                 <IconButton>

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
     // Paper,
@@ -18,7 +18,15 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
-import {useRowSelect, useSortBy, useTable, useFlexLayout, useResizeColumns} from 'react-table';
+import {
+    useRowSelect,
+    useSortBy,
+    useTable,
+    useFlexLayout,
+    useResizeColumns,
+    useFilters,
+    useGlobalFilter, useAsyncDebounce
+} from 'react-table';
 
 import PropTypes from 'prop-types';
 import IconButton from "@material-ui/core/IconButton";
@@ -100,6 +108,59 @@ const IndeterminateCheckbox = React.forwardRef(
     }
 );
 
+// Define a default UI for filtering
+function GlobalFilter({
+                          preGlobalFilteredRows,
+                          globalFilter,
+                          setGlobalFilter,
+                      }) {
+    const classes = useStyles();
+    const count = preGlobalFilteredRows.length
+    const [value, setValue] = useState(globalFilter)
+    const onChange = useAsyncDebounce(value => {
+        setGlobalFilter(value || undefined)
+    }, 200)
+
+    return (
+        <div className={classes.search}>
+            <div className={classes.searchIcon}>
+                <SearchIcon/>
+            </div>
+            <InputBase
+                value={value || ""}
+                onChange={e => {
+                    setValue(e.target.value);
+                    onChange(e.target.value);
+                }}
+                // placeholder={`${count} tournaments...`}
+                placeholder={"Search..."}
+                classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput
+                }}
+                inputProps={{'aria-label': 'search'}}
+            />
+        </div>
+    )
+}
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+                                 column: {filterValue, preFilteredRows, setFilter},
+                             }) {
+    const count = preFilteredRows.length
+
+    return (
+        <input
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+            }}
+            placeholder={`Search ${count} records...`}
+        />
+    )
+}
+
 const DashboardTable = ({
                             columns,
                             data,
@@ -114,12 +175,16 @@ const DashboardTable = ({
         headerGroups,
         rows,
         prepareRow,
-        state: {selectedRowIds},
+        state: {selectedRowIds, globalFilter},
+        preGlobalFilteredRows,
+        setGlobalFilter,
     } = useTable(
         {
             columns,
             data,
         },
+        useFilters,
+        useGlobalFilter,
         useSortBy,
         useRowSelect,
         hooks => {
@@ -172,19 +237,24 @@ const DashboardTable = ({
                 <Button size={"small"}>Pairings</Button>
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
-                <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                        <SearchIcon/>
-                    </div>
-                    <InputBase
-                        placeholder="Search…"
-                        classes={{
-                            root: classes.inputRoot,
-                            input: classes.inputInput,
-                        }}
-                        inputProps={{'aria-label': 'search'}}
-                    />
-                </div>
+                {/*<div className={classes.search}>*/}
+                {/*    <div className={classes.searchIcon}>*/}
+                {/*        <SearchIcon/>*/}
+                {/*    </div>*/}
+                {/*    <InputBase*/}
+                {/*        placeholder="Search…"*/}
+                {/*        classes={{*/}
+                {/*            root: classes.inputRoot,*/}
+                {/*            input: classes.inputInput,*/}
+                {/*        }}*/}
+                {/*        inputProps={{'aria-label': 'search'}}*/}
+                {/*    />*/}
+                {/*</div>*/}
+                <GlobalFilter
+                    preGlobalFilteredRows={preGlobalFilteredRows}
+                    globalFilter={globalFilter}
+                    setGlobalFilter={setGlobalFilter}
+                />
                 <IconButton>
                     <MoreVertIcon/>
                 </IconButton>
