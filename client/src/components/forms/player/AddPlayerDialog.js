@@ -40,7 +40,7 @@ const initialPlayer = {
 };
 
 
-const AddPlayerDialog = ({sectionId, disabled, createPlayer}) => {
+const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
     const [player, setPlayer] = useState(initialPlayer);
 
     const [selectedDOB, setDOB] = useState(null);
@@ -63,8 +63,6 @@ const AddPlayerDialog = ({sectionId, disabled, createPlayer}) => {
     };
 
     const handleSave = () => {
-        console.log("sectionId");
-        console.log(sectionId); // what type is this put in Proptypes
         createPlayer(sectionId, player);
         setPlayer(initialPlayer);
         setOpen(false);
@@ -77,9 +75,12 @@ const AddPlayerDialog = ({sectionId, disabled, createPlayer}) => {
     return (
         <div>
             <Tooltip title="Add">
-                <IconButton aria-label="add" onClick={handleClickOpen} disabled={disabled}>
+                <span>
+                    <IconButton aria-label="add" onClick={handleClickOpen}
+                                disabled={sections.sections.length === 0 ? true : false}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
+                </span>
             </Tooltip>
             <Dialog
                 open={open}
@@ -210,8 +211,12 @@ const AddPlayerDialog = ({sectionId, disabled, createPlayer}) => {
 
 AddPlayerDialog.propTypes = {
     createPlayer: PropTypes.func.isRequired,
-    disabled: PropTypes.bool,
+    sections: PropTypes.object.isRequired,
     sectionId: PropTypes.string.isRequired
 };
 
-export default connect(null, {createPlayer})(AddPlayerDialog);
+const mapStateToProps = state => ({
+    sections: state.sections
+});
+
+export default connect(mapStateToProps, {createPlayer})(AddPlayerDialog);

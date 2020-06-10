@@ -112,9 +112,9 @@ router.put("/:id", auth, async (req, res) => {
 // @route   DELETE api/tournaments/
 // @desc    Delete a tournament
 // @access  Private (A token is needed)
-router.delete("/:tournament_id", auth, async (req, res) => {
+router.delete("/:tournamentId", auth, async (req, res) => {
     try {
-        const tournament = await Tournament.findById(req.params.tournament_id);
+        const tournament = await Tournament.findById(req.params.tournamentId);
         await tournament.deleteOne();  // Will trigger cascade deletion of Sections
         await res.json(tournament);
     } catch (err) {

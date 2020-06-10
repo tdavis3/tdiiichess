@@ -149,7 +149,6 @@ const DashboardTable = ({
                             data,
                             sections,
                             sectionId,
-                            disabledAddButton,
                             clearSections
                         }) => {
 
@@ -211,7 +210,7 @@ const DashboardTable = ({
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
-                <AddPlayerDialog sectionId={sectionId} disabled={disabledAddButton}/>
+                <AddPlayerDialog sectionId={sectionId}/>
                 <Button size={"small"}>Withdrawals</Button>
                 <Button size={"small"}>Byes</Button>
                 <MovePlayerDialog oldSectionId={sectionId} selectedRowIds={selectedRowIds} players={data}
@@ -276,7 +275,6 @@ const DashboardTable = ({
 };
 
 DashboardTable.propTypes = {
-    disabledAddButton: PropTypes.bool.isRequired,
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,

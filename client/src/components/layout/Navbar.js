@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from "react";
+import React, {useState} from "react";
 import {Link} from "react-router-dom";
 
 import {
@@ -136,9 +136,9 @@ const Navbar = ({logout, auth}) => {
             onClose={handleMobileMenuClose}
         >
             {!auth.loading && (
-                <Fragment>
+                <div>
                     {auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
-                </Fragment>
+                </div>
             )}
         </Menu>
     );
@@ -154,9 +154,9 @@ const Navbar = ({logout, auth}) => {
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>
                         {!auth.loading && (
-                            <Fragment>
+                            <div>
                                 {auth.isAuthenticated ? authLinks : guestLinks}
-                            </Fragment>
+                            </div>
                         )}
                     </div>
                     <div className={classes.sectionMobile}>

@@ -98,7 +98,7 @@ const DrawerHeader = ({auth, logout}) => {
                         aria-haspopup="true"
                         onClick={handleToggle}
                     >
-                        <MenuIcon fontSize={"medium"}/>
+                        <MenuIcon/>
                     </IconButton>
                     {/*zIndex to prevent the buttons overlap*/}
                     <Popper style={{zIndex: 2}} open={open} anchorEl={anchorRef.current} role={undefined} transition

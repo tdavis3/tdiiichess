@@ -55,7 +55,6 @@ const AddSectionDialog = ({
     };
 
     const handleSave = () => {
-        console.log("AddSectionDialog tournamentId: ".concat(tournamentId));
         crudActionProgressHandler(true);
         createSection(tournamentId, section);
         setSection(initial_section);

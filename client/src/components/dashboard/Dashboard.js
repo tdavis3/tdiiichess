@@ -74,7 +74,7 @@ const Dashboard = ({
 
     const [crudActionInProgress, setCrudActionInProgress] = useState(false);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
-    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? 0 : sections.sections[sectionDisplayedIndex]._id;
+    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : sections.sections[sectionDisplayedIndex]._id;
 
     const handleSectionClick = (index) => () => {
         setSectionDisplayedIndex(index);
@@ -207,7 +207,6 @@ const Dashboard = ({
                     {sections.loading ? (<Spinner/>) : (
                         <DashboardTable
                             sectionId={selectedSectionId}
-                            disabledAddButton={sections.sections.length === 0 ? true : false}
                             columns={columns}
                             data={data}
                         />
