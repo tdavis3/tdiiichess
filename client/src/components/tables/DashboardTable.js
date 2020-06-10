@@ -144,23 +144,6 @@ function GlobalFilter({
     )
 }
 
-// Define a default UI for filtering
-function DefaultColumnFilter({
-                                 column: {filterValue, preFilteredRows, setFilter},
-                             }) {
-    const count = preFilteredRows.length
-
-    return (
-        <input
-            value={filterValue || ''}
-            onChange={e => {
-                setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-            }}
-            placeholder={`Search ${count} records...`}
-        />
-    )
-}
-
 const DashboardTable = ({
                             columns,
                             data,
@@ -237,19 +220,6 @@ const DashboardTable = ({
                 <Button size={"small"}>Pairings</Button>
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
-                {/*<div className={classes.search}>*/}
-                {/*    <div className={classes.searchIcon}>*/}
-                {/*        <SearchIcon/>*/}
-                {/*    </div>*/}
-                {/*    <InputBase*/}
-                {/*        placeholder="Search…"*/}
-                {/*        classes={{*/}
-                {/*            root: classes.inputRoot,*/}
-                {/*            input: classes.inputInput,*/}
-                {/*        }}*/}
-                {/*        inputProps={{'aria-label': 'search'}}*/}
-                {/*    />*/}
-                {/*</div>*/}
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}
                     globalFilter={globalFilter}

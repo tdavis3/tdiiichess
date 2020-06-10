@@ -84,8 +84,14 @@ const Dashboard = ({
         () => [
             {
                 Header: 'Player',
-                accessor: 'player_id',
+                // accessor: row => `${row.first_name} ${row.last_name} ${row.suffix} ${row.uscf_id}`,
+                // filterMethod: (filter, row) =>
+                //     row._original.firstName.startsWith(filter.value) ||
+                //     row._original.lastName.startsWith(filter.value) ||
+                //     row._original.suffix.startsWith(filter.value) ||
+                //     row._original.uscf_id.startsWith(filter.value),
                 // disableResizing: true,
+                accessor: 'player_id',
                 width: 150,
                 minWidth: 150,
                 maxWidth: 150,
