@@ -41,9 +41,6 @@ const AddSectionDialog = ({
     };
 
     const [section, setSection] = useState(initial_section);
-
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {

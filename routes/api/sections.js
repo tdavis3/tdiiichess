@@ -155,20 +155,13 @@ router.put("/:section_id", auth, async (req, res) => {
 // @route   DELETE api/sections/
 // @desc    Delete a section
 // @access  Private (A token is needed)
-router.delete("/:section_id", auth, async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({errors: errors.array()});
-    }
-
+router.delete("/:sectionId", auth, async (req, res) => {
     try {
-        const section = await Section.findById(req.params.section_id);
-
+        const section = await Section.findById(req.params.sectionId);
         if (section) {
             section.deleteOne(); // doc.deleteOne() - This should cascade delete
             return res.json(section);
         }
-        await res.status(400).json({errors: "Delete failure"});
     } catch (err) {
         console.error(err.message);
         res.status(500).send({msg: "Could not delete section. Try again!"});

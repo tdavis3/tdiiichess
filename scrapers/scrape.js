@@ -27,16 +27,14 @@ const getUSCFhtml = async (partialuscfURI, uscfid) => {
             .find('[name="memfideid"]')
             .val()
             .split("-", 2); // Only two splits (id, country)
-
         const name = parseFullName(tr.find('[name="memname"]').val());
-
         const ret = {
             uscfId: tr.find('[name="memid"]').val(),
             expires: tr.find('[name="memexpdt"]').val(),
             firstName: toTitleCase(name.first),
             middleName: toTitleCase(name.middle),
             lastName: toTitleCase(name.last),
-            suffix: toTitleCase(name.suffix),
+            suffix: (name.suffix.includes("i") || name.suffix.includes("I")) ? name.suffix.toUpperCase() : toTitleCase(name.suffix),
             regRating: ratingparser(tr.find('[name="rating1"]').val()),
             quickRating: ratingparser(tr.find('[name="rating2"]').val()),
             blitzRating: ratingparser(tr.find('[name="rating3"]').val()),

@@ -1,10 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
-    Tooltip,
     TextField,
     Button,
-    IconButton,
     Select,
     Input,
     InputLabel,
@@ -14,42 +12,42 @@ import {
     DialogContent,
     DialogContentText
 } from "@material-ui/core";
-import EditIcon from '@material-ui/icons/Edit';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {editSection} from "../../../actions/sections";
 
-const EditSectionDialog = ({editSection, selected_edit}) => {
+
+const EditSectionDialog = ({display, setAnchorEl, setDisplay, editSection, selectedSection}) => {
+
+    useEffect(
+        () => {
+            setSection(originalSection);
+        }, [selectedSection]
+    );
 
     const originalSection = {
-        name: selected_edit.name,
-        printing_name: selected_edit.printing_name,
-        event_type: selected_edit.event_type,
-        style: selected_edit.style,
-        rating_type: selected_edit.rating_type,
-        coin_toss: selected_edit.coin_toss,
-        time_control: selected_edit.time_control,
-        number_of_rounds: selected_edit.number_of_rounds
+        name: selectedSection.name,
+        printing_name: selectedSection.printing_name,
+        event_type: selectedSection.event_type,
+        style: selectedSection.style,
+        rating_type: selectedSection.rating_type,
+        coin_toss: selectedSection.coin_toss,
+        time_control: selectedSection.time_control,
+        number_of_rounds: selectedSection.number_of_rounds
     };
 
     const [section, setSection] = useState(originalSection);
 
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true)
-    };
-
     const handleClose = () => {
-        setOpen(false);
+        setDisplay(false);
+        setAnchorEl(null);
     };
 
     const handleSave = () => {
-        editSection(selected_edit._id, section);
-        setOpen(false);
+        editSection(selectedSection._id, section);
+        setDisplay(false);
+        setAnchorEl(null);
     };
 
     const handleChange = name => ({target: {value}}) => {
@@ -58,13 +56,8 @@ const EditSectionDialog = ({editSection, selected_edit}) => {
 
     return (
         <div>
-            <Tooltip title="Add">
-                <IconButton aria-label="add" onClick={handleClickOpen}>
-                    <EditIcon/>
-                </IconButton>
-            </Tooltip>
             <Dialog
-                open={open}
+                open={display}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
@@ -169,6 +162,10 @@ const EditSectionDialog = ({editSection, selected_edit}) => {
 };
 
 EditSectionDialog.propTypes = {
+    display: PropTypes.bool.isRequired,
+    setAnchorEl: PropTypes.func.isRequired,
+    setDisplay: PropTypes.func.isRequired,
+    selectedSection: PropTypes.object.isRequired,
     editSection: PropTypes.func.isRequired,
 };
 

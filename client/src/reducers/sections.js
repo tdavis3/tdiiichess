@@ -64,9 +64,7 @@ export default function (state = initialState, action) {
         case DELETE_SECTION:
             return {
                 ...state,
-                sections: state.sections.filter(
-                    section => !payload.includes(section._id)
-                ),
+                sections: state.sections.filter(section => section._id !== payload),
                 loading: false
             };
         case CLEAR_SECTIONS:

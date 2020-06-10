@@ -3,14 +3,20 @@ const mongoose = require("mongoose");
 const PlayerSchema = new mongoose.Schema({
     first_name: {
         type: String,
+        default: '',
         required: true
+    },
+    middle_name: {
+        type: String,
+        default: ''
     },
     last_name: {
         type: String,
-        required: true
+        default: ''
     },
     suffix: {
-        type: String
+        type: String,
+        default: ''
     },
     state: {
         type: String

@@ -5,7 +5,7 @@ const auth = require("../../middleware/auth");
 const Player = require("../../models/Player");
 const Section = require("../../models/Section");
 const {check, validationResult} = require("express-validator");
-const getuscfhtml = require("../../scrape");
+const getuscfhtml = require("../../scrapers/scrape");
 const config = require("config");
 const partialuscfURI = config.get("uscfURI");
 
@@ -68,8 +68,8 @@ router.post("/:sectionId", auth, async (req, res) => {
     const playerFields = {};
 
     // Weird but ok
-    await getuscfhtml(partialuscfURI, uscf_id).then(async playerobject => {
-        if (playerobject === null) {
+    await getuscfhtml(partialuscfURI, uscf_id).then(async playerObject => {
+        if (playerObject === null) {
             if (first_name) playerFields.first_name = first_name;
             if (last_name) playerFields.last_name = last_name;
             if (suffix) playerFields.suffix = suffix;
@@ -85,24 +85,24 @@ router.post("/:sectionId", auth, async (req, res) => {
             if (cell) playerFields.cell = cell;
             if (dob) playerFields.dob = dob;
         } else {
-            if (playerobject.firstName)
-                playerFields.first_name = playerobject.firstName;
-            if (playerobject.middleName)
-                playerFields.middle_name = playerobject.middleName;
-            if (playerobject.lastName) playerFields.last_name = playerobject.lastName;
-            if (playerobject.suffix) playerFields.suffix = playerobject.suffix;
-            if (playerobject.uscfId) playerFields.uscf_id = playerobject.uscfId;
-            if (playerobject.regRating)
-                playerFields.uscf_reg_rating = playerobject.regRating;
-            if (playerobject.blitzRating)
-                playerFields.uscf_blitz_rating = playerobject.blitzRating;
-            if (playerobject.quickRating)
-                playerFields.uscf_quick_rating = playerobject.quickRating;
-            if (playerobject.state) playerFields.state = playerobject.state;
-            if (playerobject.expires) playerFields.expires = playerobject.expires;
-            if (playerobject.fideCountry)
-                playerFields.fide_country = playerobject.fideCountry;
-            if (playerobject.fideId) playerFields.fide_id = playerobject.fideId;
+            if (playerObject.firstName)
+                playerFields.first_name = playerObject.firstName;
+            if (playerObject.middleName)
+                playerFields.middle_name = playerObject.middleName;
+            if (playerObject.lastName) playerFields.last_name = playerObject.lastName;
+            if (playerObject.suffix) playerFields.suffix = playerObject.suffix;
+            if (playerObject.uscfId) playerFields.uscf_id = playerObject.uscfId;
+            if (playerObject.regRating)
+                playerFields.uscf_reg_rating = playerObject.regRating;
+            if (playerObject.blitzRating)
+                playerFields.uscf_blitz_rating = playerObject.blitzRating;
+            if (playerObject.quickRating)
+                playerFields.uscf_quick_rating = playerObject.quickRating;
+            if (playerObject.state) playerFields.state = playerObject.state;
+            if (playerObject.expires) playerFields.expires = playerObject.expires;
+            if (playerObject.fideCountry)
+                playerFields.fide_country = playerObject.fideCountry;
+            if (playerObject.fideId) playerFields.fide_id = playerObject.fideId;
             if (email) playerFields.email = email;
             if (cell) playerFields.cell = cell;
             if (dob) playerFields.dob = dob;

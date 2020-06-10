@@ -1,9 +1,19 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo} from "react";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Moment from "react-moment";
-import {Box, Grid, Drawer, Divider, List, ListItem, ListItemText, Typography, Container} from "@material-ui/core";
+import {
+    Box,
+    Grid,
+    Drawer,
+    Divider,
+    List,
+    ListItem,
+    ListItemText,
+    Typography,
+    Container,
+} from "@material-ui/core";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
@@ -15,6 +25,8 @@ import {connect} from "react-redux";
 import {getSections} from "../../actions/sections";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import SnackbarAlert from "../layout/SnackbarAlert";
+import EditSectionDialog from "../forms/section/EditSectionDialog";
+import SectionContextMenu from "../forms/section/SectionContextMenu";
 
 let moment = require('moment');
 moment().format();
@@ -52,10 +64,9 @@ const useStyles = makeStyles(theme => ({
         height: '100vh',
         // overflow: 'auto',
     },
-    container: {
-        // paddingTop: theme.spacing(4),
-        // paddingBottom: theme.spacing(4),
-    },
+    popoverContent: {
+        padding: theme.spacing(1)
+    }
 }));
 
 const Dashboard = ({
@@ -72,15 +83,10 @@ const Dashboard = ({
 
     const classes = useStyles();
 
-    const [crudActionInProgress, setCrudActionInProgress] = useState(false);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
     let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : sections.sections[sectionDisplayedIndex]._id;
 
-    const handleSectionClick = (index) => () => {
-        setSectionDisplayedIndex(index);
-    };
-
-    const columns = React.useMemo(
+    const columns = useMemo(
         () => [
             {
                 Header: 'Player',
@@ -118,7 +124,7 @@ const Dashboard = ({
         []
     );
 
-    const data = React.useMemo(() => {
+    const data = useMemo(() => {
         if (sections.loading || sections.sections.length === 0) {
             return []
         } else {
@@ -153,6 +159,30 @@ const Dashboard = ({
             return 'Completed';
         }
     };
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [crudActionInProgress, setCrudActionInProgress] = useState(false);
+    const [rightClickedSectionIndex, setRightClickedSectionIndex] = useState(0);
+    let rightClickedSection = (sections.loading || sections.sections.length === 0) ? {} : sections.sections[rightClickedSectionIndex];
+
+    const handleSectionClick = (index) => () => {
+        setSectionDisplayedIndex(index);
+    };
+
+    const handleSectionRightClickToggle = (index) => (e) => {
+        e.preventDefault();
+        setAnchorEl(e.currentTarget);
+        setRightClickedSectionIndex(index);
+    };
+
+    const SectionContextMenuProps = {
+        rightClickedSectionIndex,
+        anchorEl,
+        setAnchorEl,
+        setSectionDisplayedIndex,
+        rightClickedSection
+    };
+
+    const open = Boolean(anchorEl);
 
     return (
         <div className={classes.root}>
@@ -190,16 +220,26 @@ const Dashboard = ({
                         />
                     </Grid>
                 </Grid>
+
                 {/* TODO Figure out a way to maintain multiple loading indicators for adding a section */}
                 {/*{crudActionInProgress || sections.loading ? <LinearProgress/> : <></>}*/}
                 <List component="nav" aria-label="secondary mailbox folders">
                     {sections.sections.map((section, index) => (
                         <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
-                                  onClick={handleSectionClick(index)}>
+                                  onClick={handleSectionClick(index)}
+                                  onContextMenu={handleSectionRightClickToggle(index)}>
                             <ListItemText primary={section.name}/>
+                            {/* Right Click Popper Menu */}
                         </ListItem>
                     ))}
                 </List>
+                {
+                    (open) ?
+                        <SectionContextMenu display={open} {...SectionContextMenuProps}/>
+                        :
+                        <></>
+                }
+
             </Drawer>
             <main className={classes.content}>
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
@@ -221,7 +261,8 @@ const Dashboard = ({
 Dashboard.propTypes = {
     getSections: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
-    sections: PropTypes.object.isRequired
+    sections: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

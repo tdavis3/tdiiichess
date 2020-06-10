@@ -16,10 +16,10 @@ export const getSections = id => async dispatch => {
         dispatch({type: GET_SECTIONS, payload: res.data});
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: SECTIONS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
 
@@ -40,10 +40,10 @@ export const createSection = (tournament_id, formData) => async dispatch => {
         dispatch(setAlert("Section created", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: SECTIONS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
 
@@ -55,50 +55,34 @@ export const editSection = (section_id, formData) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
-
         const res = await axios.put(`/api/sections/${section_id}`, formData, config);
-
         dispatch({type: EDIT_SECTION, payload: res.data});
-
         dispatch(setAlert("Section edited", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: SECTIONS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
 
 // Delete a section
-export const deleteSection = data => async dispatch => {
-    const sections = data.objs;
-    if (sections.length === 0) {
-        dispatch(setAlert("No Section Selected", "error"));
-        return;
-    }
-    if (window.confirm("Are you sure you want to delete the selected?")) {
-        try {
-            sections.map(
-                async sectionobj => await axios.delete(`/api/sections/${sectionobj._id}`)
-            );
-            dispatch({type: DELETE_SECTION, payload: sections});
-            dispatch(setAlert("Sections deleted", "success"));
-        } catch (err) {
-            dispatch(setAlert(err.response.data.msg, "error"));
-            // dispatch({
-            //     type: SECTIONS_ERROR,
-            //     payload: {msg: err.response.statusText, status: err.response.status}
-            // });
-        }
+export const deleteSection = id => async dispatch => {
+    try {
+        await axios.delete(`/api/sections/${id}`);
+        dispatch({type: DELETE_SECTION, payload: id});
+        dispatch(setAlert("Section deleted", "success"));
+    } catch (err) {
+        dispatch(setAlert(err.response.data.msg, "error"));
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
 
 // Clear sections in state
 export const clearSections = () => async dispatch => {
-    try {
-        dispatch({type: CLEAR_SECTIONS});
-    } catch (err) {
-
-    }
+    dispatch({type: CLEAR_SECTIONS});
 };

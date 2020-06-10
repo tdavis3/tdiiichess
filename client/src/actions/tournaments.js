@@ -34,10 +34,10 @@ export const createTournament = formData => async dispatch => {
         dispatch(setAlert("Tournament created", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: TOURNAMENTS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
+        dispatch({
+            type: TOURNAMENTS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
 
@@ -74,9 +74,9 @@ export const deleteTournament = id => async dispatch => {
         dispatch(setAlert("Tournaments deleted", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: TOURNAMENTS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
+        dispatch({
+            type: TOURNAMENTS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
     }
 };
