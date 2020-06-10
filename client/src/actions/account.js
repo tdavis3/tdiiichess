@@ -47,7 +47,7 @@ export const change_password = (user_id, old_password, new_password) => async di
             return;
         }
         const snackbar_success_msg = "Your password was successfully changed.";
-        dispatch(setAlert(snackbar_success_msg, "error"));
+        dispatch(setAlert(snackbar_success_msg, "success"));
     } catch (err) {
         console.log(err);
     }

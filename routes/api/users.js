@@ -72,7 +72,7 @@ router.post(
             );
         } catch (err) {
             console.error(err.message);
-            res.status(500).send("Server error"); // Return response if error
+            res.status(500).send({msg: "Could not register you. Try again!"});
         }
     }
 );
@@ -93,7 +93,7 @@ router.put("/", auth, async (req, res) => {
             return res.json({err: 11000});
         }
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.status(500).send({msg: "Could not change email. Try again!"});
     }
 });
 
@@ -101,13 +101,14 @@ router.put("/", auth, async (req, res) => {
 // @desc    Change a user's password
 // @access  Private (A token is needed)
 router.put("/:user_id", auth, async (req, res) => {
+    // TODO: Check password length just to be sure
     const {old_password, new_password} = req.body;
     try {
         const user = await User.findById(req.params.user_id);
 
         const isMatch = await bcrypt.compare(old_password, user.password);
         if (!isMatch) {
-            return res.json({err: "Passwords don't match"});
+            return res.status(409).send({msg: "Passwords do not match. Try again!"});
         }
 
         // Encrypt new password
@@ -122,7 +123,7 @@ router.put("/:user_id", auth, async (req, res) => {
         res.json({result: updated_user.lastErrorObject.n, updated_user: updated_user.value});
     } catch (err) {
         console.error(err.message);
-        res.status(500).send("Server error");
+        res.status(500).send({msg: "Could not change password. Try again!"});
     }
 });
 

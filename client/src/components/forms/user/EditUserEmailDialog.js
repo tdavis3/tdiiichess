@@ -120,7 +120,7 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button onClick={handleSave} disabled={(errorData.emails_match && errorData.valid_email) ? false : true} color="primary">
                         Save
                     </Button>
                 </DialogActions>

@@ -42,6 +42,10 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
     };
 
     const handleSave = () => {
+        /*
+        TODO: Check length of password - Better error UI mayber list of requirements (red) and as they are satisfied
+          (green)
+         */
         if (errorData.passwords_match) {
             change_password(auth.user._id, formData.old_password, formData.new_password);
             setOpen(false);
@@ -117,7 +121,7 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button onClick={handleSave} disabled={(errorData.passwords_match) ? false : true} color="primary">
                         Save
                     </Button>
                 </DialogActions>
