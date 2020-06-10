@@ -12,8 +12,6 @@ import {
     InputBase,
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
-import IconButton from "@material-ui/core/IconButton";
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TournamentTableOptions from "./TournamentTableOptions";
 import {fade, makeStyles} from '@material-ui/core/styles';

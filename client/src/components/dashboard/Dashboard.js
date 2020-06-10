@@ -25,7 +25,6 @@ import {connect} from "react-redux";
 import {getSections} from "../../actions/sections";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import SnackbarAlert from "../layout/SnackbarAlert";
-import EditSectionDialog from "../forms/section/EditSectionDialog";
 import SectionContextMenu from "../forms/section/SectionContextMenu";
 
 let moment = require('moment');

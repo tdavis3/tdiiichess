@@ -4,11 +4,7 @@ import {
     Popover,
     MenuList,
     MenuItem,
-    Typography
 } from "@material-ui/core";
-import EditIcon from '@material-ui/icons/Edit';
-import makeStyles from "@material-ui/core/styles/makeStyles";
-
 import EditSectionDialog from "./EditSectionDialog";
 
 import PropTypes from 'prop-types';
@@ -16,15 +12,7 @@ import {connect} from "react-redux";
 import {deleteSection} from "../../../actions/sections";
 
 
-const useStyles = makeStyles(theme => ({
-    popoverContent: {
-        padding: theme.spacing(1)
-    }
-}));
-
 const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSectionIndex, setSectionDisplayedIndex, deleteSection, rightClickedSection}) => {
-
-    const classes = useStyles();
 
     const [openEditSectionDialog, setOpenEditSectionDialog] = useState(false);
 
@@ -43,7 +31,7 @@ const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSection
         deleteSection(rightClickedSection._id);
         setAnchorEl(null);
         setSectionDisplayedIndex(prevState => {
-            if ((rightClickedSectionIndex != 0 || prevState != 0) && prevState != 0) {
+            if ((rightClickedSectionIndex !== 0 || prevState !== 0) && prevState !== 0) {
                 return prevState - 1;
             } else {
                 return prevState;

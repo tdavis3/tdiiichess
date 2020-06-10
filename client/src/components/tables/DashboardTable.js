@@ -1,7 +1,9 @@
 import React, {useEffect, useState} from 'react';
+import {Link} from "react-router-dom";
 
 import {
     // Paper,
+    CssBaseline,
     Button,
     Typography,
     TableBody,
@@ -11,10 +13,10 @@ import {
     TableSortLabel,
     Toolbar,
     InputBase,
+    Checkbox,
+    IconButton
 } from "@material-ui/core";
-
 import SearchIcon from '@material-ui/icons/Search';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
@@ -28,14 +30,11 @@ import {
     useGlobalFilter, useAsyncDebounce
 } from 'react-table';
 
-import PropTypes from 'prop-types';
-import IconButton from "@material-ui/core/IconButton";
 import AddPlayerDialog from "../forms/player/AddPlayerDialog";
-import {Link} from "react-router-dom";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Checkbox from "@material-ui/core/Checkbox";
-import {connect} from "react-redux";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
+
+import PropTypes from 'prop-types';
+import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
 import SectionTableOptions from "./SectionTableOptions";
 
