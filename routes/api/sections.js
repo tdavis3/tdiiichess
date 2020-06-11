@@ -9,11 +9,10 @@ const {check, validationResult} = require("express-validator");
 // @route   GET api/sections
 // @desc    Get all sections in a tournament
 // @access  Private (A token is needed)
-router.get("/:tournament_id", auth, async (req, res) => {
+router.get("/:tournamentId", auth, async (req, res) => {
     try {
         // Only select the sections field
-        const sections = await Tournament.findById(req.params.tournament_id)
-            // .populate("section_ids")
+        const sections = await Tournament.findById(req.params.tournamentId)
             .populate({
                 path: "section_ids",
                 model: "Section",
@@ -36,7 +35,7 @@ router.get("/:tournament_id", auth, async (req, res) => {
 // @desc    Create a new section
 // @access  Private (A token is needed)
 router.post(
-    "/:tournament_id",
+    "/:tournamentId",
     [
         auth,
         [
@@ -72,7 +71,7 @@ router.post(
 
         const sectionFields = {};
 
-        sectionFields.tournament_id = req.params.tournament_id;
+        sectionFields.tournament_id = req.params.tournamentId;
         if (name) sectionFields.name = name;
         if (printing_name) sectionFields.printing_name = printing_name;
         if (event_type) sectionFields.event_type = event_type;
@@ -83,22 +82,21 @@ router.post(
         if (number_of_rounds) sectionFields.number_of_rounds = number_of_rounds;
 
         try {
-            // TODO - Check if a section with the same name exists
             const section = new Section(sectionFields);
-            const savedsection = await section.save();
+            const savedSection = await section.save();
 
-            const updatedtournament = await Tournament.findByIdAndUpdate(
-                req.params.tournament_id,
+            const updatedTournament = await Tournament.findByIdAndUpdate(
+                req.params.tournamentId,
                 {
                     $push: {
-                        section_ids: savedsection._id
+                        section_ids: savedSection._id
                     }
                 },
                 {new: true}
             );
 
-            if (savedsection && updatedtournament) {
-                return res.json(savedsection);
+            if (savedSection && updatedTournament) {
+                return res.json(savedSection);
             }
             await res
                 .status(404)
@@ -113,7 +111,7 @@ router.post(
 // @route   PUT api/sections/
 // @desc    Edit a section
 // @access  Private (A token is needed)
-router.put("/:section_id", auth, async (req, res) => {
+router.put("/:sectionId", auth, async (req, res) => {
     const {
         name,
         printing_name,
@@ -139,7 +137,7 @@ router.put("/:section_id", auth, async (req, res) => {
     try {
         // Returns the updated section
         const updatedsection = await Section.findByIdAndUpdate(
-            req.params.section_id,
+            req.params.sectionId,
             {$set: sectionFields},
             {new: true}
         );
@@ -149,6 +147,35 @@ router.put("/:section_id", auth, async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send({msg: "Could not edit section. Try again!"});
+    }
+});
+
+// @route   POST api/sections/
+// @desc    Duplicate a section
+// @access  Private (A token is needed)
+router.post("/:sectionId/duplicate", auth, async (req, res) => {
+    try {
+        let section = await Section.findById(req.params.sectionId, {_id: 0});
+        section.isNew = true;
+        const duplicatedSection = new Section(section);
+        const savedDuplicatedSection = await duplicatedSection.save();
+        await Tournament.findByIdAndUpdate(
+            savedDuplicatedSection.tournament_id,
+            {
+                $push: {
+                    section_ids: savedDuplicatedSection._id
+                }
+            },
+            {new: true}
+        );
+        const finalDuplicatedSection = await savedDuplicatedSection.populate({
+            path: "players.player_id",
+            model: "Player"
+        }).execPopulate();
+        return res.json(finalDuplicatedSection);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send({msg: "Could not delete section. Try again!"});
     }
 });
 

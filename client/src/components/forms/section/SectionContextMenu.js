@@ -9,10 +9,19 @@ import EditSectionDialog from "./EditSectionDialog";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {deleteSection} from "../../../actions/sections";
+import {duplicateSection, deleteSection} from "../../../actions/sections";
 
 
-const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSectionIndex, setSectionDisplayedIndex, deleteSection, rightClickedSection}) => {
+const SectionContextMenu = ({
+                                display,
+                                anchorEl,
+                                setAnchorEl,
+                                rightClickedSectionIndex,
+                                setSectionDisplayedIndex,
+                                rightClickedSection,
+                                duplicateSection,
+                                deleteSection
+                            }) => {
 
     const [openEditSectionDialog, setOpenEditSectionDialog] = useState(false);
 
@@ -20,16 +29,24 @@ const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSection
     const id = open ? 'simple-popover' : undefined;
 
     const handleClose = (event) => {
-        setAnchorEl(null);
+        setAnchorEl(null);  // Close the contextMenu
     };
 
     const handleEdit = () => {
         setOpenEditSectionDialog(true);
     };
 
+    const handleDuplicate = () => {
+        duplicateSection(rightClickedSection._id);
+        setAnchorEl(null);
+    };
+
+    const handleMove = () => {
+        setAnchorEl(null);
+    };
+
     const handleDelete = () => {
         deleteSection(rightClickedSection._id);
-        setAnchorEl(null);
         setSectionDisplayedIndex(prevState => {
             if ((rightClickedSectionIndex !== 0 || prevState !== 0) && prevState !== 0) {
                 return prevState - 1;
@@ -37,6 +54,7 @@ const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSection
                 return prevState;
             }
         });
+        setAnchorEl(null);
     };
 
     return (
@@ -57,6 +75,8 @@ const SectionContextMenu = ({display, anchorEl, setAnchorEl, rightClickedSection
             >
                 <MenuList autoFocusItem={display}>
                     <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                    <MenuItem onClick={handleDuplicate}>Duplicate</MenuItem>
+                    <MenuItem onClick={handleMove}>Move</MenuItem>
                     <MenuItem onClick={handleDelete}>Delete</MenuItem>
                 </MenuList>
             </Popover>
@@ -73,7 +93,8 @@ SectionContextMenu.propTypes = {
     rightClickedSection: PropTypes.object.isRequired,
     display: PropTypes.bool.isRequired,
     setSectionDisplayedIndex: PropTypes.func.isRequired,
+    duplicateSection: PropTypes.func.isRequired,
     deleteSection: PropTypes.func.isRequired,
 };
 
-export default connect(null, {deleteSection})(SectionContextMenu);
+export default connect(null, {duplicateSection, deleteSection})(SectionContextMenu);

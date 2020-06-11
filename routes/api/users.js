@@ -50,6 +50,7 @@ router.post(
             user.password = await bcrypt.hash(password, salt); // Hash user password
             await user.save(); // Save use to database
 
+            // TODO: There's a better way to do this without copying - Implement
             let secure_user = JSON.parse(JSON.stringify(user));  // Deep copy
             delete secure_user.password;  // Avoid sending password in response
 

@@ -4,6 +4,7 @@ import {
     GET_SECTIONS,
     CREATE_SECTION,
     EDIT_SECTION,
+    DUPLICATE_SECTION,
     DELETE_SECTION,
     CLEAR_SECTIONS,
     SECTIONS_ERROR,
@@ -24,7 +25,7 @@ export const getSections = id => async dispatch => {
 };
 
 // Create a section
-export const createSection = (tournament_id, formData) => async dispatch => {
+export const createSection = (tournamentId, formData) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -32,7 +33,7 @@ export const createSection = (tournament_id, formData) => async dispatch => {
             }
         };
         const res = await axios.post(
-            `/api/sections/${tournament_id}`,
+            `/api/sections/${tournamentId}`,
             formData,
             config
         );
@@ -48,16 +49,36 @@ export const createSection = (tournament_id, formData) => async dispatch => {
 };
 
 // Edit a section
-export const editSection = (section_id, formData) => async dispatch => {
+export const editSection = (sectionId, formData) => async dispatch => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        const res = await axios.put(`/api/sections/${section_id}`, formData, config);
+        const res = await axios.put(`/api/sections/${sectionId}`, formData, config);
         dispatch({type: EDIT_SECTION, payload: res.data});
         dispatch(setAlert("Section edited", "success"));
+    } catch (err) {
+        dispatch(setAlert(err.response.data.msg, "error"));
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
+    }
+};
+
+// Duplicate a section
+export const duplicateSection = (sectionId) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await axios.post(`/api/sections/${sectionId}/duplicate`, {}, config);
+        dispatch({type: DUPLICATE_SECTION, payload: res.data});
+        dispatch(setAlert("Section duplicated", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
         dispatch({

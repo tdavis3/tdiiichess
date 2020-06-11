@@ -5,7 +5,7 @@ import {
     DELETE_SECTION,
     CLEAR_SECTIONS,
     MOVE_PLAYER,
-    SECTIONS_ERROR
+    SECTIONS_ERROR, DUPLICATE_SECTION
 } from "../actions/types";
 
 const initialState = {
@@ -23,6 +23,7 @@ export default function (state = initialState, action) {
                 sections: payload,
                 loading: false
             };
+        case DUPLICATE_SECTION:
         case CREATE_SECTION:
             return {
                 ...state,
