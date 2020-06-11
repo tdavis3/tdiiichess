@@ -140,7 +140,10 @@ router.put("/:sectionId", auth, async (req, res) => {
             req.params.sectionId,
             {$set: sectionFields},
             {new: true}
-        );
+        ).populate({
+            path: "players.player_id",
+            model: "Player"
+        });
         if (updatedsection) {
             return res.json(updatedsection);
         }
@@ -172,6 +175,7 @@ router.post("/:sectionId/duplicate", auth, async (req, res) => {
             path: "players.player_id",
             model: "Player"
         }).execPopulate();
+        console.log(finalDuplicatedSection);
         return res.json(finalDuplicatedSection);
     } catch (err) {
         console.error(err.message);
