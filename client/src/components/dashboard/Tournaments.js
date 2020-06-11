@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Moment from "react-moment";
 import {Box, Grid, Drawer, Divider, Typography, Container} from "@material-ui/core";
 import {red, green, yellow} from '@material-ui/core/colors';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
@@ -119,22 +118,12 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                 Cell: ({cell: {row: {original: {start_date, end_date}}}}) => {
                     const start = moment(start_date);
                     const end = moment(end_date);
-                    if (start.isSame(end)) {
-                        return (
-                            <div>
-                                <Moment
-                                    format="MM/DD/YYYY">{start_date}</Moment>
-                            </div>
-                        );
-                    } else {
-                        return (
-                            <div>
-                                <Moment
-                                    format="MM/DD/YYYY">{start_date}</Moment> - <Moment
-                                format="MM/DD/YYYY">{end_date}</Moment>
-                            </div>
-                        );
-                    }
+                    return (
+                        start.isSame(end) ?
+                            start.format("MM/DD/YYYY") :
+                            start.format("MM/DD/YYYY").concat(" - ", end.format("MM/DD/YYYY"))
+
+                    )
                 },
                 sortType: (a, b) => {  // Date Comparison function
                     const x = new Date(a);

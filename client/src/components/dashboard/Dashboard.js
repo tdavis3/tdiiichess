@@ -131,25 +131,26 @@ const Dashboard = ({
         }
     }, [sectionDisplayedIndex, sections.loading, sections.sections]);
 
-    const dateRenderer = (start_date, end_date) => {
-        const start = moment(start_date);
-        const end = moment(end_date);
+    const dateRenderer = (startDate, endDate) => {
+        const start = moment(startDate);
+        const end = moment(endDate);
         return (
             <Typography>
                 Date:{" "}
                 {
-                    start.isSame(end) ? (<Moment format="MM/DD/YYYY">{start_date}</Moment>) :
-                        (<Moment format="MM/DD/YYYY">{start_date}</Moment> -
-                            <Moment format="MM/DD/YYYY">{end_date}</Moment>)
+                    start.isSame(end) ?
+                        start.format("MM/DD/YYYY") :
+                        start.format("MM/DD/YYYY").concat(" - ", end.format("MM/DD/YYYY"))
+
                 }
             </Typography>
         );
     };
 
-    const tournament_status = (start_date, end_date) => {
+    const tournament_status = (startDate, endDate) => {
         const today = moment();
-        const start = moment(start_date);
-        const end = moment(end_date);
+        const start = moment(startDate);
+        const end = moment(endDate);
         if (today.isBefore(start)) {
             return 'Not started';
         } else if (today.isBetween(start, end)) {

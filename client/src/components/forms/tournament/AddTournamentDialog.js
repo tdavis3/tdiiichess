@@ -21,6 +21,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {createTournament} from '../../../actions/tournaments';
 
+let moment = require('moment');
+moment().format();
+
 
 const AddTournamentDialog = ({createTournament}) => {
 
@@ -28,14 +31,14 @@ const AddTournamentDialog = ({createTournament}) => {
         name: "",
         printing_name: "",
         time_control: "",
-        start_date: new Date(),
-        end_date: new Date()
+        start_date: moment().startOf('day'),
+        end_date: moment().startOf('day')
     };
 
     const [tournament, setTournament] = useState(initialTournament);
 
-    const [selectedStartDate, setStartDateChange] = useState(new Date());
-    const [selectedEndDate, setEndDateChange] = useState(new Date());
+    const [selectedStartDate, setStartDateChange] = useState(moment().startOf('day'));
+    const [selectedEndDate, setEndDateChange] = useState(moment().startOf('day'));
 
     const [open, setOpen] = useState(false);
 
