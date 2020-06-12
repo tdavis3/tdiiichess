@@ -10,7 +10,7 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    DialogContentText
+    DialogContentText, Grid
 } from "@material-ui/core";
 
 import PropTypes from 'prop-types';
@@ -61,9 +61,9 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
-                <DialogTitle id="form-dialog-title">Edit Section</DialogTitle>
+                <DialogTitle id="form-dialog-title">Edit this section</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Change section details.</DialogContentText>
+                    <DialogContentText>Enter section details.</DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -91,62 +91,74 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
                         value={section.time_control}
                         onChange={handleChange('time_control')}
                     />
-                    <InputLabel htmlFor="event_type">Event Type</InputLabel>
-                    <Select
-                        native
-                        value={section.event_type}
-                        onChange={handleChange('event_type')}
-                        input={<Input id="event_type"/>}
-                    >
-                        <option value="Regular Swiss">Regular Swiss</option>
-                        <option value="Round Robin">Round Robin</option>
-                    </Select>
-
-                    <InputLabel htmlFor="style">Style</InputLabel>
-                    <Select
-                        native
-                        value={section.style}
-                        onChange={handleChange('style')}
-                        input={<Input id="style"/>}
-                    >
-                        <option value="Regular">Regular</option>
-                        <option value="Double">Double</option>
-                    </Select>
-
-                    <InputLabel htmlFor="rating_type">Rating Type</InputLabel>
-                    <Select
-                        native
-                        value={section.rating_type}
-                        onChange={handleChange('rating_type')}
-                        input={<Input id="rating_type"/>}
-                    >
-                        <option value="Regular/Standard">Regular/Standard</option>
-                        <option value="Quick/Rapid">Quick/Rapid</option>
-                        <option value="Blitz">Blitz</option>
-                    </Select>
-
-                    <InputLabel htmlFor="coin_toss">Coin Toss</InputLabel>
-                    <Select
-                        native
-                        value={section.coin_toss}
-                        onChange={handleChange('coin_toss')}
-                        input={<Input id="coin_toss"/>}
-                    >
-                        <option value="--">--</option>
-                        <option value="High">High</option>
-                        <option value="Low">Low</option>
-                    </Select>
-
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Number or Rounds"
-                        type="number"
-                        fullWidth
-                        value={section.number_of_rounds}
-                        onChange={handleChange('number_of_rounds')}
-                    />
-
+                    <Grid container spacing={3} style={{paddingTop: 20}}>
+                        <Grid item xs={6}>
+                            <InputLabel htmlFor="event_type">Event Type</InputLabel>
+                            <Select
+                                native
+                                value={section.event_type}
+                                onChange={handleChange('event_type')}
+                                input={<Input id="event_type"/>}
+                            >
+                                <option value="Regular Swiss">Regular Swiss</option>
+                                <option value="Round Robin">Round Robin</option>
+                            </Select>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <InputLabel htmlFor="rating_type">Rating Type</InputLabel>
+                            <Select
+                                native
+                                value={section.rating_type}
+                                onChange={handleChange('rating_type')}
+                                input={<Input id="rating_type"/>}
+                            >
+                                <option value="Regular/Standard">Regular/Standard</option>
+                                <option value="Quick/Rapid">Quick/Rapid</option>
+                                <option value="Blitz">Blitz</option>
+                            </Select>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <InputLabel htmlFor="style">Style</InputLabel>
+                            <Select
+                                native
+                                value={section.style}
+                                onChange={handleChange('style')}
+                                input={<Input id="style"/>}
+                            >
+                                <option value="Regular">Regular</option>
+                                <option value="Double">Double</option>
+                            </Select>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <InputLabel htmlFor="coin_toss">Coin Toss</InputLabel>
+                            <Select
+                                native
+                                value={section.coin_toss}
+                                onChange={handleChange('coin_toss')}
+                                input={<Input id="coin_toss"/>}
+                            >
+                                <option value="--">--</option>
+                                <option value="High">High</option>
+                                <option value="Low">Low</option>
+                            </Select>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                label="Number of Rounds"
+                                type="number"
+                                InputProps={{
+                                    inputProps: {
+                                        min: 0
+                                    }
+                                }}
+                                fullWidth
+                                value={section.number_of_rounds}
+                                onChange={handleChange('number_of_rounds')}
+                            />
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

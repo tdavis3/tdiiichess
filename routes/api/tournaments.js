@@ -134,13 +134,13 @@ router.post("/:tournamentId/duplicate", auth, async (req, res) => {
             let section = await Section.findById(sectionId, {_id: 0}).session(session);
             section.isNew = true;
             const duplicatedSection = new Section(section);
-            const savedDuplicatedSection = await duplicatedSection.save().session(session);
+            const savedDuplicatedSection = await duplicatedSection.save({session});
             return savedDuplicatedSection._id;
         });
 
         tournament.section_ids = newSectionIds;
         const duplicatedTournament = new Tournament(tournament);
-        const savedDuplicatedTournament = await duplicatedTournament.save().session(session);
+        const savedDuplicatedTournament = await duplicatedTournament.save({session});
         await session.commitTransaction();
         return res.json(savedDuplicatedTournament);
     } catch (err) {
