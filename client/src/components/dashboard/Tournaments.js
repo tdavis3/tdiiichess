@@ -1,16 +1,27 @@
-import React, {useEffect, useMemo} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 
+import {
+    Box,
+    Grid,
+    Drawer,
+    Divider,
+    Typography,
+    Container, IconButton, Tooltip
+} from "@material-ui/core";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Box, Grid, Drawer, Divider, Typography, Container} from "@material-ui/core";
+import Skeleton from "@material-ui/lab/Skeleton";
 import {red, green, yellow} from '@material-ui/core/colors';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
+import SnackbarAlert from "../layout/SnackbarAlert";
 import TournamentTable from "../tables/TournamentTable";
 import EditTournamentDialog from "../forms/tournament/EditTournamentDialog";
 import DeleteTournamentDialog from "../forms/tournament/DeleteTournamentDialog";
@@ -18,9 +29,9 @@ import DeleteTournamentDialog from "../forms/tournament/DeleteTournamentDialog";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
-import {getCurrentTournaments} from "../../actions/tournaments";
-import Skeleton from "@material-ui/lab/Skeleton";
-import SnackbarAlert from "../layout/SnackbarAlert";
+import {getCurrentTournaments, duplicateTournament} from "../../actions/tournaments";
+
+import copy from "copy-to-clipboard";
 
 let moment = require('moment');
 moment().format();
@@ -57,20 +68,32 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
         height: '100vh',
         // overflow: 'auto',
-    },
-    container: {
-        // paddingTop: theme.spacing(4),
-        // paddingBottom: theme.spacing(4),
-    },
+    }
 }));
 
 
-const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
+const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTournaments}) => {
     useEffect(() => {
         getCurrentTournaments();
     }, []);
 
     const classes = useStyles();
+
+    const initialCopyClipboardToolTipText = "Copy ID";
+    const [copyClipboardText, setCopyClipboardText] = useState(initialCopyClipboardToolTipText);
+
+    const handleCopyClipboardToolTipClose = () => {
+        setCopyClipboardText(initialCopyClipboardToolTipText);
+    };
+
+    const handleCopyToClipboard = (tournamentId) => () => {
+        copy(tournamentId);
+        setCopyClipboardText("Copied!");
+    };
+
+    const handleDuplicateTournament = (tournamentId) => () => {
+        duplicateTournament(tournamentId);
+    }
 
     const columns = useMemo(
         () => [
@@ -178,6 +201,22 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                             <Grid item xs={3}>
                                 <DeleteTournamentDialog tournament={cell.row.original}/>
                             </Grid>
+                            <Grid item xs={3}>
+                                <Tooltip title={copyClipboardText} onClose={handleCopyClipboardToolTipClose}>
+                                    <IconButton aria-label="copy"
+                                                onClick={handleCopyToClipboard(cell.row.original._id)}>
+                                        <AssignmentIcon fontSize={"small"}/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Tooltip title={"Duplicate tournament"}>
+                                    <IconButton aria-label="duplicate"
+                                                onClick={handleDuplicateTournament(cell.row.original._id)}>
+                                        <FileCopyIcon fontSize={"small"}/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
                         </Grid>
                     </div>
                 ),
@@ -220,7 +259,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
                 </Box>
             </Drawer>
             <main className={classes.content}>
-                <Container className={classes.container}>
+                <Container>
                     {tournaments.loading ? (
                         <Spinner/>
                     ) : (
@@ -240,6 +279,7 @@ const Tournaments = ({getCurrentTournaments, tournaments, auth}) => {
 Tournaments.propTypes = {
     setAlert: PropTypes.func.isRequired,
     getCurrentTournaments: PropTypes.func.isRequired,
+    duplicateTournament: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired,
     tournaments: PropTypes.object.isRequired
 };
@@ -251,5 +291,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     setAlert,
-    getCurrentTournaments
+    getCurrentTournaments,
+    duplicateTournament
 })(Tournaments);

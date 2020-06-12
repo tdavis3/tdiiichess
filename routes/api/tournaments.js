@@ -1,7 +1,9 @@
 const express = require("express");
+const mongoose = require('mongoose');
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const Tournament = require("../../models/Tournament");
+const Section = require("../../models/Section");
 const {check, validationResult} = require("express-validator");
 
 // @route   GET api/tournaments
@@ -11,7 +13,7 @@ router.get("/", auth, async (req, res) => {
     try {
         // Find all tournaments of the logged in user and return specified fields
         const tournaments = await Tournament.find({user_id: req.user.id}).sort({
-            date: -1
+            start_date: -1
         });
         if (tournaments === []) {
             return res
@@ -106,6 +108,47 @@ router.put("/:id", auth, async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send({msg: "Could not edit tournament. Try again!"});
+    }
+});
+
+// @route   POST api/tournaments/
+// @desc    Duplicate a tournament
+// @access  Private (A token is needed)
+router.post("/:tournamentId/duplicate", auth, async (req, res) => {
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    try {
+        let tournament = await Tournament.findById(req.params.tournamentId, {_id: 0}).session(session);
+        tournament.isNew = true;
+
+        async function asyncForEach(array, callback) {
+            let outputArray = [];
+            for (let index = 0; index < array.length; index++) {
+                const newSectionId = await callback(array[index], index, array);
+                outputArray.push(newSectionId);
+            }
+            return outputArray;
+        }
+
+        const newSectionIds = await asyncForEach(tournament.section_ids, async (sectionId) => {
+            let section = await Section.findById(sectionId, {_id: 0}).session(session);
+            section.isNew = true;
+            const duplicatedSection = new Section(section);
+            const savedDuplicatedSection = await duplicatedSection.save().session(session);
+            return savedDuplicatedSection._id;
+        });
+
+        tournament.section_ids = newSectionIds;
+        const duplicatedTournament = new Tournament(tournament);
+        const savedDuplicatedTournament = await duplicatedTournament.save().session(session);
+        await session.commitTransaction();
+        return res.json(savedDuplicatedTournament);
+    } catch (err) {
+        await session.abortTransaction();
+        console.error(err.message);
+        res.status(500).send({msg: "Could not duplicate the tournament. Try again!"});
+    } finally {
+        await session.endSession();
     }
 });
 

@@ -266,7 +266,6 @@ const Dashboard = ({
                         :
                         <></>
                 }
-
             </Drawer>
             <main className={classes.content}>
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}

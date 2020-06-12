@@ -4,8 +4,10 @@ import {
     GET_TOURNAMENTS,
     CREATE_TOURNAMENT,
     EDIT_TOURNAMENT,
+    DUPLICATE_TOURNAMENT,
     DELETE_TOURNAMENT,
-    TOURNAMENTS_ERROR, CLEAR_SECTIONS
+    TOURNAMENTS_ERROR,
+    CLEAR_SECTIONS
 } from "./types";
 
 // Get current users tournaments
@@ -56,6 +58,26 @@ export const editTournament = (tournament_id, tournamentFields) => async dispatc
         );
         dispatch({type: EDIT_TOURNAMENT, payload: res.data});
         dispatch(setAlert("Tournament edited", "success"));
+    } catch (err) {
+        dispatch(setAlert(err.response.data.msg, "error"));
+        dispatch({
+            type: TOURNAMENTS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
+    }
+};
+
+// Duplicate a tournament
+export const duplicateTournament = (tournamentId) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await axios.post(`/api/tournaments/${tournamentId}/duplicate`, {}, config);
+        dispatch({type: DUPLICATE_TOURNAMENT, payload: res.data});
+        dispatch(setAlert("Tournament duplicated", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
         dispatch({

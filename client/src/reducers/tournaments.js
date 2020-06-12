@@ -4,7 +4,8 @@ import {
     EDIT_TOURNAMENT,
     DELETE_TOURNAMENT,
     CLEAR_TOURNAMENTS,
-    TOURNAMENTS_ERROR
+    TOURNAMENTS_ERROR,
+    DUPLICATE_TOURNAMENT
 } from "../actions/types";
 
 const initialState = {
@@ -24,6 +25,7 @@ export default function (state = initialState, action) {
                 tournaments: payload,
                 loading: false
             };
+        case DUPLICATE_TOURNAMENT:
         case CREATE_TOURNAMENT:
             return {
                 ...state,
