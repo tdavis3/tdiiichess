@@ -5,7 +5,9 @@ import {
     MenuList,
     MenuItem,
 } from "@material-ui/core";
+
 import EditSectionDialog from "./EditSectionDialog";
+import MoveSectionDialog from "./MoveSectionDialog";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
@@ -24,6 +26,7 @@ const SectionContextMenu = ({
                             }) => {
 
     const [openEditSectionDialog, setOpenEditSectionDialog] = useState(false);
+    const [openMoveSectionDialog, setOpenMoveSectionDialog] = useState(false);
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -42,11 +45,16 @@ const SectionContextMenu = ({
     };
 
     const handleMove = () => {
-        setAnchorEl(null);
+        setOpenMoveSectionDialog(true);
     };
 
     const handleDelete = () => {
         deleteSection(rightClickedSection._id);
+        setNextToDisplay();  // Since a section is deleted from the list of sections
+        setAnchorEl(null);
+    };
+
+    const setNextToDisplay = () => {
         setSectionDisplayedIndex(prevState => {
             if ((rightClickedSectionIndex !== 0 || prevState !== 0) && prevState !== 0) {
                 return prevState - 1;
@@ -54,7 +62,6 @@ const SectionContextMenu = ({
                 return prevState;
             }
         });
-        setAnchorEl(null);
     };
 
     return (
@@ -81,9 +88,14 @@ const SectionContextMenu = ({
                 </MenuList>
             </Popover>
             <EditSectionDialog display={openEditSectionDialog}
-                               setAnchorEl={setAnchorEl}
                                setDisplay={setOpenEditSectionDialog}
+                               setAnchorEl={setAnchorEl}
                                selectedSection={rightClickedSection}/>
+            <MoveSectionDialog display={openMoveSectionDialog}
+                               setDisplay={setOpenMoveSectionDialog}
+                               setAnchorEl={setAnchorEl}
+                               setNextToDisplay={setNextToDisplay}
+                               section={rightClickedSection}/>
         </div>
     )
 };

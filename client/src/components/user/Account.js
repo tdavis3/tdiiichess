@@ -25,7 +25,7 @@ import EditUserPasswordDialog from "../forms/user/EditUserPasswordDialog";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {get_user_analytics} from "../../actions/account";
+import {getUserAnalytics} from "../../actions/account";
 import SnackbarAlert from "../layout/SnackbarAlert";
 
 
@@ -115,12 +115,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Account = ({auth, account, get_user_analytics}) => {
+const Account = ({auth, account, getUserAnalytics}) => {
     const classes = useStyles();
 
     useEffect(
         () => {
-            get_user_analytics(auth.user._id);
+            getUserAnalytics(auth.user._id);
         }, []
     );
 
@@ -234,7 +234,7 @@ const Account = ({auth, account, get_user_analytics}) => {
 Account.propTypes = {
     auth: PropTypes.object.isRequired,
     account: PropTypes.object.isRequired,
-    get_user_analytics: PropTypes.func.isRequired
+    getUserAnalytics: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -242,4 +242,4 @@ const mapStateToProps = state => ({
     account: state.account
 });
 
-export default connect(mapStateToProps, {get_user_analytics})(Account);
+export default connect(mapStateToProps, {getUserAnalytics})(Account);

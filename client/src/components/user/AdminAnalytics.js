@@ -20,7 +20,7 @@ import DrawerHeader from "../layout/DrawerHeader";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {get_admin_analytics} from "../../actions/account";
+import {getAdminAnalytics} from "../../actions/account";
 
 
 const drawerWidth = 260;
@@ -70,16 +70,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const AdminAnalytics = ({auth, account, get_admin_analytics}) => {
+const AdminAnalytics = ({auth, account, getAdminAnalytics}) => {
     const classes = useStyles();
 
     useEffect(
         () => {
             // const interval = setInterval(() => {
-            //     get_admin_analytics(auth.user._id);
+            //     getAdminAnalytics(auth.user._id);
             // }, 1000);
             // return () => clearInterval(interval);
-            get_admin_analytics(auth.user._id);
+            getAdminAnalytics(auth.user._id);
         }, []);
 
     return (
@@ -169,7 +169,7 @@ const AdminAnalytics = ({auth, account, get_admin_analytics}) => {
 AdminAnalytics.propTypes = {
     auth: PropTypes.object.isRequired,
     account: PropTypes.object.isRequired,
-    get_admin_analytics: PropTypes.func.isRequired
+    getAdminAnalytics: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -177,4 +177,4 @@ const mapStateToProps = state => ({
     account: state.account
 });
 
-export default connect(mapStateToProps, {get_admin_analytics})(AdminAnalytics);
+export default connect(mapStateToProps, {getAdminAnalytics})(AdminAnalytics);

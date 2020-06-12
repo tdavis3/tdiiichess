@@ -7,7 +7,7 @@ import {
 } from "./types";
 
 
-export const change_email = (old_email, new_email) => async dispatch => {
+export const changeEmail = (old_email, new_email) => async dispatch => {
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -31,7 +31,7 @@ export const change_email = (old_email, new_email) => async dispatch => {
     }
 };
 
-export const change_password = (user_id, old_password, new_password) => async dispatch => {
+export const changePassword = (user_id, old_password, new_password) => async dispatch => {
     const config = {
         headers: {
             "Content-Type": "application/json"
@@ -53,7 +53,7 @@ export const change_password = (user_id, old_password, new_password) => async di
     }
 };
 
-export const get_user_analytics = (user_id) => async dispatch => {
+export const getUserAnalytics = (user_id) => async dispatch => {
     try {
         const res = await axios.get(`/api/analytics/users/${user_id}`);
         dispatch({type: GET_USER_ANALYTICS, payload: res.data});
@@ -62,7 +62,7 @@ export const get_user_analytics = (user_id) => async dispatch => {
     }
 };
 
-export const get_admin_analytics = (user_id) => async dispatch => {
+export const getAdminAnalytics = (user_id) => async dispatch => {
     try {
         const res = await axios.get(`/api/analytics/admin/${user_id}`);
         dispatch({type: GET_ADMIN_ANALYTICS, payload: res.data});

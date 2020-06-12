@@ -14,10 +14,10 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {change_password} from "../../../actions/account";
+import {changePassword} from "../../../actions/account";
 
 
-const EditUserPasswordDialog = ({auth, change_password}) => {
+const EditUserPasswordDialog = ({auth, changePassword}) => {
 
     const initial_form = {
         old_password: "",
@@ -28,7 +28,7 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
     const [formData, setFormData] = useState(initial_form);
 
     const [errorData, setErrorData] = useState({
-        passwords_match: true
+        passwordsMatch: true
     });
 
     const [open, setOpen] = useState(false);
@@ -43,11 +43,11 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
 
     const handleSave = () => {
         /*
-        TODO: Check length of password - Better error UI mayber list of requirements (red) and as they are satisfied
+        TODO: Check length of password - Better error UI - maybe list of requirements (red) and as they are satisfied
           (green)
          */
-        if (errorData.passwords_match) {
-            change_password(auth.user._id, formData.old_password, formData.new_password);
+        if (errorData.passwordsMatch) {
+            changePassword(auth.user._id, formData.old_password, formData.new_password);
             setOpen(false);
             setFormData(initial_form);
         }
@@ -55,22 +55,16 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
 
     const handleChange = name => ({target: {value}}) => {
         setFormData({...formData, [name]: value});
-
-        let newErrorData = {
-            passwords_match: null
-        };
-
         if (name === 'new_password') {
-            newErrorData.passwords_match = (value === formData.confirm_new_password);
+            setErrorData({...errorData, passwordsMatch: (value === formData.confirm_new_password)})
         } else if (name === 'confirm_new_password') {
-            newErrorData.passwords_match = (value === formData.new_password);
+            setErrorData({...errorData, passwordsMatch: (value === formData.new_password)})
         }
-        setErrorData(newErrorData);
     };
 
     return (
         <div>
-            <Tooltip title="Change password">
+            <Tooltip title="Edit password">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
                     <EditIcon fontSize={"small"}/>
                 </IconButton>
@@ -113,15 +107,15 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
                         fullWidth
                         value={formData.confirm_new_password}
                         onChange={handleChange('confirm_new_password')}
-                        error={!errorData.passwords_match}
-                        helperText={errorData.passwords_match ? "" : "Passwords do not match."}
+                        error={!errorData.passwordsMatch}
+                        helperText={errorData.passwordsMatch ? "" : "Passwords do not match."}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={(errorData.passwords_match) ? false : true} color="primary">
+                    <Button onClick={handleSave} disabled={(!errorData.passwordsMatch)} color="primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -131,7 +125,7 @@ const EditUserPasswordDialog = ({auth, change_password}) => {
 };
 
 EditUserPasswordDialog.propTypes = {
-    change_password: PropTypes.func.isRequired,
+    changePassword: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -139,4 +133,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {change_password})(EditUserPasswordDialog);
+export default connect(mapStateToProps, {changePassword})(EditUserPasswordDialog);

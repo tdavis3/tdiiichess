@@ -1,8 +1,5 @@
 import React, {useEffect, useState, useMemo} from "react";
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import makeStyles from "@material-ui/core/styles/makeStyles";
-import Moment from "react-moment";
 import {
     Box,
     Grid,
@@ -12,20 +9,25 @@ import {
     ListItem,
     ListItemText,
     Typography,
-    Container,
+    Container, TextField, IconButton, Tooltip,
 } from "@material-ui/core";
+import CssBaseline from '@material-ui/core/CssBaseline';
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
+import SnackbarAlert from "../layout/SnackbarAlert";
 import DashboardTable from "../tables/DashboardTable";
 import AddSectionDialog from "../forms/section/AddSectionDialog";
+import SectionContextMenu from "../forms/section/SectionContextMenu";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getSections} from "../../actions/sections";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import SnackbarAlert from "../layout/SnackbarAlert";
-import SectionContextMenu from "../forms/section/SectionContextMenu";
+
+import copy from 'copy-to-clipboard';
 
 let moment = require('moment');
 moment().format();
@@ -161,6 +163,8 @@ const Dashboard = ({
     };
     const [anchorEl, setAnchorEl] = useState(null);
     const [crudActionInProgress, setCrudActionInProgress] = useState(false);
+    const initialCopyClipboardToolTipText = "Copy to clipboard";
+    const [copyClipboardText, setCopyClipboardText] = useState(initialCopyClipboardToolTipText);
     const [rightClickedSectionIndex, setRightClickedSectionIndex] = useState(0);
     let rightClickedSection = (sections.loading || sections.sections.length === 0) ? {} : sections.sections[rightClickedSectionIndex];
 
@@ -172,6 +176,15 @@ const Dashboard = ({
         e.preventDefault();
         setAnchorEl(e.currentTarget);
         setRightClickedSectionIndex(index);
+    };
+
+    const handleCopyClipboardToolTipClose = () => {
+        setCopyClipboardText(initialCopyClipboardToolTipText);
+    };
+
+    const handleCopyToClipboard = () => {
+        copy(tournament._id);
+        setCopyClipboardText("Copied!");
     };
 
     const SectionContextMenuProps = {
@@ -206,6 +219,20 @@ const Dashboard = ({
                     <Typography>Name: {tournament.name}</Typography>
                     {dateRenderer(tournament.start_date, tournament.end_date)}
                     <Typography>Status: {tournament_status(tournament.start_date, tournament.end_date)}</Typography>
+                    {/* TODO: Hacked the styling here - probably should change */}
+                    <Grid container spacing={1} style={{maxHeight: 30}}>
+                        <Grid item xs={10}>
+                            <Typography noWrap>ID: {tournament._id}</Typography>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Tooltip title={copyClipboardText} onClose={handleCopyClipboardToolTipClose}>
+                                <IconButton aria-label="copy" edge={"start"} style={{bottom: 11}}
+                                            onClick={handleCopyToClipboard}>
+                                    <AssignmentIcon fontSize={"small"}/>
+                                </IconButton>
+                            </Tooltip>
+                        </Grid>
+                    </Grid>
                 </Box>
                 <Divider/>
                 <Grid container justify={'center'}>

@@ -2,10 +2,12 @@ import {
     GET_SECTIONS,
     CREATE_SECTION,
     EDIT_SECTION,
+    DUPLICATE_SECTION,
+    MOVE_SECTION,
     DELETE_SECTION,
     CLEAR_SECTIONS,
     MOVE_PLAYER,
-    SECTIONS_ERROR, DUPLICATE_SECTION
+    SECTIONS_ERROR
 } from "../actions/types";
 
 const initialState = {
@@ -62,6 +64,7 @@ export default function (state = initialState, action) {
                 ...state,
                 sections: newSections
             }
+        case MOVE_SECTION:
         case DELETE_SECTION:
             return {
                 ...state,

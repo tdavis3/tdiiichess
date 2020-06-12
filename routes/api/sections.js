@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose = require('mongoose');
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const Tournament = require("../../models/Tournament");
@@ -103,7 +104,7 @@ router.post(
                 .json({msg: "No sections found in this tournament"});
         } catch (err) {
             console.error(err.message);
-            res.status(500).send({msg: "Could not create section. Try again!"});
+            res.status(500).send({msg: "Could not create the section. Try again!"});
         }
     }
 );
@@ -149,7 +150,7 @@ router.put("/:sectionId", auth, async (req, res) => {
         }
     } catch (err) {
         console.error(err.message);
-        res.status(500).send({msg: "Could not edit section. Try again!"});
+        res.status(500).send({msg: "Could not edit the section. Try again!"});
     }
 });
 
@@ -175,11 +176,61 @@ router.post("/:sectionId/duplicate", auth, async (req, res) => {
             path: "players.player_id",
             model: "Player"
         }).execPopulate();
-        console.log(finalDuplicatedSection);
         return res.json(finalDuplicatedSection);
     } catch (err) {
         console.error(err.message);
-        res.status(500).send({msg: "Could not delete section. Try again!"});
+        res.status(500).send({msg: "Could not duplicate the section. Try again!"});
+    }
+});
+
+// @route   PUT api/sections/
+// @desc    Move a section to another tournament
+// @access  Private (A token is needed)
+router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
+    if (!(req.params.tournamentId.match(/^[0-9a-fA-F]{24}$/))) {
+        return res.status(403).send({msg: "Not a valid ID."});
+    }
+    const session = await mongoose.startSession();
+    await session.startTransaction();
+    try {
+        // Replace old tournament_id with the new one
+        const oldSection = await Section.findByIdAndUpdate(req.params.sectionId, {$set: {tournament_id: req.params.tournamentId}}).session(session);
+        // Remove section from old tournament refs
+        const oldTournament = await Tournament.findByIdAndUpdate(
+            oldSection.tournament_id,
+            {
+                $pull: {
+                    section_ids: oldSection._id
+                }
+            },
+            {new: true}
+        ).session(session);
+        // Add section to new tournament refs
+        const newTournament = await Tournament.findByIdAndUpdate(
+            req.params.tournamentId,
+            {
+                $push: {
+                    section_ids: oldSection._id
+                }
+            },
+            {new: true}
+        ).session(session);
+        if (!newTournament) {
+            await session.abortTransaction();
+            return res.status(404).send({msg: "This tournament was not found. Try again!"});
+        }
+        if (!(oldTournament.user_id.equals(newTournament.user_id))) {
+            await session.abortTransaction();
+            return res.status(403).send({msg: "You can only move sections to tournaments in your own account."});
+        }
+        await session.commitTransaction();
+        return res.json(req.params.sectionId);
+    } catch (err) {
+        await session.abortTransaction();
+        console.error(err.message);
+        res.status(500).send({msg: "Could not move the section. Try again!"});
+    } finally {
+        await session.endSession();
     }
 });
 

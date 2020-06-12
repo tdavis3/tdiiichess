@@ -5,6 +5,7 @@ import {
     CREATE_SECTION,
     EDIT_SECTION,
     DUPLICATE_SECTION,
+    MOVE_SECTION,
     DELETE_SECTION,
     CLEAR_SECTIONS,
     SECTIONS_ERROR,
@@ -79,6 +80,26 @@ export const duplicateSection = (sectionId) => async dispatch => {
         const res = await axios.post(`/api/sections/${sectionId}/duplicate`, {}, config);
         dispatch({type: DUPLICATE_SECTION, payload: res.data});
         dispatch(setAlert("Section duplicated", "success"));
+    } catch (err) {
+        dispatch(setAlert(err.response.data.msg, "error"));
+        dispatch({
+            type: SECTIONS_ERROR,
+            payload: {msg: err.response.statusText, status: err.response.status}
+        });
+    }
+};
+
+// Move a section
+export const moveSection = (sectionId, newTournamentId) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        const res = await axios.put(`/api/sections/${sectionId}/tournaments/${newTournamentId}`, {}, config);
+        dispatch({type: MOVE_SECTION, payload: res.data});
+        dispatch(setAlert("Section moved", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
         dispatch({

@@ -19,12 +19,10 @@ import {deleteTournament} from '../../../actions/tournaments';
 
 const DeleteTournamentDialog = ({deleteTournament, tournament}) => {
 
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
-        setOpen(true)
+        setOpen(true);
     };
 
     const handleYes = () => {

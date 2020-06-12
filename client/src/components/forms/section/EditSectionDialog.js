@@ -18,7 +18,7 @@ import {connect} from "react-redux";
 import {editSection} from "../../../actions/sections";
 
 
-const EditSectionDialog = ({display, setAnchorEl, setDisplay, editSection, selectedSection}) => {
+const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selectedSection}) => {
 
     useEffect(
         () => {

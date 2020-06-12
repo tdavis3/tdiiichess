@@ -15,10 +15,10 @@ import isEmail from 'validator/lib/isEmail';
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {change_email} from "../../../actions/account";
+import {changeEmail} from "../../../actions/account";
 
 
-const EditUserEmailDialog = ({auth, change_email}) => {
+const EditUserEmailDialog = ({auth, changeEmail}) => {
 
     const initial_form = {
         new_email: "",
@@ -28,8 +28,8 @@ const EditUserEmailDialog = ({auth, change_email}) => {
     const [formData, setFormData] = useState(initial_form);
 
     const [errorData, setErrorData] = useState({
-        emails_match: true,
-        valid_email: false
+        emailsMatch: true,
+        validEmail: false
     });
 
     const [open, setOpen] = useState(false);
@@ -43,8 +43,8 @@ const EditUserEmailDialog = ({auth, change_email}) => {
     };
 
     const handleSave = () => {
-        if (errorData.emails_match && errorData.valid_email) {
-            change_email(auth.user.email, formData.new_email);
+        if (errorData.emailsMatch && errorData.validEmail) {
+            changeEmail(auth.user.email, formData.new_email);
             setOpen(false);
             setFormData(initial_form);
         }
@@ -52,24 +52,20 @@ const EditUserEmailDialog = ({auth, change_email}) => {
 
     const handleChange = name => ({target: {value}}) => {
         setFormData({...formData, [name]: value});
-
-        let newErrorData = {
-            emails_match: null,
-            valid_email: errorData.valid_email
-        };
-
         if (name === 'new_email') {
-            newErrorData.valid_email = isEmail(value);
-            newErrorData.emails_match = (value === formData.confirm_new_email);
+            setErrorData({
+                ...errorData,
+                validEmail: isEmail(value),
+                emailsMatch: (value === formData.confirm_new_email)
+            })
         } else if (name === 'confirm_new_email') {
-            newErrorData.emails_match = (value === formData.new_email);
+            setErrorData({...errorData, emailsMatch: (value === formData.new_email)})
         }
-        setErrorData(newErrorData);
     };
 
     return (
         <div>
-            <Tooltip title="Change email">
+            <Tooltip title="Edit email">
                 <IconButton aria-label="edit" onClick={handleClickOpen}>
                     <EditIcon fontSize={"small"}/>
                 </IconButton>
@@ -100,8 +96,8 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                         fullWidth
                         value={formData.new_email}
                         onChange={handleChange('new_email')}
-                        error={!errorData.valid_email}
-                        helperText={errorData.valid_email ? "" : "Not a valid email format."}
+                        error={!errorData.validEmail}
+                        helperText={errorData.validEmail ? "" : "Not a valid email format."}
                     />
                     <TextField
                         variant={"outlined"}
@@ -112,15 +108,16 @@ const EditUserEmailDialog = ({auth, change_email}) => {
                         fullWidth
                         value={formData.confirm_new_email}
                         onChange={handleChange('confirm_new_email')}
-                        error={!errorData.emails_match}
-                        helperText={errorData.emails_match ? "" : "Emails do not match."}
+                        error={!errorData.emailsMatch}
+                        helperText={errorData.emailsMatch ? "" : "Emails do not match."}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={(errorData.emails_match && errorData.valid_email) ? false : true} color="primary">
+                    <Button onClick={handleSave} disabled={(!(errorData.emailsMatch && errorData.validEmail))}
+                            color="primary">
                         Save
                     </Button>
                 </DialogActions>
@@ -130,7 +127,7 @@ const EditUserEmailDialog = ({auth, change_email}) => {
 };
 
 EditUserEmailDialog.propTypes = {
-    change_email: PropTypes.func.isRequired,
+    changeEmail: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -139,4 +136,4 @@ const mapStateToProps = state => ({
 });
 
 
-export default connect(mapStateToProps, {change_email})(EditUserEmailDialog);
+export default connect(mapStateToProps, {changeEmail})(EditUserEmailDialog);
