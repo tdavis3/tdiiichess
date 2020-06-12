@@ -158,11 +158,13 @@ router.put("/:sectionId", auth, async (req, res) => {
 // @desc    Duplicate a section
 // @access  Private (A token is needed)
 router.post("/:sectionId/duplicate", auth, async (req, res) => {
+    const session = await mongoose.startSession();
+    await session.startTransaction();
     try {
-        let section = await Section.findById(req.params.sectionId, {_id: 0});
+        let section = await Section.findById(req.params.sectionId, {_id: 0}).session(session);
         section.isNew = true;
         const duplicatedSection = new Section(section);
-        const savedDuplicatedSection = await duplicatedSection.save();
+        const savedDuplicatedSection = await duplicatedSection.save({session});
         await Tournament.findByIdAndUpdate(
             savedDuplicatedSection.tournament_id,
             {
@@ -171,15 +173,19 @@ router.post("/:sectionId/duplicate", auth, async (req, res) => {
                 }
             },
             {new: true}
-        );
+        ).session(session);
         const finalDuplicatedSection = await savedDuplicatedSection.populate({
             path: "players.player_id",
             model: "Player"
         }).execPopulate();
+        await session.commitTransaction();
         return res.json(finalDuplicatedSection);
     } catch (err) {
+        await session.abortTransaction();
         console.error(err.message);
         res.status(500).send({msg: "Could not duplicate the section. Try again!"});
+    } finally {
+        await session.endSession();
     }
 });
 
@@ -188,7 +194,7 @@ router.post("/:sectionId/duplicate", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
     if (!(req.params.tournamentId.match(/^[0-9a-fA-F]{24}$/))) {
-        return res.status(403).send({msg: "Not a valid ID."});
+        return res.status(403).send({msg: "Invalid ID."});
     }
     const session = await mongoose.startSession();
     await session.startTransaction();
@@ -238,15 +244,19 @@ router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
 // @desc    Delete a section
 // @access  Private (A token is needed)
 router.delete("/:sectionId", auth, async (req, res) => {
+    const session = await mongoose.startSession();
+    await session.startTransaction();
     try {
-        const section = await Section.findById(req.params.sectionId);
-        if (section) {
-            section.deleteOne(); // doc.deleteOne() - This should cascade delete
-            return res.json(section);
-        }
+        const section = await Section.findById(req.params.sectionId).session(session);
+        section.deleteOne().session(session); // doc.deleteOne() - This should cascade delete
+        await session.commitTransaction();
+        return res.json(section);
     } catch (err) {
+        await session.abortTransaction();
         console.error(err.message);
         res.status(500).send({msg: "Could not delete section. Try again!"});
+    } finally {
+        await session.endSession();
     }
 });
 

@@ -33,10 +33,14 @@ const MoveSectionDialog = ({
 
     const handleMove = () => {
         if (errorData.validObjectId) {
-            moveSection(section._id, destinationTournament);
-            setNextToDisplay();  // Since a section is deleted from the list of sections
-            setDisplay(false);
-            setAnchorEl(null);
+            if (section.tournament_id !== destinationTournament) {
+                moveSection(section._id, destinationTournament);
+                setNextToDisplay();  // Since a section is deleted from the list of sections
+                setDisplay(false);
+                setAnchorEl(null);
+            } else {
+                console.log("Cannot move to the same tournament.");
+            }
         }
     };
 

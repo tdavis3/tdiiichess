@@ -16,9 +16,9 @@ import {
     Checkbox,
     IconButton
 } from "@material-ui/core";
+import {fade, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
-import {fade, makeStyles} from '@material-ui/core/styles';
 import MaUTable from '@material-ui/core/Table';
 import {
     useRowSelect,
@@ -30,13 +30,15 @@ import {
     useGlobalFilter, useAsyncDebounce
 } from 'react-table';
 
+import SectionTableOptions from "./SectionTableOptions";
 import AddPlayerDialog from "../forms/player/AddPlayerDialog";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
+import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
-import SectionTableOptions from "./SectionTableOptions";
+import ByesDialog from "../forms/section/ByesDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -211,8 +213,8 @@ const DashboardTable = ({
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog sectionId={sectionId}/>
-                <Button size={"small"}>Withdrawals</Button>
-                <Button size={"small"}>Byes</Button>
+                <WithdrawalsDialog/>
+                <ByesDialog/>
                 <MovePlayerDialog oldSectionId={sectionId} selectedRowIds={selectedRowIds} players={data}
                                   sections={sections}/>
                 <Typography className={classes.leftSection}></Typography>
