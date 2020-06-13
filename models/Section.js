@@ -31,6 +31,10 @@ const SectionSchema = new mongoose.Schema({
     time_control: {
         type: String
     },
+    current_round: {
+        type: Number,
+        default: 0
+    },
     number_of_rounds: {
         type: Number
     },

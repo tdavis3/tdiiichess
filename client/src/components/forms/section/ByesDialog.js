@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {
@@ -62,11 +62,44 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ByesDialog = ({sections}) => {
+const ByesDialog = ({selectedSectionIndex, sections}) => {
     const classes = useStyles();
+
+    useEffect(() => {
+        setByesPlayers();
+    }, [selectedSectionIndex, sections]);
 
     const [tabIndex, setTabIndex] = useState(0);
     const [open, setOpen] = useState(false);
+
+    const [playersWithBye, setPlayersWithBye] = useState([]);
+    const [activePlayers, setActivePlayers] = useState([]);
+    const [summary, setSummary] = useState([]);
+
+    const setByesPlayers = () => {
+        const tempActivePlayers = [];
+        const tempPlayersWithBye = [];
+        const tempSummary = [];
+        if (!sections.loading) {
+            if (!(sections.sections.length === 0)) {
+                const currentRound = sections.sections[selectedSectionIndex].current_round;
+                sections.sections[selectedSectionIndex].players.forEach(player => {
+                    const listOfByes = player.byes;
+                    if (listOfByes.includes(currentRound + 1)) {
+                        tempPlayersWithBye.push(player.player_id);
+                    } else {
+                        tempActivePlayers.push(player.player_id);
+                    }
+                    if (listOfByes.length > 0) {
+                        tempSummary.push(player.player_id);
+                    }
+                });
+            }
+        }
+        setPlayersWithBye(tempPlayersWithBye);
+        setActivePlayers(tempActivePlayers);
+        setSummary(tempSummary);
+    };
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -109,37 +142,34 @@ const ByesDialog = ({sections}) => {
                 <TabPanel value={tabIndex} index={0}>
                     <Typography align={"center"}>Players inactive for next round</Typography>
                     <List>
-                        <ListItem button>
-                            <ListItemText primary="Tyrone Davis III"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Angel Lopez Jr."/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Sumit Dhar"/>
-                        </ListItem>
+                        {playersWithBye.map((player, index) => (
+                            <ListItem button data-index={index} key={index}>
+                                <ListItemText
+                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                            </ListItem>
+                        ))}
                     </List>
                 </TabPanel>
                 <TabPanel value={tabIndex} index={1}>
                     <Typography align={"center"}>Players active for next round</Typography>
                     <List>
-                        <ListItem button>
-                            <ListItemText primary="Russell Makofsky"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Swarup Dhar"/>
-                        </ListItem>
+                        {activePlayers.map((player, index) => (
+                            <ListItem button data-index={index} key={index}>
+                                <ListItemText
+                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                            </ListItem>
+                        ))}
                     </List>
                 </TabPanel>
                 <TabPanel value={tabIndex} index={2}>
                     <Typography align={"center"}>All players with byes</Typography>
                     <List>
-                        <ListItem button>
-                            <ListItemText primary="Russell Makofsky: 2, 6"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Swarup Dhar: 1, 8"/>
-                        </ListItem>
+                        {summary.map((player, index) => (
+                            <ListItem button data-index={index} key={index}>
+                                <ListItemText
+                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                            </ListItem>
+                        ))}
                     </List>
                 </TabPanel>
             </Dialog>
@@ -148,6 +178,7 @@ const ByesDialog = ({sections}) => {
 };
 
 ByesDialog.propTypes = {
+    selectedSectionIndex: PropTypes.number.isRequired,
     sections: PropTypes.object.isRequired,
 };
 

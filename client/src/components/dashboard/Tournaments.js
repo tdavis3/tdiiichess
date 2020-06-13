@@ -196,12 +196,6 @@ const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTourname
                     <div>
                         <Grid container spacing={2}>
                             <Grid item xs={3}>
-                                <EditTournamentDialog selected_edit={cell.row.original}/>
-                            </Grid>
-                            <Grid item xs={3}>
-                                <DeleteTournamentDialog tournament={cell.row.original}/>
-                            </Grid>
-                            <Grid item xs={3}>
                                 <Tooltip title={copyClipboardText} onClose={handleCopyClipboardToolTipClose}>
                                     <IconButton aria-label="copy"
                                                 onClick={handleCopyToClipboard(cell.row.original._id)}>
@@ -210,12 +204,18 @@ const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTourname
                                 </Tooltip>
                             </Grid>
                             <Grid item xs={3}>
-                                <Tooltip title={"Duplicate tournament"}>
+                                <Tooltip title={"Duplicate"}>
                                     <IconButton aria-label="duplicate"
                                                 onClick={handleDuplicateTournament(cell.row.original._id)}>
                                         <FileCopyIcon fontSize={"small"}/>
                                     </IconButton>
                                 </Tooltip>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <EditTournamentDialog selected_edit={cell.row.original}/>
+                            </Grid>
+                            <Grid item xs={3}>
+                                <DeleteTournamentDialog tournament={cell.row.original}/>
                             </Grid>
                         </Grid>
                     </div>

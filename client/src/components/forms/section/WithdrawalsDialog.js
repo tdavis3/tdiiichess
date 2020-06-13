@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {
@@ -61,11 +61,35 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const WithdrawalsDialog = ({sections}) => {
+const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
     const classes = useStyles();
+
+    useEffect(() => {
+        setWithdrawalPlayers();
+    }, [selectedSectionIndex, sections]);
 
     const [tabIndex, setTabIndex] = useState(0);
     const [open, setOpen] = useState(false);
+    const [activePlayers, setActivePlayers] = useState([]);
+    const [inactivePlayers, setInactivePlayers] = useState([]);
+
+    const setWithdrawalPlayers = () => {
+        const tempActivePlayers = [];
+        const tempInactivePlayers = [];
+        if (!sections.loading) {
+            if (!(sections.sections.length === 0)) {
+                sections.sections[selectedSectionIndex].players.forEach(player => {
+                    if (player.withdrew) {
+                        tempInactivePlayers.push(player.player_id);
+                    } else {
+                        tempActivePlayers.push(player.player_id);
+                    }
+                });
+            }
+        }
+        setActivePlayers(tempActivePlayers);
+        setInactivePlayers(tempInactivePlayers);
+    };
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -100,32 +124,28 @@ const WithdrawalsDialog = ({sections}) => {
                     indicatorColor="primary"
                     textColor="primary"
                     variant="fullWidth"
-                    // centered
                 >
                     <Tab label="Active Players" {...a11yProps(0)}/>
                     <Tab label="Inactive Players" {...a11yProps(1)}/>
                 </Tabs>
                 <TabPanel value={tabIndex} index={0}>
                     <List>
-                        <ListItem button>
-                            <ListItemText primary="Tyrone Davis III"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Angel Lopez Jr."/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Sumit Dhar"/>
-                        </ListItem>
+                        {activePlayers.map((activePlayer, index) => (
+                            <ListItem button data-index={index} key={index}>
+                                <ListItemText
+                                    primary={activePlayer.first_name.concat(" ", activePlayer.last_name, " ", activePlayer.suffix)}/>
+                            </ListItem>
+                        ))}
                     </List>
                 </TabPanel>
                 <TabPanel value={tabIndex} index={1}>
                     <List>
-                        <ListItem button>
-                            <ListItemText primary="Russell Makofsky"/>
-                        </ListItem>
-                        <ListItem button>
-                            <ListItemText primary="Swarup Dhar"/>
-                        </ListItem>
+                        {inactivePlayers.map((inactivePlayer, index) => (
+                            <ListItem button data-index={index} key={index}>
+                                <ListItemText
+                                    primary={inactivePlayer.first_name.concat(" ", inactivePlayer.last_name, " ", inactivePlayer.suffix)}/>
+                            </ListItem>
+                        ))}
                     </List>
                 </TabPanel>
             </Dialog>
@@ -134,6 +154,7 @@ const WithdrawalsDialog = ({sections}) => {
 };
 
 WithdrawalsDialog.propTypes = {
+    selectedSectionIndex: PropTypes.number.isRequired,
     sections: PropTypes.object.isRequired,
 };
 

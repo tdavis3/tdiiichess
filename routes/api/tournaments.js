@@ -156,13 +156,19 @@ router.post("/:tournamentId/duplicate", auth, async (req, res) => {
 // @desc    Delete a tournament
 // @access  Private (A token is needed)
 router.delete("/:tournamentId", auth, async (req, res) => {
+    const session = await mongoose.startSession();
+    await session.startTransaction();
     try {
-        const tournament = await Tournament.findById(req.params.tournamentId);
-        await tournament.deleteOne();  // Will trigger cascade deletion of Sections
+        const tournament = await Tournament.findById(req.params.tournamentId).session(session);
+        await tournament.deleteOne({session});  // Will trigger cascade deletion of Sections
+        await session.commitTransaction()
         await res.json(tournament);
     } catch (err) {
+        await session.abortTransaction();
         console.error(err.message);
         res.status(500).send({msg: "Could not delete tournament. Try again!"});
+    } finally {
+        await session.endSession();
     }
 });
 

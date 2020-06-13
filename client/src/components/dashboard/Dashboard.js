@@ -273,6 +273,7 @@ const Dashboard = ({
                 <Container className={classes.container}>
                     {sections.loading ? (<Spinner/>) : (
                         <DashboardTable
+                            selectedSectionIndex={sectionDisplayedIndex}
                             sectionId={selectedSectionId}
                             columns={columns}
                             data={data}

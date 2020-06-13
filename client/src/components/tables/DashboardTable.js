@@ -150,6 +150,7 @@ const DashboardTable = ({
                             columns,
                             data,
                             sections,
+                            selectedSectionIndex,
                             sectionId,
                             clearSections
                         }) => {
@@ -213,8 +214,8 @@ const DashboardTable = ({
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog sectionId={sectionId}/>
-                <WithdrawalsDialog/>
-                <ByesDialog/>
+                <WithdrawalsDialog selectedSectionIndex={selectedSectionIndex}/>
+                <ByesDialog selectedSectionIndex={selectedSectionIndex}/>
                 <MovePlayerDialog oldSectionId={sectionId} selectedRowIds={selectedRowIds} players={data}
                                   sections={sections}/>
                 <Typography className={classes.leftSection}></Typography>
@@ -278,6 +279,7 @@ DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
+    selectedSectionIndex: PropTypes.number.isRequired,
     sectionId: PropTypes.string.isRequired,
     clearSections: PropTypes.func.isRequired
 };

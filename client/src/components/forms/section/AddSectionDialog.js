@@ -37,7 +37,7 @@ const AddSectionDialog = ({
         rating_type: "Regular/Standard",
         coin_toss: "--",
         time_control: tournament_time_control,
-        number_of_rounds: 1
+        number_of_rounds: 0
     };
 
     const [section, setSection] = useState(initial_section);
@@ -163,6 +163,11 @@ const AddSectionDialog = ({
                                 label="Number of Rounds"
                                 type="number"
                                 fullWidth
+                                InputProps={{
+                                    inputProps: {
+                                        min: 0
+                                    }
+                                }}
                                 value={section.number_of_rounds}
                                 onChange={handleChange('number_of_rounds')}
                             />
@@ -173,7 +178,7 @@ const AddSectionDialog = ({
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={(section.name === "") ? true : false} color="primary">
+                    <Button onClick={handleSave} disabled={(section.name === "")} color="primary">
                         Save
                     </Button>
                 </DialogActions>
