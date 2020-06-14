@@ -16,6 +16,7 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
+import {dateRenderer} from "../../utils/helpers";
 import SnackbarAlert from "../layout/SnackbarAlert";
 import TournamentTable from "../tables/TournamentTable";
 import EditTournamentDialog from "../forms/tournament/EditTournamentDialog";
@@ -116,16 +117,10 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
             },
             {
                 Header: 'Date',
-                accessor: 'date',
+                id: 'duration',
+                accessor: 'start_date',
                 Cell: ({cell: {row: {original: {start_date, end_date}}}}) => {
-                    const start = moment(start_date);
-                    const end = moment(end_date);
-                    return (
-                        start.isSame(end) ?
-                            start.format("MM/DD/YYYY") :
-                            start.format("MM/DD/YYYY").concat(" - ", end.format("MM/DD/YYYY"))
-
-                    )
+                    return (dateRenderer(start_date, end_date));
                 },
                 sortType: (a, b) => {  // Date Comparison function
                     const x = new Date(a);
@@ -135,6 +130,7 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
             },
             {
                 Header: 'Status',
+                id: 'status',
                 accessor: 'start_date',
                 // minWidth: 150,
                 Cell: ({cell}) => {

@@ -6,7 +6,7 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Tournaments from "./components/dashboard/Tournaments";
-import Dashboard from "./components/dashboard/Dashboard";
+import Dashboard from "./components/dashboard/sections/Dashboard";
 import Account from "./components/user/Account";
 import AdminAnalytics from "./components/user/AdminAnalytics";
 import Footer from "./components/layout/Footer";

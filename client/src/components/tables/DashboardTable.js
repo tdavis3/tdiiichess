@@ -230,6 +230,7 @@ const DashboardTable = ({
                 />
                 <SectionTableOptions/>
             </Toolbar>
+            {/* TODO: On load - both of these progresses are loading making it double thick */}
             {players.loading && <LinearProgress/>}
             {(sections.loading && players.loading) ? <LinearProgress/> :
                 <MaUTable {...getTableProps()}>
