@@ -250,7 +250,7 @@ router.delete("/:sectionId", auth, async (req, res) => {
         const section = await Section.findById(req.params.sectionId).session(session);
         section.deleteOne({session}); // doc.deleteOne() - This should cascade delete
         await session.commitTransaction();
-        return res.json(section);
+        return res.json(section._id);
     } catch (err) {
         await session.abortTransaction();
         console.error(err.message);

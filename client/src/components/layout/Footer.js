@@ -6,9 +6,7 @@ import {CssBaseline, Container, Typography} from '@material-ui/core';
 function Copyright() {
     return (
         <Typography variant="body2">
-            {'© '}
-            {new Date().getFullYear()}
-            {' '} TDIII Chess
+            {'© '}{new Date().getFullYear()}{' '} TDIII Chess
         </Typography>
     );
 }

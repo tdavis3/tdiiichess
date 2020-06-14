@@ -162,7 +162,7 @@ router.delete("/:tournamentId", auth, async (req, res) => {
         const tournament = await Tournament.findById(req.params.tournamentId).session(session);
         await tournament.deleteOne({session});  // Will trigger cascade deletion of Sections
         await session.commitTransaction()
-        await res.json(tournament);
+        await res.json(tournament._id);
     } catch (err) {
         await session.abortTransaction();
         console.error(err.message);

@@ -9,14 +9,15 @@ import {
     ListItem,
     ListItemText,
     Typography,
-    Container, TextField, IconButton, Tooltip,
+    Container,
+    IconButton,
+    Tooltip,
+    LinearProgress
 } from "@material-ui/core";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import LinearProgress from "@material-ui/core/LinearProgress";
 
-import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import SnackbarAlert from "../layout/SnackbarAlert";
 import DashboardTable from "../tables/DashboardTable";
@@ -248,37 +249,27 @@ const Dashboard = ({
                         />
                     </Grid>
                 </Grid>
-
-                {/* TODO Figure out a way to maintain multiple loading indicators for adding a section */}
-                {/*{crudActionInProgress || sections.loading ? <LinearProgress/> : <></>}*/}
+                {sections.loading && <LinearProgress/>}
                 <List component="nav" aria-label="secondary mailbox folders">
                     {sections.sections.map((section, index) => (
                         <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
                                   onClick={handleSectionClick(index)}
                                   onContextMenu={handleSectionRightClickToggle(index)}>
                             <ListItemText primary={section.name}/>
-                            {/* Right Click Popper Menu */}
                         </ListItem>
                     ))}
                 </List>
-                {
-                    (open) ?
-                        <SectionContextMenu display={open} {...SectionContextMenuProps}/>
-                        :
-                        <></>
-                }
+                {open && <SectionContextMenu display={open} {...SectionContextMenuProps}/>}
             </Drawer>
             <main className={classes.content}>
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
                 <Container className={classes.container}>
-                    {sections.loading ? (<Spinner/>) : (
-                        <DashboardTable
-                            selectedSectionIndex={sectionDisplayedIndex}
-                            sectionId={selectedSectionId}
-                            columns={columns}
-                            data={data}
-                        />
-                    )}
+                    <DashboardTable
+                        selectedSectionIndex={sectionDisplayedIndex}
+                        sectionId={selectedSectionId}
+                        columns={columns}
+                        data={data}
+                    />
                     <SnackbarAlert/>
                 </Container>
             </main>

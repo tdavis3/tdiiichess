@@ -1,4 +1,6 @@
 import {
+    SET_PLAYERS_LOADING,
+    PLAYERS_SUCCESS,
     GET_PLAYERS,
     CREATE_PLAYER,
     EDIT_PLAYER,
@@ -15,6 +17,16 @@ const initialState = {
 export default function (state = initialState, action) {
     const {type, payload} = action;
     switch (type) {
+        case SET_PLAYERS_LOADING:
+            return {
+                ...state,
+                loading: true
+            };
+        case PLAYERS_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            };
         case GET_PLAYERS:
             return {
                 ...state,

@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import Skeleton from "@material-ui/lab/Skeleton";
 import {red, green, yellow} from '@material-ui/core/colors';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -19,7 +18,6 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-import Spinner from "../layout/Spinner";
 import DrawerHeader from "../layout/DrawerHeader";
 import SnackbarAlert from "../layout/SnackbarAlert";
 import TournamentTable from "../tables/TournamentTable";
@@ -260,15 +258,11 @@ const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTourname
             </Drawer>
             <main className={classes.content}>
                 <Container>
-                    {tournaments.loading ? (
-                        <Spinner/>
-                    ) : (
-                        <TournamentTable
-                            title={"Tournaments"}
-                            columns={columns}
-                            data={data}
-                        />
-                    )}
+                    <TournamentTable
+                        title={"Tournaments"}
+                        columns={columns}
+                        data={data}
+                    />
                     <SnackbarAlert/>
                 </Container>
             </main>

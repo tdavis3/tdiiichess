@@ -9,13 +9,18 @@ import {
     DELETE_SECTION,
     CLEAR_SECTIONS,
     SECTIONS_ERROR,
+    SET_SECTIONS_LOADING,
+    PLAYERS_SUCCESS
 } from "./types";
+
 
 // Get sections
 export const getSections = id => async dispatch => {
     try {
+        dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.get(`/api/sections/${id}`);
         dispatch({type: GET_SECTIONS, payload: res.data});
+        dispatch({type: PLAYERS_SUCCESS});
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
         dispatch({
@@ -33,6 +38,7 @@ export const createSection = (tournamentId, formData) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.post(
             `/api/sections/${tournamentId}`,
             formData,
@@ -57,6 +63,7 @@ export const editSection = (sectionId, formData) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.put(`/api/sections/${sectionId}`, formData, config);
         dispatch({type: EDIT_SECTION, payload: res.data});
         dispatch(setAlert("Section edited", "success"));
@@ -77,6 +84,7 @@ export const duplicateSection = (sectionId) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.post(`/api/sections/${sectionId}/duplicate`, {}, config);
         dispatch({type: DUPLICATE_SECTION, payload: res.data});
         dispatch(setAlert("Section duplicated", "success"));
@@ -97,6 +105,7 @@ export const moveSection = (sectionId, newTournamentId) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.put(`/api/sections/${sectionId}/tournaments/${newTournamentId}`, {}, config);
         dispatch({type: MOVE_SECTION, payload: res.data});
         dispatch(setAlert("Section moved", "success"));
@@ -112,8 +121,9 @@ export const moveSection = (sectionId, newTournamentId) => async dispatch => {
 // Delete a section
 export const deleteSection = id => async dispatch => {
     try {
-        await axios.delete(`/api/sections/${id}`);
-        dispatch({type: DELETE_SECTION, payload: id});
+        dispatch({type: SET_SECTIONS_LOADING});
+        const res = await axios.delete(`/api/sections/${id}`);
+        dispatch({type: DELETE_SECTION, payload: res.data});
         dispatch(setAlert("Section deleted", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

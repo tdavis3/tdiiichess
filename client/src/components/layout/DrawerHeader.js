@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
         fontSize: 14,
     },
     menu: {
-        // display: 'flex',
         alignItems: 'center'
     },
 }));
@@ -69,7 +68,6 @@ const DrawerHeader = ({auth, logout}) => {
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
-
         prevOpen.current = open;
     }, [open]);
 
@@ -99,7 +97,6 @@ const DrawerHeader = ({auth, logout}) => {
                     >
                         <MenuIcon/>
                     </IconButton>
-                    {/*zIndex to prevent the buttons overlap*/}
                     <Popper style={{zIndex: 2}} open={open} anchorEl={anchorRef.current} role={undefined} transition
                             disablePortal>
                         {({TransitionProps, placement}) => (

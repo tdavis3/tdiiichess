@@ -10,6 +10,7 @@ import {
     TableSortLabel,
     Toolbar,
     InputBase,
+    LinearProgress
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,6 +21,7 @@ import {useRowSelect, useSortBy, useTable, useFilters, useGlobalFilter, useAsync
 
 import PropTypes from 'prop-types';
 import AddTournamentDialog from "../forms/tournament/AddTournamentDialog";
+import {connect} from "react-redux";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -130,7 +132,8 @@ function DefaultColumnFilter({
 
 const TournamentTable = ({
                              columns,
-                             data
+                             data,
+                             tournaments
                          }) => {
 
     const defaultColumn = useMemo(
@@ -181,6 +184,7 @@ const TournamentTable = ({
                 />
                 <TournamentTableOptions/>
             </Toolbar>
+            {tournaments.loading && <LinearProgress/>}
             <MaUTable {...getTableProps()}>
                 <TableHead>
                     {headerGroups.map(headerGroup => (
@@ -205,7 +209,6 @@ const TournamentTable = ({
                     ))}
                 </TableHead>
                 <TableBody {...getTableBodyProps()}>
-                    {/*firstPageRows.map((row, i) =>*/}
                     {rows.map((row, i) => {
                         prepareRow(row);
                         return (
@@ -228,7 +231,12 @@ const TournamentTable = ({
 
 TournamentTable.propTypes = {
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired
+    data: PropTypes.array.isRequired,
+    tournaments: PropTypes.object.isRequired
 };
 
-export default TournamentTable;
+const mapStateToProps = state => ({
+    tournaments: state.tournaments
+});
+
+export default connect(mapStateToProps)(TournamentTable);

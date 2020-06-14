@@ -1,4 +1,5 @@
 import {
+    SET_TOURNAMENTS_LOADING,
     GET_TOURNAMENTS,
     CREATE_TOURNAMENT,
     EDIT_TOURNAMENT,
@@ -9,7 +10,6 @@ import {
 } from "../actions/types";
 
 const initialState = {
-    editing_tournament: null,
     tournaments: [],
     loading: true,
     error: {}
@@ -19,6 +19,11 @@ export default function (state = initialState, action) {
     const {type, payload} = action;
 
     switch (type) {
+        case SET_TOURNAMENTS_LOADING:
+            return {
+                ...state,
+                loading: true
+            };
         case GET_TOURNAMENTS:
             return {
                 ...state,

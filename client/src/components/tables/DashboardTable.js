@@ -14,7 +14,8 @@ import {
     Toolbar,
     InputBase,
     Checkbox,
-    IconButton
+    IconButton,
+    LinearProgress
 } from "@material-ui/core";
 import {fade, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
@@ -31,6 +32,7 @@ import {
 } from 'react-table';
 
 import SectionTableOptions from "./SectionTableOptions";
+import ByesDialog from "../forms/section/ByesDialog";
 import AddPlayerDialog from "../forms/player/AddPlayerDialog";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
 import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
@@ -38,7 +40,6 @@ import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
-import ByesDialog from "../forms/section/ByesDialog";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -149,6 +150,7 @@ function GlobalFilter({
 const DashboardTable = ({
                             columns,
                             data,
+                            players,
                             sections,
                             selectedSectionIndex,
                             sectionId,
@@ -203,7 +205,6 @@ const DashboardTable = ({
         clearSections();
     };
 
-    // Render the UI for your table
     return (
         // <Paper>
         <div>
@@ -229,47 +230,49 @@ const DashboardTable = ({
                 />
                 <SectionTableOptions/>
             </Toolbar>
-
-            <MaUTable {...getTableProps()}>
-                <TableHead>
-                    {headerGroups.map(headerGroup => (
-                        <TableRow {...headerGroup.getHeaderGroupProps()}>
-                            {headerGroup.headers.map(column => (
-                                <TableCell
-                                    {...(column.id === 'selection'
-                                        ? column.getHeaderProps()
-                                        : column.getHeaderProps(column.getSortByToggleProps()))}
-                                >
-                                    {column.render('Header')}
-                                    {column.id !== 'selection' ? (
-                                        <TableSortLabel
-                                            active={column.isSorted}
-                                            // react-table has a unsorted state which is not treated here
-                                            direction={column.isSortedDesc ? 'desc' : 'asc'}
-                                        />
-                                    ) : null}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableHead>
-                <TableBody>
-                    {rows.map((row, i) => {
-                        prepareRow(row);
-                        return (
-                            <TableRow hover {...row.getRowProps()}>
-                                {row.cells.map(cell => {
-                                    return (
-                                        <TableCell {...cell.getCellProps()}>
-                                            {cell.render('Cell')}
-                                        </TableCell>
-                                    )
-                                })}
+            {players.loading && <LinearProgress/>}
+            {(sections.loading && players.loading) ? <LinearProgress/> :
+                <MaUTable {...getTableProps()}>
+                    <TableHead>
+                        {headerGroups.map(headerGroup => (
+                            <TableRow {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map(column => (
+                                    <TableCell
+                                        {...(column.id === 'selection'
+                                            ? column.getHeaderProps()
+                                            : column.getHeaderProps(column.getSortByToggleProps()))}
+                                    >
+                                        {column.render('Header')}
+                                        {column.id !== 'selection' ? (
+                                            <TableSortLabel
+                                                active={column.isSorted}
+                                                // react-table has a unsorted state which is not treated here
+                                                direction={column.isSortedDesc ? 'desc' : 'asc'}
+                                            />
+                                        ) : null}
+                                    </TableCell>
+                                ))}
                             </TableRow>
-                        )
-                    })}
-                </TableBody>
-            </MaUTable>
+                        ))}
+                    </TableHead>
+                    <TableBody>
+                        {rows.map((row, i) => {
+                            prepareRow(row);
+                            return (
+                                <TableRow hover {...row.getRowProps()}>
+                                    {row.cells.map(cell => {
+                                        return (
+                                            <TableCell {...cell.getCellProps()}>
+                                                {cell.render('Cell')}
+                                            </TableCell>
+                                        )
+                                    })}
+                                </TableRow>
+                            )
+                        })}
+                    </TableBody>
+                </MaUTable>
+            }
         </div>
         // </Paper>
     )
@@ -279,12 +282,14 @@ DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
+    players: PropTypes.object.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
     sectionId: PropTypes.string.isRequired,
     clearSections: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections
 });
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 import {setAlert} from "./alert";
 import {
+    SET_TOURNAMENTS_LOADING,
     GET_TOURNAMENTS,
     CREATE_TOURNAMENT,
     EDIT_TOURNAMENT,
@@ -13,6 +14,7 @@ import {
 // Get current users tournaments
 export const getCurrentTournaments = () => async dispatch => {
     try {
+        dispatch({type: SET_TOURNAMENTS_LOADING});
         const res = await axios.get("/api/tournaments");
         dispatch({type: GET_TOURNAMENTS, payload: res.data});
     } catch (err) {
@@ -31,6 +33,7 @@ export const createTournament = formData => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_TOURNAMENTS_LOADING});
         const res = await axios.post("/api/tournaments", formData, config);
         dispatch({type: CREATE_TOURNAMENT, payload: res.data});
         dispatch(setAlert("Tournament created", "success"));
@@ -51,6 +54,7 @@ export const editTournament = (tournament_id, tournamentFields) => async dispatc
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_TOURNAMENTS_LOADING});
         const res = await axios.put(
             `/api/tournaments/${tournament_id}`,
             tournamentFields,
@@ -75,6 +79,7 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
+        dispatch({type: SET_TOURNAMENTS_LOADING});
         const res = await axios.post(`/api/tournaments/${tournamentId}/duplicate`, {}, config);
         dispatch({type: DUPLICATE_TOURNAMENT, payload: res.data});
         dispatch(setAlert("Tournament duplicated", "success"));
@@ -90,9 +95,10 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
 // Delete a tournament
 export const deleteTournament = id => async dispatch => {
     try {
-        await axios.delete(`/api/tournaments/${id}`);
-        dispatch({type: DELETE_TOURNAMENT, payload: id});
-        dispatch({type: CLEAR_SECTIONS, payload: id});
+        dispatch({type: SET_TOURNAMENTS_LOADING});
+        const res = await axios.delete(`/api/tournaments/${id}`);
+        dispatch({type: DELETE_TOURNAMENT, payload: res.data});
+        dispatch({type: CLEAR_SECTIONS, payload: res.data});
         dispatch(setAlert("Tournaments deleted", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

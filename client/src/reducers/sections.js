@@ -1,4 +1,5 @@
 import {
+    SET_SECTIONS_LOADING,
     GET_SECTIONS,
     CREATE_SECTION,
     EDIT_SECTION,
@@ -19,6 +20,11 @@ const initialState = {
 export default function (state = initialState, action) {
     const {type, payload} = action;
     switch (type) {
+        case SET_SECTIONS_LOADING:
+            return {
+                ...state,
+                loading: true
+            };
         case GET_SECTIONS:
             return {
                 ...state,
