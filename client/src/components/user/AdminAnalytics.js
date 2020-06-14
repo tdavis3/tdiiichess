@@ -5,8 +5,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {
     CssBaseline,
     Chip,
-    Drawer,
-    Divider,
     Box,
     Typography,
     Container,
@@ -16,33 +14,16 @@ import {
 } from '@material-ui/core';
 
 import Spinner from "../layout/Spinner";
-import DrawerHeader from "../layout/DrawerHeader";
+import MainDrawer from "../layout/MainDrawer";
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {getAdminAnalytics} from "../../actions/account";
 
 
-const drawerWidth = 260;
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
-    },
-    drawer: {
-        display: "inline-block",
-        width: drawerWidth,
-        flexShrink: 0
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerContainer: {
-        overflow: 'auto',
-    },
-    toolbar: theme.mixins.toolbar,
-    logo: {
-        width: '60px',
     },
     center: {
         textAlign: 'center',
@@ -75,30 +56,13 @@ const AdminAnalytics = ({auth, account, getAdminAnalytics}) => {
 
     useEffect(
         () => {
-            // const interval = setInterval(() => {
-            //     getAdminAnalytics(auth.user._id);
-            // }, 1000);
-            // return () => clearInterval(interval);
             getAdminAnalytics(auth.user._id);
         }, []);
 
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-                anchor="left"
-            >
-                <DrawerHeader
-                    first_name={auth.user.first_name}
-                    last_name={auth.user.last_name}
-                    email={auth.user.email}
-                />
-                <Divider/>
+            <MainDrawer>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Menu</Typography>
                 </Box>
@@ -115,7 +79,7 @@ const AdminAnalytics = ({auth, account, getAdminAnalytics}) => {
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Account</Typography>
                 </Box>
-            </Drawer>
+            </MainDrawer>
             <main className={classes.content}>
                 <Container className={classes.container}>
                     <Typography variant={"h5"} style={{marginBottom: 20}}>Admin Analytics</Typography>

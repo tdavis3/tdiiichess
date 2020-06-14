@@ -3,7 +3,6 @@ import React, {useEffect, useState, useMemo} from "react";
 import {
     Box,
     Grid,
-    Drawer,
     Divider,
     List,
     ListItem,
@@ -18,7 +17,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-import DrawerHeader from "../layout/DrawerHeader";
+import MainDrawer from "../layout/MainDrawer";
 import SnackbarAlert from "../layout/SnackbarAlert";
 import DashboardTable from "../tables/DashboardTable";
 import AddSectionDialog from "../forms/section/AddSectionDialog";
@@ -33,26 +32,9 @@ import copy from 'copy-to-clipboard';
 let moment = require('moment');
 moment().format();
 
-const drawerWidth = 260;
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
-    },
-    drawer: {
-        display: "inline-block",
-        width: drawerWidth,
-        flexShrink: 0
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerContainer: {
-        overflow: 'auto',
-    },
-    toolbar: theme.mixins.toolbar,
-    logo: {
-        width: '60px',
     },
     center: {
         textAlign: 'center',
@@ -63,8 +45,7 @@ const useStyles = makeStyles(theme => ({
     },
     content: {
         flexGrow: 1,
-        height: '100vh',
-        // overflow: 'auto',
+        height: '100vh'
     },
     popoverContent: {
         padding: theme.spacing(1)
@@ -73,7 +54,6 @@ const useStyles = makeStyles(theme => ({
 
 const Dashboard = ({
                        getSections,
-                       auth,
                        sections,
                        location
                    }) => {
@@ -202,20 +182,7 @@ const Dashboard = ({
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-                anchor="left"
-            >
-                <DrawerHeader
-                    first_name={auth.user.first_name}
-                    last_name={auth.user.last_name}
-                    email={auth.user.email}
-                />
-                <Divider/>
+            <MainDrawer>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Tournament</Typography>
                     <Typography>Name: {tournament.name}</Typography>
@@ -260,7 +227,7 @@ const Dashboard = ({
                     ))}
                 </List>
                 {open && <SectionContextMenu display={open} {...SectionContextMenuProps}/>}
-            </Drawer>
+            </MainDrawer>
             <main className={classes.content}>
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
                 <Container className={classes.container}>
@@ -279,13 +246,11 @@ const Dashboard = ({
 
 Dashboard.propTypes = {
     getSections: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
     sections: state.sections
 });
 

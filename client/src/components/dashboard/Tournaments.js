@@ -4,8 +4,6 @@ import {Link} from "react-router-dom";
 import {
     Box,
     Grid,
-    Drawer,
-    Divider,
     Typography,
     Container, IconButton, Tooltip
 } from "@material-ui/core";
@@ -18,7 +16,6 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 
-import DrawerHeader from "../layout/DrawerHeader";
 import SnackbarAlert from "../layout/SnackbarAlert";
 import TournamentTable from "../tables/TournamentTable";
 import EditTournamentDialog from "../forms/tournament/EditTournamentDialog";
@@ -30,30 +27,15 @@ import {setAlert} from "../../actions/alert";
 import {getCurrentTournaments, duplicateTournament} from "../../actions/tournaments";
 
 import copy from "copy-to-clipboard";
+import MainDrawer from "../layout/MainDrawer";
 
 let moment = require('moment');
 moment().format();
 
-const drawerWidth = 260;
 
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
-    },
-    drawer: {
-        display: "inline-block",
-        width: drawerWidth,
-        flexShrink: 0
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    drawerContainer: {
-        overflow: 'auto',
-    },
-    toolbar: theme.mixins.toolbar,
-    logo: {
-        width: '60px',
     },
     center: {
         textAlign: 'center',
@@ -65,12 +47,11 @@ const useStyles = makeStyles(theme => ({
     content: {
         flexGrow: 1,
         height: '100vh',
-        // overflow: 'auto',
     }
 }));
 
 
-const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTournaments}) => {
+const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) => {
     useEffect(() => {
         getCurrentTournaments();
     }, []);
@@ -238,24 +219,11 @@ const Tournaments = ({auth, tournaments, duplicateTournament, getCurrentTourname
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-                anchor="left"
-            >
-                <DrawerHeader
-                    first_name={auth.user.first_name}
-                    last_name={auth.user.last_name}
-                    email={auth.user.email}
-                />
-                <Divider/>
+            <MainDrawer>
                 <Box className={classes.box}>
                     <Typography className={classes.center}>Welcome!</Typography>
                 </Box>
-            </Drawer>
+            </MainDrawer>
             <main className={classes.content}>
                 <Container>
                     <TournamentTable
@@ -274,12 +242,10 @@ Tournaments.propTypes = {
     setAlert: PropTypes.func.isRequired,
     getCurrentTournaments: PropTypes.func.isRequired,
     duplicateTournament: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired,
     tournaments: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    auth: state.auth,
     tournaments: state.tournaments
 });
 

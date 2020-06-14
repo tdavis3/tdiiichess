@@ -66,7 +66,7 @@ const App = () => {
                             </Switch>
                         </section>
                     </section>
-                    <Footer/>
+                    {/*<Footer/>*/}
                 </div>
             </Router>
         </Provider>

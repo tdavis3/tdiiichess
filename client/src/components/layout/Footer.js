@@ -1,15 +1,8 @@
 import React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
-import {CssBaseline, Container, Typography} from '@material-ui/core';
+import {CssBaseline, Typography} from '@material-ui/core';
 
-function Copyright() {
-    return (
-        <Typography variant="body2">
-            {'© '}{new Date().getFullYear()}{' '} TDIII Chess
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -19,6 +12,13 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+function Copyright() {
+    return (
+        <Typography variant="body2">
+            {'© '}{new Date().getFullYear()}{' '} TDIII Chess
+        </Typography>
+    );
+}
 
 const Footer = () => {
     const classes = useStyles();
@@ -26,9 +26,7 @@ const Footer = () => {
     return (
         <footer className={classes.root}>
             <CssBaseline/>
-            <Container maxWidth="sm">
-                <Copyright/>
-            </Container>
+            <Copyright/>
         </footer>
     );
 };
