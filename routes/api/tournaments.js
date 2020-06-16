@@ -116,7 +116,7 @@ router.put("/:id", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.post("/:tournamentId/duplicate", auth, async (req, res) => {
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
         let tournament = await Tournament.findById(req.params.tournamentId, {_id: 0}).session(session);
         tournament.isNew = true;
@@ -137,18 +137,17 @@ router.post("/:tournamentId/duplicate", auth, async (req, res) => {
             const savedDuplicatedSection = await duplicatedSection.save({session});
             return savedDuplicatedSection._id;
         });
-
         tournament.section_ids = newSectionIds;
         const duplicatedTournament = new Tournament(tournament);
         const savedDuplicatedTournament = await duplicatedTournament.save({session});
         await session.commitTransaction();
+        session.endSession();
         return res.json(savedDuplicatedTournament);
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Could not duplicate the tournament. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 
@@ -157,18 +156,18 @@ router.post("/:tournamentId/duplicate", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.delete("/:tournamentId", auth, async (req, res) => {
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
         const tournament = await Tournament.findById(req.params.tournamentId).session(session);
         await tournament.deleteOne({session});  // Will trigger cascade deletion of Sections
         await session.commitTransaction()
+        session.endSession();
         await res.json(tournament._id);
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Could not delete tournament. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 

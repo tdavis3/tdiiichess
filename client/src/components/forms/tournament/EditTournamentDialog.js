@@ -21,26 +21,24 @@ import {connect} from "react-redux";
 import {editTournament} from "../../../actions/tournaments";
 
 
-const EditTournamentDialog = ({editTournament, selected_edit}) => {
+const EditTournamentDialog = ({editTournament, selectedTournament}) => {
 
     const initial_tournament = {
-        name: selected_edit.name,
-        printing_name: selected_edit.printing_name,
-        time_control: selected_edit.time_control,
-        start_date: selected_edit.start_date,
-        end_date: selected_edit.end_date
+        name: selectedTournament.name,
+        printing_name: selectedTournament.printing_name,
+        time_control: selectedTournament.time_control,
+        start_date: selectedTournament.start_date,
+        end_date: selectedTournament.end_date
     };
 
     useEffect(() => {
         setTournament(initial_tournament);
-    }, [selected_edit]);
-
-    const [tournament, setTournament] = useState(initial_tournament);
-
-    const [selectedStartDate, setStartDateChange] = useState(selected_edit.start_date);
-    const [selectedEndDate, setEndDateChange] = useState(selected_edit.end_date);
+    }, [selectedTournament]);
 
     const [open, setOpen] = useState(false);
+    const [tournament, setTournament] = useState(initial_tournament);
+    const [selectedStartDate, setStartDateChange] = useState(selectedTournament.start_date);
+    const [selectedEndDate, setEndDateChange] = useState(selectedTournament.end_date);
 
     const handleStartDateChange = (date) => {
         setStartDateChange(date);
@@ -61,7 +59,7 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
     };
 
     const handleSave = () => {  // event parameter
-        editTournament(selected_edit._id, tournament);
+        editTournament(selectedTournament._id, tournament);
         setOpen(false);
     };
 
@@ -83,9 +81,10 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
             >
                 <DialogTitle id="form-dialog-title">Edit Tournament</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Edit tournament details.</DialogContentText>
+                    <DialogContentText>Edit details.</DialogContentText>
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Name"
                         type="text"
@@ -95,8 +94,9 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
-                        label="Printing Name"
+                        label="Printing name"
                         type="text"
                         fullWidth
                         value={tournament.printing_name}
@@ -104,8 +104,9 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
-                        label="Time Control"
+                        label="Time control"
                         type="text"
                         fullWidth
                         value={tournament.time_control}
@@ -114,38 +115,33 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
                     <small id="timecontrolinfo" className="form-text text-muted">
                         Only if all sections have the same time control.
                     </small>
+
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <Grid container spacing={3}>
                             <Grid item xs={6}>
                                 <KeyboardDatePicker
-                                    disableToolbar
-                                    // autoOk
+                                    autoOk
                                     variant="inline"
+                                    inputVariant={"outlined"}
                                     format="MM/dd/yyyy"
                                     margin="normal"
                                     id="start-date-picker-inline"
-                                    label="Start Date"
+                                    label="Start date"
                                     value={selectedStartDate}
                                     onChange={handleStartDateChange}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <KeyboardDatePicker
-                                    disableToolbar
+                                    autoOk
                                     variant="inline"
+                                    inputVariant={"outlined"}
                                     format="MM/dd/yyyy"
                                     margin="normal"
                                     id="end-date-picker-inline"
-                                    label="End Date"
+                                    label="End date"
                                     value={selectedEndDate}
                                     onChange={handleEndDateChange}
-                                    // InputAdornmentProps={{position: "start"}}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
                             </Grid>
                         </Grid>
@@ -166,7 +162,7 @@ const EditTournamentDialog = ({editTournament, selected_edit}) => {
 
 EditTournamentDialog.propTypes = {
     editTournament: PropTypes.func.isRequired,
-    selected_edit: PropTypes.object.isRequired
+    selectedTournament: PropTypes.object.isRequired
 };
 
 export default connect(null, {editTournament})(EditTournamentDialog);

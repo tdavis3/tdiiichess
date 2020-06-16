@@ -1,13 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 
-import {Drawer, Typography} from "@material-ui/core";
+import {Drawer, Typography, Divider} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 import DrawerHeader from "./DrawerHeader";
 
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
-import Divider from "@material-ui/core/Divider";
 
 const drawerWidth = 260;
 
@@ -61,8 +58,4 @@ const MainDrawer = ({children}) => {
     );
 };
 
-MainDrawer.propTypes = {};
-
-const mapStateToProps = state => ({});
-
-export default connect(mapStateToProps, {})(MainDrawer);
+export default MainDrawer;

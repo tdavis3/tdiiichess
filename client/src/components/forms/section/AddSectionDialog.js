@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 
 import {
     Tooltip,
@@ -57,7 +57,7 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
     };
 
     return (
-        <Fragment>
+        <div>
             <Tooltip title="Add">
                 <IconButton aria-label="add" onClick={handleClickOpen}>
                     <AddCircleOutlineIcon/>
@@ -71,9 +71,10 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
             >
                 <DialogTitle id="form-dialog-title">Create Section</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Enter section details.</DialogContentText>
+                    <DialogContentText>Enter details.</DialogContentText>
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Name"
                         type="text"
@@ -83,6 +84,7 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Printing Name"
                         type="text"
@@ -92,6 +94,7 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Time Control"
                         type="text"
@@ -177,7 +180,7 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Fragment>
+        </div>
     )
 };
 

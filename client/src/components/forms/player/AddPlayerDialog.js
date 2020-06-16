@@ -10,49 +10,79 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    DialogContentText
+    DialogContentText,
+    Checkbox,
+    FormControlLabel
 } from "@material-ui/core";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {MuiPickersUtilsProvider, KeyboardDatePicker} from '@material-ui/pickers';
 
+import ByeInput from "./ByeInput";
+
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {createPlayer} from "../../../actions/players";
 
 
-const initialPlayer = {
-    first_name: "",
-    last_name: "",
-    suffix: "",
-    uscf_id: "",
-    uscf_reg_rating: "",
-    uscf_blitz_rating: "",
-    uscf_quick_rating: "",
-    state: "",
-    fide_id: "",
-    fide_rating: "",
-    expired: "",
-    email: "",
-    cell: "",
-    dob: null
-};
-
-
 const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
-    const [player, setPlayer] = useState(initialPlayer);
 
+    const initialPlayer = {
+        first_name: "",
+        last_name: "",
+        suffix: "",
+        uscf_id: "",
+        uscf_reg_rating: "",
+        uscf_blitz_rating: "",
+        uscf_quick_rating: "",
+        state: "",
+        fide_id: "",
+        fide_rating: "",
+        expired: "",
+        email: "",
+        cell: "",
+        dob: null,
+        withdrew: false,
+        byes: []
+    };
+
+    const [open, setOpen] = useState(false);
+    const [player, setPlayer] = useState(initialPlayer);
     const [selectedDOB, setDOB] = useState(null);
+    const [chipByeData, setChipByeData] = useState([]);  // [{round_number: #, bye_point: #}]
+
+    const roundAlreadyExists = (roundNumber) => {
+        for (const bye of chipByeData) {
+            if (bye.round_number === roundNumber) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    const handleByesAdd = (round, byePoint) => () => {
+        if (roundAlreadyExists(round)) {
+            // TODO: Display an error text on the UI
+            // Assumption: Cannot have multiple byes for the same round
+        } else {
+            setChipByeData(prevState => {
+                return prevState.concat({round_number: round, bye_point: byePoint});
+            });
+            setPlayer({...player, byes: chipByeData.concat({round_number: round, bye_point: byePoint})});
+        }
+    };
+
+    const handleByesDelete = (chipToDelete) => () => {
+        const newByesList = chipByeData.filter(bye => bye.round_number !== chipToDelete.round_number);
+        setChipByeData(newByesList);
+        setPlayer({...player, newByesList});
+    };
 
     const handleDOBChange = (date) => {
         setDOB(date);
         setPlayer({...player, dob: date});
     };
-
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
-    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -68,8 +98,12 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
         setOpen(false);
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setPlayer({...player, [name]: value})  // Will re-render component
+    const handleChange = name => ({target: {value, checked}}) => {
+        if (name === "withdrew") {
+            setPlayer({...player, withdrew: checked});
+        } else {
+            setPlayer({...player, [name]: value});
+        }
     };
 
     return (
@@ -77,23 +111,26 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
             <Tooltip title="Add">
                 <span>
                     <IconButton aria-label="add" onClick={handleClickOpen}
-                                disabled={sections.sections.length === 0 ? true : false}>
+                                disabled={sections.sections.length === 0}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
                 </span>
             </Tooltip>
             <Dialog
                 open={open}
+                fullWidth={true}
+                maxWidth={"sm"}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
             >
                 <DialogTitle id="form-dialog-title">Add Player</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Enter player details.</DialogContentText>
+                    <DialogContentText>Enter details.</DialogContentText>
                     <Grid container spacing={3}>
                         <Grid item xs={6}>
                             <TextField
                                 autoFocus
+                                variant={"outlined"}
                                 margin="dense"
                                 label="First Name"
                                 type="text"
@@ -105,6 +142,7 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                         <Grid item xs={6}>
                             <TextField
                                 autoFocus
+                                variant={"outlined"}
                                 margin="dense"
                                 label="Last Name"
                                 type="text"
@@ -114,71 +152,92 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                             />
                         </Grid>
                     </Grid>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="USCF ID"
-                        type="text"
-                        fullWidth
-                        value={player.uscf_id}
-                        onChange={handleChange('uscf_id')}
-                    />
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="USCF ID"
+                                type="text"
+                                fullWidth
+                                value={player.uscf_id}
+                                onChange={handleChange('uscf_id')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="Rating"
+                                type="text"
+                                fullWidth
+                                value={player.uscf_reg_rating}
+                                onChange={handleChange('uscf_reg_rating')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                variant={"outlined"}
+                                label="State"
+                                type="text"
+                                fullWidth
+                                value={player.state}
+                                onChange={handleChange('state')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="Expires"
+                                type="text"
+                                fullWidth
+                                value={player.expired}
+                                onChange={handleChange('expired')}
+                            />
+                        </Grid>
+                    </Grid>
+
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Grid container spacing={3}>
+                        <Grid container alignItems={"center"} spacing={3}>
                             <Grid item xs={6}>
                                 <TextField
                                     autoFocus
+                                    variant={"outlined"}
                                     margin="dense"
-                                    label="Rating"
+                                    label="Cell"
                                     type="text"
                                     fullWidth
-                                    value={player.uscf_reg_rating}
-                                    onChange={handleChange('uscf_reg_rating')}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    label="Expires"
-                                    type="text"
-                                    fullWidth
-                                    value={player.expired}
-                                    onChange={handleChange('expired')}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    label="State"
-                                    type="text"
-                                    fullWidth
-                                    value={player.state}
-                                    onChange={handleChange('state')}
+                                    value={player.cell}
+                                    onChange={handleChange('cell')}
                                 />
                             </Grid>
                             <Grid item xs={6}>
                                 <KeyboardDatePicker
-                                    disableToolbar
-                                    // autoOk
-                                    variant="inline"
+                                    autoOk
+                                    variant={"inline"}
+                                    inputVariant={"outlined"}
                                     format="MM/dd/yyyy"
                                     margin="normal"
                                     id="dob-date-picker-inline"
                                     label="Date of Birth"
+                                    disableFuture={true}
                                     value={selectedDOB}
                                     onChange={handleDOBChange}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
                             </Grid>
                         </Grid>
                     </MuiPickersUtilsProvider>
-
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Email"
                         type="text"
@@ -186,22 +245,28 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                         value={player.email}
                         onChange={handleChange('email')}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Cell"
-                        type="text"
-                        fullWidth
-                        value={player.cell}
-                        onChange={handleChange('cell')}
-                    />
+                    <Grid container spacing={3} alignItems={"center"}>
+                        <Grid item xs={3}>
+                            <FormControlLabel
+                                control={<Checkbox checked={player.withdrew} onChange={handleChange('withdrew')}/>}
+                                label={"Withdraw"}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ByeInput
+                                chipByeData={chipByeData}
+                                handleByesAdd={handleByesAdd}
+                                handleByesDelete={handleByesDelete}
+                            />
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
                     <Button onClick={handleSave}
-                            disabled={(player.first_name === "" && player.uscf_id === "") ? true : false}
+                            disabled={(player.first_name === "" && player.uscf_id === "")}
                             color="primary">
                         Save
                     </Button>

@@ -168,7 +168,6 @@ const TournamentTable = ({
 
     const classes = useStyles();
 
-    // Render the UI for your table
     return (
         <div>
             <CssBaseline/>

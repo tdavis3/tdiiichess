@@ -62,7 +62,9 @@ router.post("/:sectionId", auth, async (req, res) => {
         expired,
         email,
         cell,
-        dob
+        dob,
+        withdrew,
+        byes
     } = req.body;
 
     const playerFields = {};
@@ -117,7 +119,8 @@ router.post("/:sectionId", auth, async (req, res) => {
                         players: {
                             player_id: savedPlayer._id,
                             total_points: 0,
-                            withdrew: false
+                            withdrew: withdrew,
+                            byes: byes
                         }
                     }
                 }, {new: true}
@@ -204,25 +207,28 @@ router.put("/:playerId", auth, async (req, res) => {
 // @desc    Move a player from one section to another
 // @access  Private (A token is needed)
 router.put("/move/:oldSectionId/:newSectionId", auth, async (req, res) => {
-    const oldSectionId = req.params.oldSectionId;
-    const newSectionId = req.params.newSectionId;
-    const {movingPlayerObj} = req.body;
-    movingPlayerObj.previous_opponents = [];  // Reset previous opponents
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
-        // Use transactions to maintain atomicity
+        const oldSectionId = req.params.oldSectionId;
+        const newSectionId = req.params.newSectionId;
+        const {movingPlayerObj} = req.body;
+        movingPlayerObj.previous_opponents = [];  // Reset previous opponents
+
         const updatedOldSection = await Section.findOneAndUpdate(
             {_id: oldSectionId},  // Find section
             {$pull: {players: {player_id: movingPlayerObj.player_id._id}}},
             {new: true, multi: true}
         ).populate("players.player_id").session(session);
+
         const updatedNewSection = await Section.findOneAndUpdate(
             {_id: newSectionId},  // Find section
             {$push: {players: movingPlayerObj}},
             {new: true, multi: true}
         ).populate("players.player_id").session(session);
+
         await session.commitTransaction();
+        session.endSession();
         /*
          TODO:
           Consider adding a check here to ensure that all changes were ACTUALLY made by inspecting the rawResult -
@@ -231,10 +237,9 @@ router.put("/move/:oldSectionId/:newSectionId", auth, async (req, res) => {
         res.json({msg: "Player moved successfully", updatedOldSection, updatedNewSection});
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Player could not be moved. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 

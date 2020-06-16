@@ -47,7 +47,7 @@ const TournamentInfo = ({tournament}) => {
         <div className={classes.box}>
             <Typography className={classes.center}>Tournament</Typography>
             <Typography>Name: {tournament.name}</Typography>
-            {dateRenderer(tournament.start_date, tournament.end_date)}
+            <Typography>Date: {dateRenderer(tournament.start_date, tournament.end_date)}</Typography>
             <Typography>Status: {tournament_status(tournament.start_date, tournament.end_date)}</Typography>
             {/* TODO: Alot of style hacking here - probably should change */}
             <Grid container spacing={1} style={{maxHeight: 30}}>

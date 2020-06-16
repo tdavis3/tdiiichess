@@ -63,9 +63,10 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
             >
                 <DialogTitle id="form-dialog-title">Edit this section</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Enter section details.</DialogContentText>
+                    <DialogContentText>Edit details.</DialogContentText>
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Name"
                         type="text"
@@ -75,6 +76,7 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Printing Name"
                         type="text"
@@ -84,6 +86,7 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
                     />
                     <TextField
                         autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Time Control"
                         type="text"

@@ -187,7 +187,7 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
                                 </Tooltip>
                             </Grid>
                             <Grid item xs={3}>
-                                <EditTournamentDialog selected_edit={cell.row.original}/>
+                                <EditTournamentDialog selectedTournament={cell.row.original}/>
                             </Grid>
                             <Grid item xs={3}>
                                 <DeleteTournamentDialog tournament={cell.row.original}/>

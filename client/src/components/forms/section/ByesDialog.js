@@ -10,10 +10,10 @@ import {
     Dialog,
     DialogTitle,
     Button,
-    Typography
+    Typography,
+    Tab,
+    Tabs
 } from '@material-ui/core';
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
@@ -76,6 +76,15 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
     const [activePlayers, setActivePlayers] = useState([]);
     const [summary, setSummary] = useState([]);
 
+    const roundInByes = (roundNumber, byes) => {
+        for (const bye of byes) {
+            if (bye.round_number === roundNumber) {
+                return true;
+            }
+        }
+        return false;
+    };
+
     const setByesPlayers = () => {
         const tempActivePlayers = [];
         const tempPlayersWithBye = [];
@@ -85,7 +94,7 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
                 const currentRound = sections.sections[selectedSectionIndex].current_round;
                 sections.sections[selectedSectionIndex].players.forEach(player => {
                     const listOfByes = player.byes;
-                    if (listOfByes.includes(currentRound + 1)) {
+                    if (roundInByes(currentRound + 1, listOfByes)) {
                         tempPlayersWithBye.push(player.player_id);
                     } else {
                         tempActivePlayers.push(player.player_id);

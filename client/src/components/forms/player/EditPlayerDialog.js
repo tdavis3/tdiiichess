@@ -9,9 +9,13 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-    DialogContentText
+    DialogContentText, Checkbox, FormControlLabel, Grid
 } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
+import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+
+import ByeInput from "./ByeInput";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
@@ -34,14 +38,19 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
         expired: selected_edit.player_id.expired,
         email: selected_edit.player_id.email,
         cell: selected_edit.player_id.cell,
-        dob: selected_edit.player_id.dob
+        dob: selected_edit.player_id.dob,
+        withdrew: selected_edit.player_id.withdrew,
+        byes: selected_edit.byes
     };
 
     const [player, setPlayer] = useState(originalPlayer);
-
-    // Any change to the state vis call to setOpen() will re-render the component
-    // Closing the modal for example
     const [open, setOpen] = useState(false);
+    const [selectedDOB, setDOB] = useState(null);
+
+    const handleDOBChange = (date) => {
+        setDOB(date);
+        setPlayer({...player, dob: date});
+    };
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -75,72 +84,119 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
             >
                 <DialogTitle id="form-dialog-title">Edit Player</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>Change player details.</DialogContentText>
+                    <DialogContentText>Enter details.</DialogContentText>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="First Name"
+                                type="text"
+                                fullWidth
+                                value={player.first_name}
+                                onChange={handleChange('first_name')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="Last Name"
+                                type="text"
+                                fullWidth
+                                value={player.last_name}
+                                onChange={handleChange('last_name')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="USCF ID"
+                                type="text"
+                                fullWidth
+                                value={player.uscf_id}
+                                onChange={handleChange('uscf_id')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="Rating"
+                                type="text"
+                                fullWidth
+                                value={player.uscf_reg_rating}
+                                onChange={handleChange('uscf_reg_rating')}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                margin="dense"
+                                variant={"outlined"}
+                                label="State"
+                                type="text"
+                                fullWidth
+                                value={player.state}
+                                onChange={handleChange('state')}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <TextField
+                                autoFocus
+                                variant={"outlined"}
+                                margin="dense"
+                                label="Expires"
+                                type="text"
+                                fullWidth
+                                value={player.expired}
+                                onChange={handleChange('expired')}
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container alignItems={"center"} spacing={3}>
+                            <Grid item xs={6}>
+                                <TextField
+                                    autoFocus
+                                    variant={"outlined"}
+                                    margin="dense"
+                                    label="Cell"
+                                    type="text"
+                                    fullWidth
+                                    value={player.cell}
+                                    onChange={handleChange('cell')}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
+                                <KeyboardDatePicker
+                                    autoOk
+                                    variant={"inline"}
+                                    inputVariant={"outlined"}
+                                    format="MM/dd/yyyy"
+                                    margin="normal"
+                                    id="dob-date-picker-inline"
+                                    label="Date of Birth"
+                                    disableFuture={true}
+                                    value={selectedDOB}
+                                    onChange={handleDOBChange}
+                                />
+                            </Grid>
+                        </Grid>
+                    </MuiPickersUtilsProvider>
                     <TextField
                         autoFocus
-                        margin="dense"
-                        label="First Name"
-                        type="text"
-                        fullWidth
-                        value={player.first_name}
-                        onChange={handleChange('first_name')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Last Name"
-                        type="text"
-                        fullWidth
-                        value={player.last_name}
-                        onChange={handleChange('last_name')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="USCF ID"
-                        type="text"
-                        fullWidth
-                        value={player.uscf_id}
-                        onChange={handleChange('uscf_id')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Rating"
-                        type="text"
-                        fullWidth
-                        value={player.uscf_reg_rating}
-                        onChange={handleChange('uscf_reg_rating')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Expires"
-                        type="text"
-                        fullWidth
-                        value={player.expired}
-                        onChange={handleChange('expired')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="State"
-                        type="text"
-                        fullWidth
-                        value={player.state}
-                        onChange={handleChange('state')}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Date of Birth"
-                        type="text"
-                        fullWidth
-                        value={player.dob}
-                        onChange={handleChange('dob')}
-                    />
-                    <TextField
-                        autoFocus
+                        variant={"outlined"}
                         margin="dense"
                         label="Email"
                         type="text"
@@ -148,16 +204,17 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
                         value={player.email}
                         onChange={handleChange('email')}
                     />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Cell"
-                        type="text"
-                        fullWidth
-                        value={player.cell}
-                        onChange={handleChange('cell')}
-                    />
-
+                    <Grid container spacing={3} alignItems={"center"}>
+                        <Grid item xs={3}>
+                            <FormControlLabel
+                                control={<Checkbox checked={player.withdrew} onChange={handleChange('withdrew')}/>}
+                                label={"Withdraw"}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ByeInput byes={player.byes}/>
+                        </Grid>
+                    </Grid>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

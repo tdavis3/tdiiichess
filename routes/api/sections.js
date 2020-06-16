@@ -159,7 +159,7 @@ router.put("/:sectionId", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.post("/:sectionId/duplicate", auth, async (req, res) => {
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
         let section = await Section.findById(req.params.sectionId, {_id: 0}).session(session);
         section.isNew = true;
@@ -179,13 +179,13 @@ router.post("/:sectionId/duplicate", auth, async (req, res) => {
             model: "Player"
         }).execPopulate();
         await session.commitTransaction();
+        session.endSession();
         return res.json(finalDuplicatedSection);
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Could not duplicate the section. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 
@@ -197,7 +197,7 @@ router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
         return res.status(403).send({msg: "Invalid ID."});
     }
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
         // Replace old tournament_id with the new one
         const oldSection = await Section.findByIdAndUpdate(req.params.sectionId, {$set: {tournament_id: req.params.tournamentId}}).session(session);
@@ -223,20 +223,22 @@ router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
         ).session(session);
         if (!newTournament) {
             await session.abortTransaction();
+            session.endSession();
             return res.status(404).send({msg: "This tournament was not found. Try again!"});
         }
         if (!(oldTournament.user_id.equals(newTournament.user_id))) {
             await session.abortTransaction();
+            session.endSession();
             return res.status(403).send({msg: "You can only move sections to tournaments in your own account."});
         }
         await session.commitTransaction();
+        session.endSession();
         return res.json(req.params.sectionId);
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Could not move the section. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 
@@ -245,18 +247,18 @@ router.put("/:sectionId/tournaments/:tournamentId", auth, async (req, res) => {
 // @access  Private (A token is needed)
 router.delete("/:sectionId", auth, async (req, res) => {
     const session = await mongoose.startSession();
-    await session.startTransaction();
+    session.startTransaction();
     try {
         const section = await Section.findById(req.params.sectionId).session(session);
-        section.deleteOne({session}); // doc.deleteOne() - This should cascade delete
+        await section.deleteOne({session}); // doc.deleteOne() - This should cascade delete
         await session.commitTransaction();
+        session.endSession();
         return res.json(section._id);
     } catch (err) {
         await session.abortTransaction();
+        session.endSession();
         console.error(err.message);
         res.status(500).send({msg: "Could not delete section. Try again!"});
-    } finally {
-        await session.endSession();
     }
 });
 
