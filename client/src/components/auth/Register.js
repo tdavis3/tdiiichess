@@ -17,6 +17,7 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {register} from "../../actions/auth";
 import {setAlert} from "../../actions/alert";
+import {isValidEmail} from "../../utils/helpers";
 
 
 const useStyles = makeStyles(theme => ({
@@ -59,7 +60,7 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     const onChange = e => {
         setFormData({...formData, [e.target.id]: e.target.value});
         let newErrorData = {
-            passwords_match: null
+            passwords_match: false
         };
 
         if (e.target.id === 'password') {
@@ -137,6 +138,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                error={!isValidEmail(email) && email}
+                                helperText={isValidEmail(email) || !email? "" : "Please enter a valid email address."}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -165,8 +168,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                 id="confirm_password"
                                 value={confirm_password}
                                 onChange={e => onChange(e)}
-                                error={!errorData.passwords_match}
-                                helperText={errorData.passwords_match ? "" : "Passwords do not match."}
+                                error={!errorData.passwords_match && confirm_password}
+                                helperText={errorData.passwords_match || !confirm_password? "" : "Passwords do not match."}
                                 autoComplete="current-password"
                             />
                         </Grid>

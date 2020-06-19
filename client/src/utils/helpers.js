@@ -41,3 +41,8 @@ export function tournament_status(startDate, endDate) {
         return 'Completed';
     }
 }
+
+const EMAIL_VALIDATION_REGEX = /\S+@\S+\.\S+/;
+export function isValidEmail (value) {
+    return EMAIL_VALIDATION_REGEX.test(value);
+}
