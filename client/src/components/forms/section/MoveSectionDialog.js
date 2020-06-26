@@ -49,11 +49,11 @@ const MoveSectionDialog = ({
         setAnchorEl(null);
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setDestinationTournament(value);
-        if (name === 'destinationTournamentId') {
-            // Valid MongoDB ObjectID
-            setErrorData({...errorData, validObjectId: !!(value.match(/^[0-9a-fA-F]{24}$/))});
+    const handleChange = e => {
+        setDestinationTournament(e.target.value);
+        if (e.target.id === 'destinationTournamentId') {
+            // Valid MongoDB ObjectID check
+            setErrorData({...errorData, validObjectId: !!(e.target.value.match(/^[0-9a-fA-F]{24}$/))});
         }
     };
 
@@ -79,8 +79,9 @@ const MoveSectionDialog = ({
                                 id="destination-tournament-id-input"
                                 type="text"
                                 fullWidth
+                                id="destinationTournamentId"
                                 value={destinationTournament}
-                                onChange={handleChange('destinationTournamentId')}
+                                onChange={handleChange}
                                 error={!errorData.validObjectId}
                                 helperText={errorData.validObjectId ? "" : "Invalid ID"}
                             />

@@ -12,26 +12,31 @@ import {
 } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
 
-import {isValidEmail} from "../../../utils/helpers";
+import {allTruthy, isValidEmail} from "../../../utils/helpers";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {changeEmail} from "../../../actions/account";
+import Config from "../../../config/default";
+import {validate} from "@material-ui/pickers";
 
 
 const EditUserEmailDialog = ({auth, changeEmail}) => {
 
-    const initial_form = {
+    const initialForm = {
         new_email: "",
-        confirm_new_email: ""
+        confirmNewEmail: ""
     };
 
-    const [formData, setFormData] = useState(initial_form);
+    const initialErrorState = {
+        display: false,
+        validEmail: false,
+        emailsMatch: true
+    };
 
-    const [errorData, setErrorData] = useState({
-        emailsMatch: true,
-        validEmail: false
-    });
+    const [formData, setFormData] = useState(initialForm);
+
+    const [errorData, setErrorData] = useState(initialErrorState);
 
     const [open, setOpen] = useState(false);
 
@@ -41,27 +46,32 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
 
     const handleClose = () => {
         setOpen(false);
+        setFormData(initialForm);
+        setErrorData(initialErrorState);
+    };
+
+    const validateFields = () => {
+        let newErrorData = {};
+        newErrorData.validEmail = isValidEmail(formData.new_email);
+        newErrorData.emailsMatch = (formData.new_email === formData.confirmNewEmail && formData.new_email !== "");
+        if (!allTruthy(newErrorData)) {
+            newErrorData.display = true;
+            setErrorData(newErrorData);
+            return false;
+        }
+        return true;
     };
 
     const handleSave = () => {
-        if (errorData.emailsMatch && errorData.validEmail) {
+        if (validateFields()) {
             changeEmail(auth.user.email, formData.new_email);
             setOpen(false);
-            setFormData(initial_form);
+            setFormData(initialForm);
         }
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setFormData({...formData, [name]: value});
-        if (name === 'new_email') {
-            setErrorData({
-                ...errorData,
-                validEmail: isValidEmail(value),
-                emailsMatch: (value === formData.confirm_new_email)
-            })
-        } else if (name === 'confirm_new_email') {
-            setErrorData({...errorData, emailsMatch: (value === formData.new_email)})
-        }
+    const handleChange = e => {
+        setFormData({...formData, [e.target.id]: e.target.value});
     };
 
     return (
@@ -95,10 +105,11 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
                         label="New email"
                         type="text"
                         fullWidth
+                        id="new_email"
                         value={formData.new_email}
-                        onChange={handleChange('new_email')}
-                        error={!errorData.validEmail}
-                        helperText={errorData.validEmail ? "" : "Not a valid email format."}
+                        onChange={handleChange}
+                        error={!errorData.validEmail && errorData.display}
+                        helperText={!errorData.validEmail ? "Not a valid email format." : ""}
                     />
                     <TextField
                         variant={"outlined"}
@@ -107,18 +118,18 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
                         label="Re-enter your new email"
                         type="text"
                         fullWidth
-                        value={formData.confirm_new_email}
-                        onChange={handleChange('confirm_new_email')}
-                        error={!errorData.emailsMatch}
-                        helperText={errorData.emailsMatch ? "" : "Emails do not match."}
+                        id="confirmNewEmail"
+                        value={formData.confirmNewEmail}
+                        onChange={handleChange}
+                        error={!errorData.emailsMatch && errorData.display}
+                        helperText={!errorData.emailsMatch && errorData.display ? "Emails do not match." : ""}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={(!(errorData.emailsMatch && errorData.validEmail))}
-                            color="primary">
+                    <Button onClick={handleSave} color="primary">
                         Save
                     </Button>
                 </DialogActions>

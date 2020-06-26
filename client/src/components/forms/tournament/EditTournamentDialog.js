@@ -63,8 +63,8 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
         setOpen(false);
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setTournament({...tournament, [name]: value})  // Will re-render component
+    const handleChange = e => {
+        setTournament({...tournament, [e.target.id]: e.target.value});
     };
 
     return (
@@ -89,8 +89,9 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
                         label="Name"
                         type="text"
                         fullWidth
+                        id="name"
                         value={tournament.name}
-                        onChange={handleChange('name')}
+                        onChange={handleChange}
                     />
                     <TextField
                         autoFocus
@@ -99,8 +100,9 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
                         label="Printing name"
                         type="text"
                         fullWidth
+                        id="printing_name"
                         value={tournament.printing_name}
-                        onChange={handleChange('printing_name')}
+                        onChange={handleChange}
                     />
                     <TextField
                         autoFocus
@@ -109,10 +111,11 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
                         label="Time control"
                         type="text"
                         fullWidth
+                        id="time_control"
                         value={tournament.time_control}
-                        onChange={handleChange('time_control')}
+                        onChange={handleChange}
                     />
-                    <small id="timecontrolinfo" className="form-text text-muted">
+                    <small id="time_control_info" className="form-text text-muted">
                         Only if all sections have the same time control.
                     </small>
 

@@ -19,11 +19,14 @@ import {register} from "../../actions/auth";
 import {setAlert} from "../../actions/alert";
 import {allTruthy, isValidEmail} from "../../utils/helpers";
 import Config from "../../config/default";
+import Paper from "@material-ui/core/Paper";
+import SnackbarAlert from "../layout/SnackbarAlert";
 
 
 const useStyles = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),
+        padding: theme.spacing(3),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center'
@@ -96,115 +99,112 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
-            <div className={classes.paper}>
-                <div style={{display: 'contents'}}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon/>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                </div>
-                <div>
-                    <form
-                        className={classes.form}
-                        onSubmit={e => onSubmit(e)}
-                        noValidate
-                    >
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="first_name"
-                                    variant="outlined"
-                                    fullWidth
-                                    id="first_name"
-                                    value={first_name}
-                                    onChange={e => onChange(e)}
-                                    label="First name"
-                                    size={"small"}
-                                    error={!errorData.validFirstName && errorData.display}
-                                    helperText={!errorData.validFirstName && errorData.display ? "Enter first name" : ""}
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="last_name"
-                                    value={last_name}
-                                    onChange={e => onChange(e)}
-                                    label="Last name"
-                                    name="last_name"
-                                    autoComplete="lname"
-                                    size={"small"}
-                                    error={!errorData.validLastName && errorData.display}
-                                    helperText={!errorData.validLastName && errorData.display ? "Enter last name" : ""}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    id="email"
-                                    value={email}
-                                    onChange={e => onChange(e)}
-                                    label="Email address"
-                                    name="email"
-                                    autoComplete="email"
-                                    size={"small"}
-                                    error={!errorData.validEmail && errorData.display}
-                                    helperText={!errorData.validEmail && errorData.display ? "Please enter a valid" +
-                                        " email" : ""}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    value={password}
-                                    onChange={e => onChange(e)}
-                                    autoComplete="current-password"
-                                    size={"small"}
-                                    error={!errorData.passwordValidLength && errorData.display}
-                                    helperText={"Must be 8-20 characters."}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    name="confirm_password"
-                                    label="Confirm password"
-                                    type="password"
-                                    id="confirmPassword"
-                                    value={confirmPassword}
-                                    onChange={e => onChange(e)}
-                                    autoComplete="current-password"
-                                    size={"small"}
-                                    error={!errorData.passwordsMatch && errorData.display}
-                                    helperText={!errorData.passwordsMatch && errorData.display ? "Passwords do not" +
-                                        " match." : ""}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
+            <SnackbarAlert/>
+            <Paper>
+                <div className={classes.paper}>
+                    <div style={{display: 'contents'}}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon/>
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
+                        </Typography>
+                    </div>
+                    <div>
+                        <form
+                            className={classes.form}
+                            onSubmit={e => onSubmit(e)}
+                            noValidate
                         >
-                            Sign Up
-                        </Button>
-                    </form>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="given-name"
+                                        variant="outlined"
+                                        fullWidth
+                                        id="first_name"
+                                        value={first_name}
+                                        onChange={onChange}
+                                        label="First name"
+                                        size={"small"}
+                                        error={!errorData.validFirstName && errorData.display}
+                                        helperText={!errorData.validFirstName && errorData.display ? "Enter first name" : ""}
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="family-name"
+                                        variant="outlined"
+                                        fullWidth
+                                        id="last_name"
+                                        value={last_name}
+                                        onChange={onChange}
+                                        label="Last name"
+                                        size={"small"}
+                                        error={!errorData.validLastName && errorData.display}
+                                        helperText={!errorData.validLastName && errorData.display ? "Enter last name" : ""}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        autoComplete="email"
+                                        variant="outlined"
+                                        fullWidth
+                                        id="email"
+                                        value={email}
+                                        onChange={onChange}
+                                        label="Email address"
+                                        size={"small"}
+                                        error={!errorData.validEmail && errorData.display}
+                                        helperText={!errorData.validEmail && errorData.display ? "Please enter a valid" +
+                                            " email" : ""}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="new-password"
+                                        variant="outlined"
+                                        fullWidth
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        value={password}
+                                        onChange={onChange}
+                                        size={"small"}
+                                        error={!errorData.passwordValidLength && errorData.display}
+                                        helperText={"Must be 8-20 characters."}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        label="Confirm password"
+                                        type="password"
+                                        id="confirmPassword"
+                                        value={confirmPassword}
+                                        onChange={onChange}
+                                        size={"small"}
+                                        error={!errorData.passwordsMatch && errorData.display}
+                                        helperText={!errorData.passwordsMatch && errorData.display ? "Passwords do not" +
+                                            " match." : ""}
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign Up
+                            </Button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </Paper>
         </Container>
     );
 };

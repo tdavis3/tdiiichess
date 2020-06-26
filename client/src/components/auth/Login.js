@@ -16,10 +16,12 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {login} from "../../actions/auth";
 import SnackbarAlert from "../layout/SnackbarAlert";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles(theme => ({
     paper: {
         marginTop: theme.spacing(8),
+        padding: theme.spacing(3),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -65,55 +67,56 @@ const Login = ({auth, login}) => {
         <Container component={"main"} maxWidth={"xs"}>
             <CssBaseline/>
             <SnackbarAlert/>
-            <div className={classes.paper}>
-                <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon/>
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form
-                    className={classes.form}
-                    onSubmit={e => onSubmit(e)}
-                    noValidate
-                >
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        id="email"
-                        value={email}
-                        label="Email Address"
-                        name="email"
-                        onChange={e => onChange(e)}
-                        autoComplete="email"
-                        autoFocus
-                    />
-
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={e => onChange(e)}
-                        autoComplete="current-password"
-                    />
-
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
+            <Paper>
+                <div className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon/>
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign in
+                    </Typography>
+                    <form
+                        className={classes.form}
+                        onSubmit={onSubmit}
+                        noValidate
                     >
-                        Login
-                    </Button>
-                </form>
-            </div>
+                        <TextField
+                            autoComplete="email"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            id="email"
+                            value={email}
+                            label="Email Address"
+                            onChange={onChange}
+                            autoFocus
+                        />
+
+                        <TextField
+                            autoComplete="current-password"
+                            variant="outlined"
+                            margin="normal"
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            value={password}
+                            onChange={onChange}
+                        />
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            className={classes.submit}
+                        >
+                            Login
+                        </Button>
+                    </form>
+                </div>
+            </Paper>
         </Container>
     );
 };

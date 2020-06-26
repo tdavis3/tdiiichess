@@ -98,12 +98,12 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
         setOpen(false);
     };
 
-    const handleChange = name => ({target: {value, checked}}) => {
-        if (name === "withdrew") {
-            setPlayer({...player, withdrew: checked});
-        } else {
-            setPlayer({...player, [name]: value});
+    const handleChange = e => {
+        if (e.target.id === "withdrew") {
+            setPlayer({...player, withdrew: e.target.checked});
+            return;
         }
+        setPlayer({...player, [e.target.id]: e.target.value});
     };
 
     return (
@@ -135,8 +135,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="First Name"
                                 type="text"
                                 fullWidth
+                                id="first_name"
                                 value={player.first_name}
-                                onChange={handleChange('first_name')}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -147,8 +148,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Last Name"
                                 type="text"
                                 fullWidth
+                                id="last_name"
                                 value={player.last_name}
-                                onChange={handleChange('last_name')}
+                                onChange={handleChange}
                             />
                         </Grid>
                     </Grid>
@@ -161,8 +163,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="USCF ID"
                                 type="text"
                                 fullWidth
+                                id="uscf_id"
                                 value={player.uscf_id}
-                                onChange={handleChange('uscf_id')}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -173,8 +176,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Rating"
                                 type="text"
                                 fullWidth
+                                id="uscf_reg_rating"
                                 value={player.uscf_reg_rating}
-                                onChange={handleChange('uscf_reg_rating')}
+                                onChange={handleChange}
                             />
                         </Grid>
                     </Grid>
@@ -187,8 +191,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="State"
                                 type="text"
                                 fullWidth
+                                id="state"
                                 value={player.state}
-                                onChange={handleChange('state')}
+                                onChange={handleChange}
                             />
                         </Grid>
                         <Grid item xs={6}>
@@ -199,8 +204,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Expires"
                                 type="text"
                                 fullWidth
+                                id="expired"
                                 value={player.expired}
-                                onChange={handleChange('expired')}
+                                onChange={handleChange}
                             />
                         </Grid>
                     </Grid>
@@ -215,8 +221,9 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                     label="Cell"
                                     type="text"
                                     fullWidth
+                                    id="cell"
                                     value={player.cell}
-                                    onChange={handleChange('cell')}
+                                    onChange={handleChange}
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -242,13 +249,14 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                         label="Email"
                         type="text"
                         fullWidth
+                        id="email"
                         value={player.email}
-                        onChange={handleChange('email')}
+                        onChange={handleChange}
                     />
                     <Grid container spacing={3} alignItems={"center"}>
                         <Grid item xs={3}>
                             <FormControlLabel
-                                control={<Checkbox checked={player.withdrew} onChange={handleChange('withdrew')}/>}
+                                control={<Checkbox id="withdrew" checked={player.withdrew} onChange={handleChange}/>}
                                 label={"Withdraw"}
                             />
                         </Grid>

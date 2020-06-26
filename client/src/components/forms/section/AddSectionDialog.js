@@ -52,8 +52,8 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
         setOpen(false);
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setSection({...section, [name]: value})  // Will re-render component
+    const handleChange = e => {
+        setSection({...section, [e.target.id]: e.target.value});
     };
 
     return (
@@ -79,36 +79,40 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                         label="Name"
                         type="text"
                         fullWidth
+                        id='name'
                         value={section.name}
-                        onChange={handleChange('name')}
+                        onChange={handleChange}
                     />
                     <TextField
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="Printing Name"
+                        label="Printing name"
                         type="text"
                         fullWidth
+                        id='printing_name'
                         value={section.printing_name}
-                        onChange={handleChange('printing_name')}
+                        onChange={handleChange}
                     />
                     <TextField
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="Time Control"
+                        label="Time control"
                         type="text"
                         fullWidth
+                        id='time_control'
                         value={section.time_control}
-                        onChange={handleChange('time_control')}
+                        onChange={handleChange}
                     />
                     <Grid container spacing={3} style={{paddingTop: 20}}>
                         <Grid item xs={6}>
-                            <InputLabel htmlFor="event_type">Event Type</InputLabel>
+                            <InputLabel htmlFor="event_type">Event type</InputLabel>
                             <Select
                                 native
                                 value={section.event_type}
-                                onChange={handleChange('event_type')}
+                                id="event_type"
+                                onChange={handleChange}
                                 input={<Input id="event_type"/>}
                             >
                                 <option value="Regular Swiss">Regular Swiss</option>
@@ -116,11 +120,12 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                             </Select>
                         </Grid>
                         <Grid item xs={6}>
-                            <InputLabel htmlFor="rating_type">Rating Type</InputLabel>
+                            <InputLabel htmlFor="rating_type">Rating type</InputLabel>
                             <Select
                                 native
+                                id="rating_type"
                                 value={section.rating_type}
-                                onChange={handleChange('rating_type')}
+                                onChange={handleChange}
                                 input={<Input id="rating_type"/>}
                             >
                                 <option value="Regular/Standard">Regular/Standard</option>
@@ -132,8 +137,9 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                             <InputLabel htmlFor="style">Style</InputLabel>
                             <Select
                                 native
+                                id="style"
                                 value={section.style}
-                                onChange={handleChange('style')}
+                                onChange={handleChange}
                                 input={<Input id="style"/>}
                             >
                                 <option value="Regular">Regular</option>
@@ -141,11 +147,12 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                             </Select>
                         </Grid>
                         <Grid item xs={3}>
-                            <InputLabel htmlFor="coin_toss">Coin Toss</InputLabel>
+                            <InputLabel htmlFor="coin_toss">Coin toss</InputLabel>
                             <Select
                                 native
+                                id="coin_toss"
                                 value={section.coin_toss}
-                                onChange={handleChange('coin_toss')}
+                                onChange={handleChange}
                                 input={<Input id="coin_toss"/>}
                             >
                                 <option value="--">--</option>
@@ -157,16 +164,17 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                             <TextField
                                 autoFocus
                                 margin="dense"
-                                label="Number of Rounds"
+                                label="Number of rounds"
                                 type="number"
                                 fullWidth
+                                id="number_of_rounds"
+                                value={section.number_of_rounds}
+                                onChange={handleChange}
                                 InputProps={{
                                     inputProps: {
                                         min: 0
                                     }
                                 }}
-                                value={section.number_of_rounds}
-                                onChange={handleChange('number_of_rounds')}
                             />
                         </Grid>
                     </Grid>

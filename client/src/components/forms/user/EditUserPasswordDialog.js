@@ -15,21 +15,27 @@ import EditIcon from '@material-ui/icons/Edit';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {changePassword} from "../../../actions/account";
+import Config from "../../../config/default";
+import {allTruthy} from "../../../utils/helpers";
 
 
 const EditUserPasswordDialog = ({auth, changePassword}) => {
 
-    const initial_form = {
+    const initialForm = {
         old_password: "",
         new_password: "",
-        confirm_new_password: ""
+        confirmNewPassword: ""
     };
 
-    const [formData, setFormData] = useState(initial_form);
-
-    const [errorData, setErrorData] = useState({
+    const initialErrorState = {
+        display: false,
+        passwordValidLength: false,
         passwordsMatch: true
-    });
+    };
+
+    const [formData, setFormData] = useState(initialForm);
+
+    const [errorData, setErrorData] = useState(initialErrorState);
 
     const [open, setOpen] = useState(false);
 
@@ -39,28 +45,38 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
 
     const handleClose = () => {
         setOpen(false);
+        setFormData(initialForm);
+        setErrorData(initialErrorState);
+    };
+
+    const validateFields = () => {
+        let newErrorData = {};
+        newErrorData.passwordValidLength = (formData.new_password.length >= Config.validMinPasswordLength && formData.new_password.length <= Config.validMaxPasswordLength);
+        newErrorData.passwordsMatch = (formData.new_password === formData.confirmNewPassword && formData.new_password !== "");
+        if (!allTruthy(newErrorData)) {
+            newErrorData.display = true;
+            setErrorData(newErrorData);
+            return false;
+        }
+        return true;
     };
 
     const handleSave = () => {
-        /*
-        TODO: Check length of password - Better error UI - maybe list of requirements (red) and as they are satisfied
-          (green)
-         */
-        if (errorData.passwordsMatch) {
+        if (validateFields()) {
             changePassword(auth.user._id, formData.old_password, formData.new_password);
             setOpen(false);
-            setFormData(initial_form);
+            setFormData(initialForm);
         }
     };
 
-    const handleChange = name => ({target: {value}}) => {
-        setFormData({...formData, [name]: value});
-        if (name === 'new_password') {
-            setErrorData({...errorData, passwordsMatch: (value === formData.confirm_new_password)})
-        } else if (name === 'confirm_new_password') {
-            setErrorData({...errorData, passwordsMatch: (value === formData.new_password)})
+    const handleChange = e => {
+        setFormData({...formData, [e.target.id]: e.target.value});
+        if (e.target.id === 'new_password') {
+            setErrorData({...errorData, passwordsMatch: (e.target.value === formData.confirmNewPassword)})
+        } else if (e.target.id === 'confirm_new_password') {
+            setErrorData({...errorData, passwordsMatch: (e.target.value === formData.new_password)})
         }
-    };
+    }
 
     return (
         <div>
@@ -83,8 +99,9 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
                         fullWidth
                         variant={"outlined"}
                         type={"password"}
+                        id="old_password"
                         value={formData.old_password}
-                        onChange={handleChange('old_password')}
+                        onChange={handleChange}
                         required
                     />
                     <TextField
@@ -92,11 +109,13 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
                         autoFocus
                         margin="dense"
                         label="New password"
-                        helperText="Your password must be 8-20 characters long."
                         type={"password"}
                         fullWidth
+                        id="new_password"
                         value={formData.new_password}
-                        onChange={handleChange('new_password')}
+                        onChange={handleChange}
+                        error={!errorData.passwordValidLength && errorData.display}
+                        helperText={"Must be 8-20 characters."}
                     />
                     <TextField
                         variant={"outlined"}
@@ -105,17 +124,19 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
                         label="Re-enter your new password"
                         type={"password"}
                         fullWidth
-                        value={formData.confirm_new_password}
-                        onChange={handleChange('confirm_new_password')}
-                        error={!errorData.passwordsMatch}
-                        helperText={errorData.passwordsMatch ? "" : "Passwords do not match."}
+                        id="confirmNewPassword"
+                        value={formData.confirmNewPassword}
+                        onChange={handleChange}
+                        error={!errorData.passwordsMatch && errorData.display}
+                        helperText={!errorData.passwordsMatch && errorData.display ? "Passwords do not" +
+                            " match." : ""}
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} disabled={(!errorData.passwordsMatch)} color="primary">
+                    <Button onClick={handleSave} color="primary">
                         Save
                     </Button>
                 </DialogActions>
