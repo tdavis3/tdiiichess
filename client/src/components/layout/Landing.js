@@ -1,11 +1,7 @@
-import React, {Fragment} from "react";
-import {Redirect} from "react-router-dom";
+import React from "react";
 
 import {makeStyles} from '@material-ui/core/styles';
 import {Button, Container, Grid} from '@material-ui/core';
-
-import PropTypes from "prop-types";
-import {connect} from "react-redux";
 
 const useStyles = makeStyles({
     auth: {
@@ -18,16 +14,11 @@ const useStyles = makeStyles({
     },
 });
 
-const Landing = ({isAuthenticated}) => {
+const Landing = () => {
     const classes = useStyles();
 
-    if (isAuthenticated) {
-        // Won't allow you to go to homepage if logged in
-        return <Redirect to="/tournaments"/>;
-    }
-
     return (
-        <Fragment>
+        <div>
             <div className="jumbotron text-center">
                 <div className="container">
                     <h1 className="jumbotron-heading">Chess Tournament Software</h1>
@@ -82,16 +73,8 @@ const Landing = ({isAuthenticated}) => {
                     </Grid>
                 </Grid>
             </Container>
-        </Fragment>
+        </div>
     );
 };
 
-Landing.propTypes = {
-    isAuthenticated: PropTypes.bool
-};
-
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
-
-export default connect(mapStateToProps)(Landing);
+export default Landing;

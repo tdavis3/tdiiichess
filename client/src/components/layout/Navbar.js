@@ -16,7 +16,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {logout} from "../../actions/auth";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -51,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const Navbar = ({logout, auth}) => {
+const Navbar = ({auth}) => {
 
     const classes = useStyles();
 
@@ -81,23 +80,9 @@ const Navbar = ({logout, auth}) => {
         </Container>
     );
 
-    const authLinks = (
-        <Container>
-            <Button href="/tournaments">
-                Tournaments
-            </Button>
-            <Button href="/account">
-                Account
-            </Button>
-            <Button href="/" onClick={logout}>
-                Sign Out
-            </Button>
-        </Container>
-    );
-
     const mobileMenuId = 'primary-search-account-menu-mobile';
 
-    const guestmenuLinks = (
+    const menuLinks = (
         <Container>
             <MenuItem component={Link} to={'/'}>
                 Home
@@ -107,20 +92,6 @@ const Navbar = ({logout, auth}) => {
             </MenuItem>
             <MenuItem component={Link} to={'/login'}>
                 Login
-            </MenuItem>
-        </Container>
-    );
-
-    const authmenuLinks = (
-        <Container>
-            <MenuItem component={Link} to={'/tournaments'}>
-                Tournaments
-            </MenuItem>
-            <MenuItem component={Link} to={'/account'}>
-                Account
-            </MenuItem>
-            <MenuItem component={Link} to={'/'} onClick={logout}>
-                Sign Out
             </MenuItem>
         </Container>
     );
@@ -137,7 +108,7 @@ const Navbar = ({logout, auth}) => {
         >
             {!auth.loading && (
                 <div>
-                    {auth.isAuthenticated ? authmenuLinks : guestmenuLinks}
+                    {menuLinks}
                 </div>
             )}
         </Menu>
@@ -145,7 +116,7 @@ const Navbar = ({logout, auth}) => {
 
     return (
         <div className={classes.root}>
-            <AppBar position="fixed" color={"inherit"}>
+            <AppBar position="fixed" color={"inherit"} style={{boxShadow: 'none'}}>
                 <Toolbar>
                     <Box component={Link} to={'/'}>
                         <img className={classes.logo} src={require("../../img/tdiii_chess_logo.png")}
@@ -155,7 +126,7 @@ const Navbar = ({logout, auth}) => {
                     <div className={classes.sectionDesktop}>
                         {!auth.loading && (
                             <div>
-                                {auth.isAuthenticated ? authLinks : guestLinks}
+                                {guestLinks}
                             </div>
                         )}
                     </div>
@@ -179,7 +150,6 @@ const Navbar = ({logout, auth}) => {
 };
 
 Navbar.propTypes = {
-    logout: PropTypes.func.isRequired,
     auth: PropTypes.object.isRequired
 };
 
@@ -187,4 +157,4 @@ const mapStateToProps = state => ({
     auth: state.auth
 });
 
-export default connect(mapStateToProps, {logout})(Navbar);
+export default connect(mapStateToProps)(Navbar);

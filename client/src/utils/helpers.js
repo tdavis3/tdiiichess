@@ -43,6 +43,14 @@ export function tournament_status(startDate, endDate) {
 }
 
 const EMAIL_VALIDATION_REGEX = /\S+@\S+\.\S+/;
-export function isValidEmail (value) {
+
+export function isValidEmail(value) {
     return EMAIL_VALIDATION_REGEX.test(value);
+}
+
+export function allTruthy(obj) {
+    for (const i in obj) {
+        if (!obj[i]) return false;
+    }
+    return true;
 }

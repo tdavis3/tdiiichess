@@ -11,7 +11,8 @@ import {
     DialogContent,
 } from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
-import isEmail from 'validator/lib/isEmail';
+
+import {isValidEmail} from "../../../utils/helpers";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
@@ -55,7 +56,7 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
         if (name === 'new_email') {
             setErrorData({
                 ...errorData,
-                validEmail: isEmail(value),
+                validEmail: isValidEmail(value),
                 emailsMatch: (value === formData.confirm_new_email)
             })
         } else if (name === 'confirm_new_email') {
