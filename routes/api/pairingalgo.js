@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const pairingengine = require('../../pairingengine');
+const pairingengine = require('../../pairing_engine/brutus');
 
 // Put auth middleware back
 

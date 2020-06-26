@@ -1,3 +1,7 @@
+/*
+This will be Brutus - the brute force pairing algorithm
+ */
+
 /** Will determine if a player requested a player for the current round. */
 function bye_requested(player, curr_round) {
     for (let bye of player.byes) {
