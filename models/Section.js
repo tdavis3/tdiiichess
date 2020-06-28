@@ -54,11 +54,18 @@ const SectionSchema = new mongoose.Schema({
                 type: Boolean,
                 default: true
             },
+            number_white: {
+                type: Number,
+                default: 0
+            },
+            number_black: {
+                type: Number,
+                default: 0
+            },
             byes: [
                 {
                     round_number: {type: Number},
                     bye_point: {type: Number}
-
                 }
             ],
             previous_opponents: [
@@ -71,7 +78,7 @@ const SectionSchema = new mongoose.Schema({
                 }
             ]
         }
-    ],
+    ]
 });
 
 // Before a section is deleted (which is why its a "pre" hook), delete all of its dependencies

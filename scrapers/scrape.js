@@ -40,7 +40,7 @@ const getUSCFhtml = async (partialuscfURI, uscfid) => {
             blitzRating: ratingparser(tr.find('[name="rating3"]').val()),
             state: tr.find('[name="state_country"]').val(),
             fideId: memfide[0].trim(),
-            fideCountry: memfide[1].trim(),
+            fideCountry: (memfide[0].trim() === '') ? '' : memfide[1].trim(),  // If someone doesn't have a fideId
             fideRating: tr
                 .find('[name="rating4"]')
                 .val()

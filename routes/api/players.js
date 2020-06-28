@@ -71,6 +71,7 @@ router.post("/:sectionId", auth, async (req, res) => {
 
     // Weird but ok
     await getuscfhtml(partialuscfURI, uscf_id).then(async playerObject => {
+        console.log(playerObject);
         if (playerObject === null) {
             if (first_name) playerFields.first_name = first_name;
             if (last_name) playerFields.last_name = last_name;

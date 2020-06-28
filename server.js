@@ -16,7 +16,7 @@ app.use("/api/tournaments", require("./routes/api/tournaments"));
 app.use("/api/sections", require("./routes/api/sections"));
 app.use("/api/players", require("./routes/api/players"));
 app.use("/api/resultpairings", require("./routes/api/resultpairings"));
-app.use("/api/pairingalgo", require("./routes/api/pairingalgo"));
+app.use("/api/pairings", require("./routes/api/pairings"));
 app.use("/api/analytics", require("./routes/api/analytics"));
 
 
