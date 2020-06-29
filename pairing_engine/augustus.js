@@ -139,28 +139,14 @@ class Pairing {
             for (const i of range(1, this.#M + 1)) {  // Add players to graph
                 g.addNode(i);
             }
-            // Calculate weights for edges
-            // Add edges
-            for (const edge of finalEdges) {
-                g.addEdge(edge[0], edge[1], 5000 - this.penaltyPoints(edge[0], edge[1]));
+            for (const edge of finalEdges) {  // Add edges and their weights
+                const weight = 5000 - this.penaltyPoints(edge[0], edge[1]);
+                g.addEdge(edge[0], edge[1], weight);
             }
 
             // Run Edmonds Blossom
 
-            console.log('----------------');
-            console.log('No. floaters: '.concat(this.#m));
-            console.log(playersInGroup);
-            console.log('ScoreGroup: '.concat(scoreGroup));
-            console.log('No. players in group: '.concat(this.#M));
-            console.log('Edges:');
-            console.log(allPossibleEdges);
-            console.log('Final Edges:');
-            console.log(finalEdges);
-
-            g.printGraph();
-
             // Transfer any unpaired players
-
         }
     }
 }
