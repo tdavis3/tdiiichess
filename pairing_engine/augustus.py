@@ -16,7 +16,7 @@ class Pairing:
 
     def __init__(self, sectionId, roundNumber, sectionPlayers):
         self.sectionId = sectionId
-        self.round = roundNumber
+        self.round = int(roundNumber)
         self.sectionPlayers = sectionPlayers
         self.groups = {k: list(v) for k, v in groupby(sorted(sectionPlayers, key=lambda p: p['total_points']),
                                                       key=lambda x: x['total_points'])}
@@ -49,7 +49,8 @@ class Pairing:
         return (B - abs(i - j) ** 2) if (self.score(i) == self.score(j) and self.score(j) == self.K) else 0
 
     def penaltyPoints(self, i, j):  # Gets the penalty points of a pairing
-        return self.oldFloater(i, j) + self.newFloater(i, j) + self.colorPenaltyPoints(i, j) + self.halvesSituation(i, j)
+        return self.oldFloater(i, j) + self.newFloater(i, j) + self.colorPenaltyPoints(i, j) + self.halvesSituation(i,
+                                                                                                                    j)
 
     @staticmethod
     def getOrdering(round):  # Pairing order in Figure 1
@@ -62,8 +63,6 @@ class Pairing:
             nextScoreGroup = currentScoreGroup + 1
         else:
             nextScoreGroup = currentScoreGroup
-        # print(f'oldScoreGroup: {self.groups[currentScoreGroup / 2]}')
-        # print(f'nextScoreGroup #: {nextScoreGroup}')
 
         hasNextScoregroup = nextScoreGroup / 2 in self.groups
         for i in range(len(players) - 1, -1, -1):  # Add in reverse order to preserve decreasing order by rating
@@ -74,9 +73,6 @@ class Pairing:
                 self.groups[nextScoreGroup / 2].insert(0, player)  # Push to front of array
             else:
                 self.groups[nextScoreGroup / 2] = [player]
-        # print(f'nextScoreGroup: {self.groups[nextScoreGroup / 2]}')
-        # print(f'oldScoreGroup: {self.groups[currentScoreGroup / 2]}')
-        # print('------------')
 
     @staticmethod
     def numberOfFloaters(players):
@@ -133,119 +129,4 @@ class Pairing:
             if len(unpaired_players) > 0: self.transfer(unpaired_players, scoreGroup)  # Transfer them to next group
             # Might need to do some more processing of the result here
             self.pairings = self.pairings + list(result)
-
-            # print('----------------')
-            # print('Result of Matching: ')
-            # print(result)
-            # print(f'No. floaters: {self.m}')
-            # print(playersInGroup)
-            # print(f'ScoreGroup: {scoreGroup}')
-            # print(f'No. players in group: {self.M}')
-            # print('Edges:')
-            # print(allPossibleEdges)
-            # print('Final Edges:')
-            # print(finalEdges)
-        # Also return any player that will get a bye
-
-
-if __name__ == "__main__":
-    test_players = [
-        {
-            "withdrew": True,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef5634ac8a140b0b45d2287",
-            "player_id": "5ef5634ac8a140b0b45d2286",
-            "total_points": 2,
-            "byes": [],
-            "previous_opponents": ["5ef81807499d8a21249acb82"]
-        }, {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 2,
-            "number_black": 0,
-            "_id": "5ef81807499d8a21249acb83",
-            "player_id": "5ef81807499d8a21249acb82",
-            "total_points": 2,
-            "byes": [],
-            "previous_opponents": ["5ef5634ac8a140b0b45d2286"]
-        }, {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef81840a0c06e6238ae867e",
-            "player_id": "5ef81840a0c06e6238ae867d",
-            "total_points": 1.5,
-            "byes": [],
-            "previous_opponents": []
-        }, {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 0,
-            "number_black": 2,
-            "_id": "5ef81852a0c06e6238ae8680",
-            "player_id": "5ef81852a0c06e6238ae867f",
-            "total_points": 1,
-            "byes": [],
-            "previous_opponents": []
-        }, {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef8189699cf60707024e9d8",
-            "player_id": "5ef8189599cf60707024e9d7",
-            "total_points": 1,
-            "byes": [],
-            "previous_opponents": ["5ef818c744f3966c6c142e9b"]
-        },
-        {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 2,
-            "number_black": 0,
-            "_id": "5ef81e0513398e690494faf8",
-            "player_id": "5ef81e0513398e690494fa21",
-            "total_points": 1,
-            "byes": [],
-            "previous_opponents": []
-        },
-        {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef819ed9f07705df00de11e",
-            "player_id": "5ef819ed9f07705df00de11d",
-            "total_points": .5,
-            "byes": [],
-            "previous_opponents": ["5ef818c744f3966c6c142e9b"]
-        }, {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef81e0513398e690494faf8",
-            "player_id": "5ef81e0513398e690494faf7",
-            "total_points": .5,
-            "byes": [],
-            "previous_opponents": []
-        },
-        {
-            "withdrew": False,
-            "able_to_pair": True,
-            "number_white": 1,
-            "number_black": 1,
-            "_id": "5ef818c744f3966c6c142e9c",
-            "player_id": "5ef818c744f3966c6c142e9b",
-            "total_points": 1,
-            "byes": [],
-            "previous_opponents": ["5ef819ed9f07705df00de11d", "5ef8189599cf60707024e9d7"]
-        },
-    ]
-    print(f'No. of test players: {len(test_players)}')
-    augustusEngine = Pairing(1, 2, test_players)
-    augustusEngine.generatePairings()
-    print(augustusEngine.pairings)
+        return self.pairings

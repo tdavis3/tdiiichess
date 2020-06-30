@@ -1,20 +1,36 @@
 const express = require("express");
 const router = express.Router();
-const AugustusEngine = require('../../pairing_engine/augustus');
 const players = require('../../pairing_engine/testData');
 
 
-// @route   GET api/pairings/
+// @route   POST api/pairings/
 // @desc    Get a pairing
 // @access  Private (A token is needed)
 // Don't forget to put the auth middleware back
-router.get("/:sectionid/:round", async (req, res) => {
+router.post("/:sectionId/:round", async (req, res) => {
     try {
         const {
             players_in_section
         } = req.body;
-        let augustusEngine = new AugustusEngine(req.params.sectionid, req.params.round, players);
-        const pairings = augustusEngine.generatePairings();
+
+        /*
+        Consider making an axios request directly from the frontend (Instead of this wrapper route)
+        - No API Key required
+
+        URL Params:
+            sectionId
+            round
+
+        Body:
+            players
+
+        Request URL: (AWS Lambda function)
+            https://7u9u22wi84.execute-api.us-east-2.amazonaws.com/prod/pairingEngine?sectionId={PARAM}&round={PARAM}
+
+        Response:
+            List of (length 2) lists - Pairings
+         */
+
         return res.json();
     } catch (err) {
         console.error(err.message);
