@@ -16,6 +16,7 @@ Current tournament director softwares:
 - https://www.vegachess.com/ns/home
 - https://chesslang.com/
 - https://github.com/ornicar/lila
+- https://github.com/BieremaBoyzProgramming/bbpPairings
 
 ---
 
