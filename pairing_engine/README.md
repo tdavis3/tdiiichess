@@ -33,6 +33,9 @@ Working dir should be /mnt/c/Users/Tyrone/PycharmProjects/aws_deployment_package
 
 Then run `pip3 install numpy -t .`
 
+Ubuntu files are located at:
+- `C:\Users\Tyrone\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs`
+
 Zip files in /mnt/c/Users/Tyrone/PycharmProjects/aws_deployment_package then upload the zipped file to the lambda
  function 
 
