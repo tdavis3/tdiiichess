@@ -1,15 +1,17 @@
-import React, {useState} from "react";
+import React, {useRef, useState} from "react";
 import {
-    Button,
+    Button, ClickAwayListener,
     Dialog,
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
     Grid,
+    Grow,
+    Paper,
+    Popper,
     Typography
 } from "@material-ui/core";
-import Popover from "@material-ui/core/Popover";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
@@ -22,13 +24,16 @@ import {movePlayer} from "../../../actions/players";
 
 
 const useStyles = makeStyles((theme) => ({
-        popoverContent: {
+        menu: {
+            alignItems: 'center'
+        },
+        infoText: {
             padding: theme.spacing(1)
         }
     }
 ));
 
-const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, movePlayer}) => {
+const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, movePlayer}) => {
     const classes = useStyles();
 
     const movingPlayerInitial = {
@@ -39,7 +44,8 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, move
         uscf_id: ""
     };
 
-    const [anchorEl, setAnchorEl] = useState(null);
+    const anchorRef = useRef(null);
+    const [open, setOpen] = useState(false);
     const [displayOpen, setDisplayOpen] = useState(false);
     const [movingPlayerInfo, setMovingPlayerInfo] = useState(movingPlayerInitial);
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
@@ -48,10 +54,10 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, move
         setSectionDisplayedIndex(index);
     };
 
-    const handleClick = (event) => {  // User can only move one player at a time
+    const handleClick = () => {  // User can only move one player at a time
         const numberOfSelectedPlayers = Object.keys(selectedRowIds).length;
         if (numberOfSelectedPlayers === 0 || numberOfSelectedPlayers > 1) {
-            setAnchorEl(event.currentTarget);  // Display popover
+            setOpen((prevOpen) => !prevOpen);
         } else if (numberOfSelectedPlayers === 1) {
             // Display MovePlayer modal
             setDisplayOpen(true);
@@ -60,42 +66,48 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, move
         }
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
+    const handleClose = (event) => {
+        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+            return;
+        }
         setDisplayOpen(false);
+        setOpen(false);
     };
 
     const handleMove = () => {
         const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
         const newSectionId = sections.sections[sectionDisplayedIndex]._id;
-        movePlayer(oldSectionId, players[selectedIndex], newSectionId);
+        movePlayer(currentSectionId, players[selectedIndex], newSectionId);
         handleClose();
     };
 
-    const popoverOpen = Boolean(anchorEl);
-    const id = popoverOpen ? 'move-popover' : undefined;
-
     return (
         <div>
-            <Button size={"small"} aria-describedby={id} onClick={handleClick}>
-                Move
-            </Button>
-            <Popover
-                id={id}
-                open={popoverOpen}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                }}
-            >
-                <Typography className={classes.popoverContent}>Select a player to move.</Typography>
-            </Popover>
+            <div className={classes.menu}>
+                <Button
+                    ref={anchorRef}
+                    aria-haspopup="true"
+                    size={"small"}
+                    onClick={handleClick}
+                >
+                    Move
+                </Button>
+                <Popper style={{zIndex: 2}} open={open} anchorEl={anchorRef.current} role={undefined} transition
+                        disablePortal>
+                    {({TransitionProps, placement}) => (
+                        <Grow
+                            {...TransitionProps}
+                            style={{transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
+                        >
+                            <Paper>
+                                <ClickAwayListener onClickAway={handleClose}>
+                                    <Typography className={classes.infoText}>Select a player to move</Typography>
+                                </ClickAwayListener>
+                            </Paper>
+                        </Grow>
+                    )}
+                </Popper>
+            </div>
 
             <Dialog
                 fullWidth={true}
@@ -103,7 +115,6 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, oldSectionId, move
                 open={displayOpen}
                 onClose={handleClose}
                 aria-labelledby="form-dialog-title"
-
             >
                 <DialogTitle id="form-dialog-title">Move Player</DialogTitle>
                 <DialogContent>
@@ -154,7 +165,7 @@ MovePlayerDialog.propTypes = {
     selectedRowIds: PropTypes.object.isRequired,
     players: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
-    oldSectionId: PropTypes.string.isRequired,
+    currentSectionId: PropTypes.string.isRequired,
     movePlayer: PropTypes.func.isRequired
 };
 

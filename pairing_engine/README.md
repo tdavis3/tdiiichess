@@ -14,7 +14,7 @@ Body:
 Request URL: (AWS Lambda function)
 - No API Key required
 
-https://7u9u22wi84.execute-api.us-east-2.amazonaws.com/prod/pairingEngine?sectionId={PARAM}&round={PARAM}
+https://api.tdiiichess.com/pairingEngine?sectionId={PARAM}&round={PARAM}
 
 Dependencies:
 - networkx

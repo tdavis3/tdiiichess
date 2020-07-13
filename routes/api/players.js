@@ -40,7 +40,6 @@ router.get("/:sectionId", auth, async (req, res) => {
     } catch (err) {
         console.error(err.message);
         res.status(500).send({msg: "Player all players could not be retrieved."});
-
     }
 });
 

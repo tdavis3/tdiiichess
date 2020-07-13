@@ -30,9 +30,9 @@ router.get("/", auth, async (req, res) => {
 // @route   GET api/tournaments
 // @desc    Get a tournament
 // @access  Private (A token is needed)
-router.get("/:tournament_id", auth, async (req, res) => {
+router.get("/:tournamentId", auth, async (req, res) => {
     try {
-        const tournament = await Tournament.findById(req.params.tournament_id);
+        const tournament = await Tournament.findById(req.params.tournamentId);
         if (tournament === []) {
             return res.status(400).send({msg: "This tournament does not exist"});
         }

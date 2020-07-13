@@ -40,6 +40,7 @@ import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
+import PairingsDropdown from "../pairings/PairingsDropdown";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -150,10 +151,10 @@ function GlobalFilter({
 const DashboardTable = ({
                             columns,
                             data,
-                            players,
-                            sections,
                             selectedSectionIndex,
                             sectionId,
+                            players,
+                            sections,
                             clearSections
                         }) => {
 
@@ -217,10 +218,18 @@ const DashboardTable = ({
                 <AddPlayerDialog sectionId={sectionId}/>
                 <WithdrawalsDialog selectedSectionIndex={selectedSectionIndex}/>
                 <ByesDialog selectedSectionIndex={selectedSectionIndex}/>
-                <MovePlayerDialog oldSectionId={sectionId} selectedRowIds={selectedRowIds} players={data}
-                                  sections={sections}/>
+                <MovePlayerDialog
+                    currentSectionId={sectionId}
+                    selectedRowIds={selectedRowIds}
+                    players={data}
+                    sections={sections}
+                />
                 <Typography className={classes.leftSection}></Typography>
-                <Button size={"small"}>Pairings</Button>
+                <PairingsDropdown
+                    selectedSectionIndex={selectedSectionIndex}
+                    currentSectionId={sectionId}
+                    players={data}
+                />
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
                 <GlobalFilter
@@ -290,7 +299,7 @@ DashboardTable.propTypes = {
 };
 
 const mapStateToProps = state => ({
-    players: state.players,
+    players: state.players,  // For the loading indicator
     sections: state.sections
 });
 

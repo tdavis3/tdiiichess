@@ -25,18 +25,21 @@ export const getResultPairings = (section_id, round_number) => async dispatch =>
 };
 
 // Generate pairings
-export const generatePairings = (section_id, round_number, players_list) => async dispatch => {
+export const generatePairings = (sectionId, roundNumber, playersArray) => async dispatch => {
     try {
 
         const config = {
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                // "x-api-key": "aAKtFfQ3mg3v0Xq1Ynlhr8peqen6fRZ19rk4TmAh"
             }
         };
 
         const res = await axios.post(
-            `/api/pairingalgo/${section_id}/${round_number}`, {players_in_section: players_list}, config
+            `https://api.tdiiichess.com/pairingEngine?sectionId=${sectionId}&round=${roundNumber}`, JSON.stringify({players: playersArray}), config
         );
+
+        console.log(res);
 
     } catch (err) {
         dispatch({

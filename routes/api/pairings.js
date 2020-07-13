@@ -25,8 +25,7 @@ router.post("/:sectionId/:round", async (req, res) => {
             players
 
         Request URL: (AWS Lambda function)
-            https://7u9u22wi84.execute-api.us-east-2.amazonaws.com/prod/pairingEngine?sectionId={PARAM}&round={PARAM}
-
+            https://api.tdiiichess.com/pairingEngine?sectionId={PARAM}&round={PARAM}
         Response:
             List of (length 2) lists - Pairings
          */
