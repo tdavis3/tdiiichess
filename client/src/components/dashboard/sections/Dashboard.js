@@ -18,6 +18,8 @@ import {getSections} from "../../../actions/sections";
 
 import TournamentInfo from "./TournamentInfo";
 import SectionsList from "./SectionsList";
+import {stripPrefix} from "../../../utils/helpers";
+import {getPlayers} from "../../../actions/players";
 
 let moment = require('moment');
 moment().format();
@@ -43,20 +45,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = ({
+                       getPlayers,
                        getSections,
                        sections,
                        location
                    }) => {
-    const tournament = location.state.tournament
-
+    const tournament = location.state.tournament;
+    const tournamentId = stripPrefix(tournament.SK);
     useEffect(() => {
-        getSections(tournament._id);
+        getSections(tournamentId).then(firstSectionId => {
+            console.log("im here");
+            if (firstSectionId !== "undefined") {
+                console.log("brian");
+                getPlayers(tournamentId, firstSectionId);
+                console.log("end brian");
+            }
+        });
     }, []);
+
 
     const classes = useStyles();
 
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
-    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : sections.sections[sectionDisplayedIndex]._id;
+    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : sections.sections[sectionDisplayedIndex].SK;
 
     const columns = useMemo(
         () => [
@@ -69,23 +80,23 @@ const Dashboard = ({
                 //     row._original.suffix.startsWith(filter.value) ||
                 //     row._original.uscf_id.startsWith(filter.value),
                 // disableResizing: true,
-                accessor: 'player_id',
+                accessor: 'SK',
                 width: 150,
                 minWidth: 150,
                 maxWidth: 150,
                 // collapse: true,
-                Cell: ({cell: {value: {first_name, last_name, suffix, uscf_id, uscf_reg_rating}}}) => {
+                Cell: ({cell: {value: {firstName, lastName, suffix, uscfId, uscfRegRating}}}) => {
                     return (
                         <Grid container spacing={2} direction={'column'}>
                             <Grid item xs={5} md={3}>
-                                <Typography>{first_name.concat(" ", last_name, " ", suffix)}</Typography>
+                                <Typography>{firstName.concat(" ", lastName, " ", suffix)}</Typography>
                             </Grid>
                             <Grid item xs={5} container>
                                 <Grid item xs={4} md={3}>
-                                    <Typography>{uscf_id}</Typography>
+                                    <Typography>{uscfId}</Typography>
                                 </Grid>
                                 <Grid item xs={2}>
-                                    <Typography>{uscf_reg_rating}</Typography>
+                                    <Typography>{uscfRegRating}</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -95,14 +106,6 @@ const Dashboard = ({
         ],
         []
     );
-
-    const data = useMemo(() => {
-        if (sections.loading || sections.sections.length === 0) {
-            return []
-        } else {
-            return sections.sections[sectionDisplayedIndex].players;
-        }
-    }, [sectionDisplayedIndex, sections.loading, sections.sections]);
 
     return (
         <div className={classes.root}>
@@ -120,10 +123,10 @@ const Dashboard = ({
                 {/* TODO Put Dashboard Toolbar here (so user can see something and spinner placed underneath)*/}
                 <Container className={classes.container}>
                     <DashboardTable
+                        tournament={tournament}
                         selectedSectionIndex={sectionDisplayedIndex}
                         sectionId={selectedSectionId}
                         columns={columns}
-                        data={data}
                     />
                     <SnackbarAlert/>
                 </Container>
@@ -133,6 +136,7 @@ const Dashboard = ({
 };
 
 Dashboard.propTypes = {
+    getPlayers: PropTypes.func.isRequired,
     getSections: PropTypes.func.isRequired,
     sections: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
@@ -142,4 +146,4 @@ const mapStateToProps = state => ({
     sections: state.sections
 });
 
-export default connect(mapStateToProps, {getSections})(Dashboard);
+export default connect(mapStateToProps, {getPlayers, getSections})(Dashboard);

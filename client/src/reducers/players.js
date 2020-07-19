@@ -9,7 +9,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-    players: [],
+    players: {},
     loading: true,
     error: {}
 };
@@ -36,13 +36,13 @@ export default function (state = initialState, action) {
         case CREATE_PLAYER:
             return {
                 ...state,
-                players: [payload, ...state.players],
+                players: {...state.players, [payload.sectionId]: payload.player},
                 loading: false
             };
         case EDIT_PLAYER:
             const updated_players = [];
             state.players.forEach(player => {
-                if (player._id === payload._id) {
+                if (player.SK === payload.SK) {
                     updated_players.push(payload);
                 } else {
                     updated_players.push(player);

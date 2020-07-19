@@ -22,20 +22,20 @@ import {connect} from "react-redux";
 import {createSection} from "../../../actions/sections";
 
 
-const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}) => {
+const AddSectionDialog = ({tournamentId, createSection, tournamentTimeControl}) => {
 
-    const initial_section = {
+    const initialSection = {
         name: "",
-        printing_name: "",
-        event_type: "Regular Swiss",
+        printingName: "",
+        eventType: "Regular Swiss",
         style: "Regular",
-        rating_type: "Regular/Standard",
-        coin_toss: "--",
-        time_control: tournament_time_control,
-        number_of_rounds: 0
+        ratingType: "Regular/Standard",
+        coinToss: "--",
+        timeControl: tournamentTimeControl,
+        numberOfRounds: 0
     };
 
-    const [section, setSection] = useState(initial_section);
+    const [section, setSection] = useState(initialSection);
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -43,12 +43,13 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
     };
 
     const handleClose = () => {
+        setSection(initialSection);
         setOpen(false);
     };
 
     const handleSave = () => {
         createSection(tournamentId, section);
-        setSection(initial_section);
+        setSection(initialSection);
         setOpen(false);
     };
 
@@ -90,8 +91,8 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                         label="Printing name"
                         type="text"
                         fullWidth
-                        id='printing_name'
-                        value={section.printing_name}
+                        id='printingName'
+                        value={section.printingName}
                         onChange={handleChange}
                     />
                     <TextField
@@ -101,32 +102,32 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                         label="Time control"
                         type="text"
                         fullWidth
-                        id='time_control'
-                        value={section.time_control}
+                        id='timeControl'
+                        value={section.timeControl}
                         onChange={handleChange}
                     />
                     <Grid container spacing={3} style={{paddingTop: 20}}>
                         <Grid item xs={6}>
-                            <InputLabel htmlFor="event_type">Event type</InputLabel>
+                            <InputLabel htmlFor="eventType">Event type</InputLabel>
                             <Select
                                 native
-                                value={section.event_type}
-                                id="event_type"
+                                value={section.eventType}
+                                id="eventType"
                                 onChange={handleChange}
-                                input={<Input id="event_type"/>}
+                                input={<Input id="eventType"/>}
                             >
                                 <option value="Regular Swiss">Regular Swiss</option>
                                 <option value="Round Robin">Round Robin</option>
                             </Select>
                         </Grid>
                         <Grid item xs={6}>
-                            <InputLabel htmlFor="rating_type">Rating type</InputLabel>
+                            <InputLabel htmlFor="ratingType">Rating type</InputLabel>
                             <Select
                                 native
-                                id="rating_type"
-                                value={section.rating_type}
+                                id="ratingType"
+                                value={section.ratingType}
                                 onChange={handleChange}
-                                input={<Input id="rating_type"/>}
+                                input={<Input id="ratingType"/>}
                             >
                                 <option value="Regular/Standard">Regular/Standard</option>
                                 <option value="Quick/Rapid">Quick/Rapid</option>
@@ -147,13 +148,13 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                             </Select>
                         </Grid>
                         <Grid item xs={3}>
-                            <InputLabel htmlFor="coin_toss">Coin toss</InputLabel>
+                            <InputLabel htmlFor="coinToss">Coin toss</InputLabel>
                             <Select
                                 native
-                                id="coin_toss"
-                                value={section.coin_toss}
+                                id="coinToss"
+                                value={section.coinToss}
                                 onChange={handleChange}
-                                input={<Input id="coin_toss"/>}
+                                input={<Input id="coinToss"/>}
                             >
                                 <option value="--">--</option>
                                 <option value="High">High</option>
@@ -167,8 +168,8 @@ const AddSectionDialog = ({tournamentId, createSection, tournament_time_control}
                                 label="Number of rounds"
                                 type="number"
                                 fullWidth
-                                id="number_of_rounds"
-                                value={section.number_of_rounds}
+                                id="numberOfRounds"
+                                value={section.numberOfRounds}
                                 onChange={handleChange}
                                 InputProps={{
                                     inputProps: {

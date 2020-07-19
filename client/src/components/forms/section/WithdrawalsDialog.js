@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
+const WithdrawalsDialog = ({selectedSectionIndex, selectedSectionId, players, sections}) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -78,11 +78,11 @@ const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
         const tempInactivePlayers = [];
         if (!sections.loading) {
             if (!(sections.sections.length === 0)) {
-                sections.sections[selectedSectionIndex].players.forEach(player => {
+                players.players.selectedSectionId.forEach(player => {
                     if (player.withdrew) {
-                        tempInactivePlayers.push(player.player_id);
+                        tempInactivePlayers.push(player.SK);
                     } else {
-                        tempActivePlayers.push(player.player_id);
+                        tempActivePlayers.push(player.SK);
                     }
                 });
             }
@@ -133,7 +133,7 @@ const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
                         {activePlayers.map((activePlayer, index) => (
                             <ListItem button data-index={index} key={index}>
                                 <ListItemText
-                                    primary={activePlayer.first_name.concat(" ", activePlayer.last_name, " ", activePlayer.suffix)}/>
+                                    primary={activePlayer.firstName.concat(" ", activePlayer.lastName, " ", activePlayer.suffix)}/>
                             </ListItem>
                         ))}
                     </List>
@@ -143,7 +143,7 @@ const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
                         {inactivePlayers.map((inactivePlayer, index) => (
                             <ListItem button data-index={index} key={index}>
                                 <ListItemText
-                                    primary={inactivePlayer.first_name.concat(" ", inactivePlayer.last_name, " ", inactivePlayer.suffix)}/>
+                                    primary={inactivePlayer.firstName.concat(" ", inactivePlayer.lastName, " ", inactivePlayer.suffix)}/>
                             </ListItem>
                         ))}
                     </List>
@@ -154,11 +154,14 @@ const WithdrawalsDialog = ({selectedSectionIndex, sections}) => {
 };
 
 WithdrawalsDialog.propTypes = {
+    selectedSectionId: PropTypes.string.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
+    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections
 });
 

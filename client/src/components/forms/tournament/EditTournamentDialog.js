@@ -25,10 +25,10 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
 
     const initial_tournament = {
         name: selectedTournament.name,
-        printing_name: selectedTournament.printing_name,
-        time_control: selectedTournament.time_control,
-        start_date: selectedTournament.start_date,
-        end_date: selectedTournament.end_date
+        printingName: selectedTournament.printingName,
+        timeControl: selectedTournament.timeControl,
+        startDate: selectedTournament.startDate,
+        endDate: selectedTournament.endDate
     };
 
     useEffect(() => {
@@ -37,17 +37,17 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
 
     const [open, setOpen] = useState(false);
     const [tournament, setTournament] = useState(initial_tournament);
-    const [selectedStartDate, setStartDateChange] = useState(selectedTournament.start_date);
-    const [selectedEndDate, setEndDateChange] = useState(selectedTournament.end_date);
+    const [selectedStartDate, setStartDateChange] = useState(selectedTournament.startDate);
+    const [selectedEndDate, setEndDateChange] = useState(selectedTournament.endDate);
 
     const handleStartDateChange = (date) => {
         setStartDateChange(date);
-        setTournament({...tournament, start_date: date});
+        setTournament({...tournament, startDate: date});
     };
 
     const handleEndDateChange = (date) => {
         setEndDateChange(date);
-        setTournament({...tournament, end_date: date});
+        setTournament({...tournament, endDate: date});
     };
 
     const handleClickOpen = () => {
@@ -59,7 +59,9 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
     };
 
     const handleSave = () => {  // event parameter
-        editTournament(selectedTournament._id, tournament);
+        const userId = selectedTournament.PK.split("#")[1];
+        const tournamentId = selectedTournament.SK.split("#")[1];
+        editTournament(userId, tournamentId, {...selectedTournament, ...tournament});
         setOpen(false);
     };
 
@@ -100,8 +102,8 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
                         label="Printing name"
                         type="text"
                         fullWidth
-                        id="printing_name"
-                        value={tournament.printing_name}
+                        id="printingName"
+                        value={tournament.printingName}
                         onChange={handleChange}
                     />
                     <TextField
@@ -111,8 +113,8 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
                         label="Time control"
                         type="text"
                         fullWidth
-                        id="time_control"
-                        value={tournament.time_control}
+                        id="timeControl"
+                        value={tournament.timeControl}
                         onChange={handleChange}
                     />
                     <small id="time_control_info" className="form-text text-muted">

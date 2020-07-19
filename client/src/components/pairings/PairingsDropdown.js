@@ -50,7 +50,7 @@ const PairingsDropdown = ({selectedSectionIndex, currentSectionId, players, sect
 
     const handlePairNextRound = () => {
         // Check that all results have been entered for the section
-        generatePairings(currentSectionId, sections.sections[selectedSectionIndex].current_round, players);
+        generatePairings(currentSectionId, sections.sections[selectedSectionIndex].currentRound, players.players[selectedSectionIndex]);
         setOpen(false);
     };
 
@@ -91,12 +91,13 @@ const PairingsDropdown = ({selectedSectionIndex, currentSectionId, players, sect
 PairingsDropdown.propTypes = {
     selectedSectionIndex: PropTypes.number.isRequired,
     currentSectionId: PropTypes.string.isRequired,
-    players: PropTypes.array.isRequired,
+    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     generatePairings: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections
 });
 

@@ -15,6 +15,7 @@ import AddSectionDialog from "../../forms/section/AddSectionDialog";
 import SectionContextMenu from "../../forms/section/SectionContextMenu";
 
 import {getSections} from "../../../actions/sections";
+import {stripPrefix} from "../../../utils/helpers";
 
 
 const SectionsList = ({
@@ -26,7 +27,7 @@ const SectionsList = ({
                       }) => {
 
     useEffect(() => {
-        getSections(tournament._id);
+        getSections(stripPrefix(tournament.SK));
     }, []);
 
     const [anchorEl, setAnchorEl] = useState(null);
@@ -61,8 +62,8 @@ const SectionsList = ({
                 </Grid>
                 <Grid item xs={2}>
                     <AddSectionDialog
-                        tournamentId={tournament._id}
-                        tournament_time_control={tournament.time_control}
+                        tournamentId={stripPrefix(tournament.SK)}
+                        tournamentTimeControl={tournament.timeControl}
                     />
                 </Grid>
             </Grid>

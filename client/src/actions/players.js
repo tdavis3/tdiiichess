@@ -12,9 +12,10 @@ import {
 } from "./types";
 
 // Get players in a specific section
-export const getCurrentPlayers = section_id => async dispatch => {
+export const getPlayers = (tournamentId, sectionId) => async dispatch => {
     try {
-        const res = await axios.get(`/api/players/${section_id}`);
+        dispatch({type: SET_PLAYERS_LOADING});
+        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`);
         dispatch({type: GET_PLAYERS, payload: res.data});
     } catch (err) {
         console.log(err);
@@ -26,7 +27,7 @@ export const getCurrentPlayers = section_id => async dispatch => {
 };
 
 // Create a player
-export const createPlayer = (sectionId, formData) => async dispatch => {
+export const createPlayer = (tournamentId, sectionId, player) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -34,8 +35,8 @@ export const createPlayer = (sectionId, formData) => async dispatch => {
             }
         };
         dispatch({type: SET_PLAYERS_LOADING});
-        const res = await axios.post(`/api/players/${sectionId}`, formData, config);
-        dispatch({type: EDIT_SECTION, payload: res.data});  // Since the response returns the updated section object
+        const res = await axios.post(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`, player, config);
+        dispatch({type: EDIT_SECTION, payload: {sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}}});
         dispatch({type: PLAYERS_SUCCESS});
         dispatch(setAlert("Player added", "success"));
     } catch (err) {

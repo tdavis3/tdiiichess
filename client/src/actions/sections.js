@@ -12,15 +12,16 @@ import {
     SET_SECTIONS_LOADING,
     PLAYERS_SUCCESS
 } from "./types";
+import {stripPrefix} from "../utils/helpers";
 
 
 // Get sections
-export const getSections = id => async dispatch => {
+export const getSections = tournamentId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.get(`/api/sections/${id}`);
+        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections`);
         dispatch({type: GET_SECTIONS, payload: res.data});
-        dispatch({type: PLAYERS_SUCCESS});
+        return stripPrefix(res.data[0].SK);
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
         dispatch({
@@ -31,7 +32,7 @@ export const getSections = id => async dispatch => {
 };
 
 // Create a section
-export const createSection = (tournamentId, formData) => async dispatch => {
+export const createSection = (tournamentId, section) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -40,11 +41,11 @@ export const createSection = (tournamentId, formData) => async dispatch => {
         };
         dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.post(
-            `/api/sections/${tournamentId}`,
-            formData,
+            `https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections`,
+            section,
             config
         );
-        dispatch({type: CREATE_SECTION, payload: res.data});
+        dispatch({type: CREATE_SECTION, payload: {...section, PK: res.data.PK, SK: res.data.SK}});
         dispatch(setAlert("Section created", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

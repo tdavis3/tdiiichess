@@ -54,3 +54,7 @@ export function allTruthy(obj) {
     }
     return true;
 }
+
+export function stripPrefix(value) {
+    return value.split("#")[1];
+}

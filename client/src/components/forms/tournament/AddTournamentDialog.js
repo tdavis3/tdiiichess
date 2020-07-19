@@ -29,10 +29,10 @@ const AddTournamentDialog = ({createTournament}) => {
 
     const initialTournament = {
         name: "",
-        printing_name: "",
-        time_control: "",
-        start_date: moment().startOf('day'),
-        end_date: moment().startOf('day')
+        printingName: "",
+        timeControl: "",
+        startDate: moment().startOf('day'),
+        endDate: moment().startOf('day')
     };
 
     const [tournament, setTournament] = useState(initialTournament);
@@ -44,12 +44,12 @@ const AddTournamentDialog = ({createTournament}) => {
 
     const handleStartDateChange = (date) => {
         setStartDateChange(date);
-        setTournament({...tournament, start_date: date});
+        setTournament({...tournament, startDate: date});
     };
 
     const handleEndDateChange = (date) => {
         setEndDateChange(date);
-        setTournament({...tournament, end_date: date});
+        setTournament({...tournament, endDate: date});
     };
 
     const handleClickOpen = () => {
@@ -103,8 +103,8 @@ const AddTournamentDialog = ({createTournament}) => {
                         label="Printing name"
                         type="text"
                         fullWidth
-                        id="printing_name"
-                        value={tournament.printing_name}
+                        id="printingName"
+                        value={tournament.printingName}
                         onChange={handleChange}
                     />
                     <TextField
@@ -114,11 +114,11 @@ const AddTournamentDialog = ({createTournament}) => {
                         label="Time control"
                         type="text"
                         fullWidth
-                        id="time_control"
-                        value={tournament.time_control}
+                        id="timeControl"
+                        value={tournament.timeControl}
                         onChange={handleChange}
                     />
-                    <small id="time_control_info" className="form-text text-muted">
+                    <small id="timeControlInfo" className="form-text text-muted">
                         Only if all sections have the same time control.
                     </small>
 

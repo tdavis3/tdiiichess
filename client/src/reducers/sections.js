@@ -41,7 +41,7 @@ export default function (state = initialState, action) {
         case EDIT_SECTION:
             const updatedSections = [];
             state.sections.forEach(section => {
-                if (section._id === payload._id) {
+                if (section.SK === payload.SK) {
                     updatedSections.push(payload);
                 } else {
                     updatedSections.push(section);

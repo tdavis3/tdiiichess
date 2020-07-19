@@ -40,7 +40,7 @@ export default function (state = initialState, action) {
         case EDIT_TOURNAMENT:
             const updated_tournaments = [];
             state.tournaments.forEach(tournament => {
-                if (tournament._id === payload._id) {
+                if (tournament.SK === payload.SK) {
                     updated_tournaments.push(payload);
                 } else {
                     updated_tournaments.push(tournament);

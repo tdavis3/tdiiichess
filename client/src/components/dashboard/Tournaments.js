@@ -92,17 +92,8 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
                 }
             },
             {
-                Header: 'Sections',
-                accessor: 'section_ids',
-                Cell: ({cell: {value}}) => {
-                    return (
-                        <>{value.length}</>
-                    );
-                }
-            },
-            {
                 Header: 'Time Control',
-                accessor: 'time_control',
+                accessor: 'timeControl',
                 Cell: ({cell: {value}}) => {
                     if (value == null || value === '') {
                         return (
@@ -118,9 +109,9 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
             {
                 Header: 'Date',
                 id: 'duration',
-                accessor: 'start_date',
-                Cell: ({cell: {row: {original: {start_date, end_date}}}}) => {
-                    return (dateRenderer(start_date, end_date));
+                accessor: 'startDate',
+                Cell: ({cell: {row: {original: {startDate, endDate}}}}) => {
+                    return (dateRenderer(startDate, endDate));
                 },
                 sortType: (a, b) => {  // Date Comparison function
                     const x = new Date(a);
@@ -131,13 +122,13 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
             {
                 Header: 'Status',
                 id: 'status',
-                accessor: 'start_date',
+                accessor: 'startDate',
                 // minWidth: 150,
                 Cell: ({cell}) => {
                     // TODO Do this calculation server-side; Add "status field" to Tournament model
                     const today = moment();
-                    const start = moment(cell.row.original.start_date).startOf('day');
-                    const end = moment(cell.row.original.end_date).endOf('day');
+                    const start = moment(cell.row.original.startDate).startOf('day');
+                    const end = moment(cell.row.original.endDate).endOf('day');
                     let status = '';
                     let icon = null;
                     if (today.isBefore(start)) {
@@ -173,7 +164,7 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
                             <Grid item xs={3}>
                                 <Tooltip title={copyClipboardText} onClose={handleCopyClipboardToolTipClose}>
                                     <IconButton aria-label="copy"
-                                                onClick={handleCopyToClipboard(cell.row.original._id)}>
+                                                onClick={handleCopyToClipboard(cell.row.original.SK)}>
                                         <AssignmentIcon fontSize={"small"}/>
                                     </IconButton>
                                 </Tooltip>
@@ -181,7 +172,7 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
                             <Grid item xs={3}>
                                 <Tooltip title={"Duplicate"}>
                                     <IconButton aria-label="duplicate"
-                                                onClick={handleDuplicateTournament(cell.row.original._id)}>
+                                                onClick={handleDuplicateTournament(cell.row.original.tournamentId)}>
                                         <FileCopyIcon fontSize={"small"}/>
                                     </IconButton>
                                 </Tooltip>

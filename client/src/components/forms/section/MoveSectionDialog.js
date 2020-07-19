@@ -33,8 +33,8 @@ const MoveSectionDialog = ({
 
     const handleMove = () => {
         if (errorData.validObjectId) {
-            if (section.tournament_id !== destinationTournament) {
-                moveSection(section._id, destinationTournament);
+            if (section.SK !== destinationTournament) {
+                moveSection(section.SK, destinationTournament);
                 setNextToDisplay();  // Since a section is deleted from the list of sections
                 setDisplay(false);
                 setAnchorEl(null);

@@ -24,22 +24,23 @@ import ByeInput from "./ByeInput";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {createPlayer} from "../../../actions/players";
+import {stripPrefix} from "../../../utils/helpers";
 
 
-const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
+const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
 
     const initialPlayer = {
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         suffix: "",
-        uscf_id: "",
-        uscf_reg_rating: "",
-        uscf_blitz_rating: "",
-        uscf_quick_rating: "",
+        uscfId: "",
+        uscfRegRating: "",
+        uscfBlitzRating: "",
+        uscfQuickRating: "",
         state: "",
-        fide_id: "",
-        fide_rating: "",
-        expired: "",
+        fideId: "",
+        fideRating: "",
+        expires: "",
         email: "",
         cell: "",
         dob: null,
@@ -50,11 +51,11 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
     const [open, setOpen] = useState(false);
     const [player, setPlayer] = useState(initialPlayer);
     const [selectedDOB, setDOB] = useState(null);
-    const [chipByeData, setChipByeData] = useState([]);  // [{round_number: #, bye_point: #}]
+    const [chipByeData, setChipByeData] = useState([]);  // [{roundNumber: #, byePoint: #}]
 
     const roundAlreadyExists = (roundNumber) => {
         for (const bye of chipByeData) {
-            if (bye.round_number === roundNumber) {
+            if (bye.roundNumber === roundNumber) {
                 return true;
             }
         }
@@ -67,14 +68,14 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
             // Assumption: Cannot have multiple byes for the same round
         } else {
             setChipByeData(prevState => {
-                return prevState.concat({round_number: round, bye_point: byePoint});
+                return prevState.concat({roundNumber: round, byePoint: byePoint});
             });
-            setPlayer({...player, byes: chipByeData.concat({round_number: round, bye_point: byePoint})});
+            setPlayer({...player, byes: chipByeData.concat({roundNumber: round, byePoint: byePoint})});
         }
     };
 
     const handleByesDelete = (chipToDelete) => () => {
-        const newByesList = chipByeData.filter(bye => bye.round_number !== chipToDelete.round_number);
+        const newByesList = chipByeData.filter(bye => bye.roundNumber !== chipToDelete.roundNumber);
         setChipByeData(newByesList);
         setPlayer({...player, newByesList});
     };
@@ -93,7 +94,7 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
     };
 
     const handleSave = () => {
-        createPlayer(sectionId, player);
+        createPlayer(stripPrefix(tournament.SK), sectionId, player);
         setPlayer(initialPlayer);
         setOpen(false);
     };
@@ -135,8 +136,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="First Name"
                                 type="text"
                                 fullWidth
-                                id="first_name"
-                                value={player.first_name}
+                                id="firstName"
+                                value={player.firstName}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -148,8 +149,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Last Name"
                                 type="text"
                                 fullWidth
-                                id="last_name"
-                                value={player.last_name}
+                                id="lastName"
+                                value={player.lastName}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -163,8 +164,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="USCF ID"
                                 type="text"
                                 fullWidth
-                                id="uscf_id"
-                                value={player.uscf_id}
+                                id="uscfId"
+                                value={player.uscfId}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -176,8 +177,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Rating"
                                 type="text"
                                 fullWidth
-                                id="uscf_reg_rating"
-                                value={player.uscf_reg_rating}
+                                id="uscfRegRating"
+                                value={player.uscfRegRating}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -204,8 +205,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                                 label="Expires"
                                 type="text"
                                 fullWidth
-                                id="expired"
-                                value={player.expired}
+                                id="expires"
+                                value={player.expires}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -274,7 +275,7 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
                         Cancel
                     </Button>
                     <Button onClick={handleSave}
-                            disabled={(player.first_name === "" && player.uscf_id === "")}
+                            disabled={(player.firstName === "" && player.uscfId === "")}
                             color="primary">
                         Save
                     </Button>
@@ -287,7 +288,8 @@ const AddPlayerDialog = ({sectionId, sections, createPlayer}) => {
 AddPlayerDialog.propTypes = {
     createPlayer: PropTypes.func.isRequired,
     sections: PropTypes.object.isRequired,
-    sectionId: PropTypes.string.isRequired
+    sectionId: PropTypes.string.isRequired,
+    tournament: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({

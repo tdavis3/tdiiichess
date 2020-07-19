@@ -95,12 +95,12 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
                 sections.sections[selectedSectionIndex].players.forEach(player => {
                     const listOfByes = player.byes;
                     if (roundInByes(currentRound + 1, listOfByes)) {
-                        tempPlayersWithBye.push(player.player_id);
+                        tempPlayersWithBye.push(player.SK);
                     } else {
-                        tempActivePlayers.push(player.player_id);
+                        tempActivePlayers.push(player.SK);
                     }
                     if (listOfByes.length > 0) {
-                        tempSummary.push(player.player_id);
+                        tempSummary.push(player.SK);
                     }
                 });
             }
@@ -154,7 +154,7 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
                         {playersWithBye.map((player, index) => (
                             <ListItem button data-index={index} key={index}>
                                 <ListItemText
-                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                                    primary={player.firstName.concat(" ", player.lastName, " ", player.suffix)}/>
                             </ListItem>
                         ))}
                     </List>
@@ -165,7 +165,7 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
                         {activePlayers.map((player, index) => (
                             <ListItem button data-index={index} key={index}>
                                 <ListItemText
-                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                                    primary={player.firstName.concat(" ", player.lastName, " ", player.suffix)}/>
                             </ListItem>
                         ))}
                     </List>
@@ -176,7 +176,7 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
                         {summary.map((player, index) => (
                             <ListItem button data-index={index} key={index}>
                                 <ListItemText
-                                    primary={player.first_name.concat(" ", player.last_name, " ", player.suffix)}/>
+                                    primary={player.firstName.concat(" ", player.lastName, " ", player.suffix)}/>
                             </ListItem>
                         ))}
                     </List>

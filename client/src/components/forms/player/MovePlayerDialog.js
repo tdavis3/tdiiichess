@@ -37,11 +37,11 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
     const classes = useStyles();
 
     const movingPlayerInitial = {
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         state: "",
-        uscf_reg_rating: "",
-        uscf_id: ""
+        uscfRegRating: "",
+        uscfId: ""
     };
 
     const anchorRef = useRef(null);
@@ -62,7 +62,7 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
             // Display MovePlayer modal
             setDisplayOpen(true);
             const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-            setMovingPlayerInfo(players[selectedIndex].player_id);  // Get the data at the selected index
+            setMovingPlayerInfo(players.players[selectedIndex].SK);  // Get the data at the selected index
         }
     };
 
@@ -76,8 +76,8 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
 
     const handleMove = () => {
         const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-        const newSectionId = sections.sections[sectionDisplayedIndex]._id;
-        movePlayer(currentSectionId, players[selectedIndex], newSectionId);
+        const newSectionId = sections.sections[sectionDisplayedIndex].SK;
+        movePlayer(currentSectionId, players.players[selectedIndex], newSectionId);
         handleClose();
     };
 
@@ -123,16 +123,16 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
                         <Grid item xs={4}>
                             <Card>
                                 <CardContent>
-                                    <Typography>{movingPlayerInfo.first_name.concat(" ", movingPlayerInfo.last_name)}</Typography>
+                                    <Typography>{movingPlayerInfo.firstName.concat(" ", movingPlayerInfo.lastName)}</Typography>
                                     <Grid container spacing={2}>
                                         <Grid item xs={3}>
                                             <Typography>{movingPlayerInfo.state}</Typography>
                                         </Grid>
                                         <Grid item xs={7}>
-                                            <Typography>{movingPlayerInfo.uscf_reg_rating}</Typography>
+                                            <Typography>{movingPlayerInfo.uscfRegRating}</Typography>
                                         </Grid>
                                     </Grid>
-                                    <Typography>{movingPlayerInfo.uscf_id}</Typography>
+                                    <Typography>{movingPlayerInfo.uscfId}</Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -163,10 +163,15 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
 
 MovePlayerDialog.propTypes = {
     selectedRowIds: PropTypes.object.isRequired,
-    players: PropTypes.array.isRequired,
+    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     currentSectionId: PropTypes.string.isRequired,
     movePlayer: PropTypes.func.isRequired
 };
 
-export default connect(null, {movePlayer})(MovePlayerDialog);
+const mapStateToProps = state => ({
+    players: state.players,
+    sections: state.sections
+});
+
+export default connect(mapStateToProps, {movePlayer})(MovePlayerDialog);

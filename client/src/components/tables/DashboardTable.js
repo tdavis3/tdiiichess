@@ -28,7 +28,8 @@ import {
     useFlexLayout,
     useResizeColumns,
     useFilters,
-    useGlobalFilter, useAsyncDebounce
+    useGlobalFilter,
+    useAsyncDebounce
 } from 'react-table';
 
 import SectionTableOptions from "./SectionTableOptions";
@@ -150,14 +151,14 @@ function GlobalFilter({
 
 const DashboardTable = ({
                             columns,
-                            data,
                             selectedSectionIndex,
                             sectionId,
                             players,
                             sections,
+                            tournament,
                             clearSections
                         }) => {
-
+    const data = players.players[sectionId] || [];  // What if a section has no players in it?
     const {
         getTableProps,
         headerGroups,
@@ -169,7 +170,7 @@ const DashboardTable = ({
     } = useTable(
         {
             columns,
-            data,
+            data
         },
         useFilters,
         useGlobalFilter,
@@ -215,20 +216,17 @@ const DashboardTable = ({
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
-                <AddPlayerDialog sectionId={sectionId}/>
-                <WithdrawalsDialog selectedSectionIndex={selectedSectionIndex}/>
-                <ByesDialog selectedSectionIndex={selectedSectionIndex}/>
-                <MovePlayerDialog
-                    currentSectionId={sectionId}
-                    selectedRowIds={selectedRowIds}
-                    players={data}
-                    sections={sections}
-                />
+                <AddPlayerDialog tournament={tournament} sectionId={sectionId}/>
+                {/*<WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
+                {/*<ByesDialog selectedSectionIndex={selectedSectionIndex}/>*/}
+                {/*<MovePlayerDialog*/}
+                {/*    currentSectionId={sectionId}*/}
+                {/*    selectedRowIds={selectedRowIds}*/}
+                {/*/>*/}
                 <Typography className={classes.leftSection}></Typography>
                 <PairingsDropdown
                     selectedSectionIndex={selectedSectionIndex}
                     currentSectionId={sectionId}
-                    players={data}
                 />
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
@@ -290,16 +288,16 @@ const DashboardTable = ({
 
 DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
     players: PropTypes.object.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
     sectionId: PropTypes.string.isRequired,
+    tournament: PropTypes.object.isRequired,
     clearSections: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-    players: state.players,  // For the loading indicator
+    players: state.players,
     sections: state.sections
 });
 
