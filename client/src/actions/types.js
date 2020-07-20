@@ -39,6 +39,7 @@ export const CREATE_PLAYER = "CREATE_PLAYER";
 export const EDIT_PLAYER = "EDIT_PLAYER";
 export const MOVE_PLAYER = "MOVE_PLAYER";
 export const DELETE_PLAYER = "DELETE_PLAYER";
+export const CLEAR_PLAYERS = "CLEAR_PLAYERS";
 export const PLAYERS_ERROR = "PLAYER_ERROR";
 
 export const GENERATE_PAIRINGS = "GENERATE_PAIRINGS";

@@ -47,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 const Dashboard = ({
                        getPlayers,
                        getSections,
+                       players,
                        sections,
                        location
                    }) => {
@@ -54,38 +55,27 @@ const Dashboard = ({
     const tournamentId = stripPrefix(tournament.SK);
     useEffect(() => {
         getSections(tournamentId).then(firstSectionId => {
-            console.log("im here");
             if (firstSectionId !== "undefined") {
-                console.log("brian");
                 getPlayers(tournamentId, firstSectionId);
-                console.log("end brian");
             }
         });
     }, []);
 
-
     const classes = useStyles();
 
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
-    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : sections.sections[sectionDisplayedIndex].SK;
+    let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : stripPrefix(sections.sections[sectionDisplayedIndex].SK);
 
     const columns = useMemo(
         () => [
             {
                 Header: 'Player',
-                // accessor: row => `${row.first_name} ${row.last_name} ${row.suffix} ${row.uscf_id}`,
-                // filterMethod: (filter, row) =>
-                //     row._original.firstName.startsWith(filter.value) ||
-                //     row._original.lastName.startsWith(filter.value) ||
-                //     row._original.suffix.startsWith(filter.value) ||
-                //     row._original.uscf_id.startsWith(filter.value),
-                // disableResizing: true,
                 accessor: 'SK',
                 width: 150,
                 minWidth: 150,
                 maxWidth: 150,
                 // collapse: true,
-                Cell: ({cell: {value: {firstName, lastName, suffix, uscfId, uscfRegRating}}}) => {
+                Cell: ({cell: {row: {original: {firstName, lastName, suffix, uscfId, uscfRegRating}}}}) => {
                     return (
                         <Grid container spacing={2} direction={'column'}>
                             <Grid item xs={5} md={3}>
@@ -127,6 +117,7 @@ const Dashboard = ({
                         selectedSectionIndex={sectionDisplayedIndex}
                         sectionId={selectedSectionId}
                         columns={columns}
+                        data={players.players[selectedSectionId] || []}
                     />
                     <SnackbarAlert/>
                 </Container>
@@ -138,11 +129,13 @@ const Dashboard = ({
 Dashboard.propTypes = {
     getPlayers: PropTypes.func.isRequired,
     getSections: PropTypes.func.isRequired,
+    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections
 });
 

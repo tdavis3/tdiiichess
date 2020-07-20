@@ -61,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const WithdrawalsDialog = ({selectedSectionIndex, selectedSectionId, players, sections}) => {
+const WithdrawalsDialog = ({selectedSectionId, selectedSectionIndex, players, sections}) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -77,8 +77,8 @@ const WithdrawalsDialog = ({selectedSectionIndex, selectedSectionId, players, se
         const tempActivePlayers = [];
         const tempInactivePlayers = [];
         if (!sections.loading) {
-            if (!(sections.sections.length === 0)) {
-                players.players.selectedSectionId.forEach(player => {
+            if (!(sections.sections.length === 0) && (selectedSectionId in players.players)) {
+                players.players[selectedSectionId].forEach(player => {
                     if (player.withdrew) {
                         tempInactivePlayers.push(player.SK);
                     } else {

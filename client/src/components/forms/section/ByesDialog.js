@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const ByesDialog = ({selectedSectionIndex, sections}) => {
+const ByesDialog = ({selectedSectionId, selectedSectionIndex, players, sections}) => {
     const classes = useStyles();
 
     useEffect(() => {
@@ -90,9 +90,9 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
         const tempPlayersWithBye = [];
         const tempSummary = [];
         if (!sections.loading) {
-            if (!(sections.sections.length === 0)) {
-                const currentRound = sections.sections[selectedSectionIndex].current_round;
-                sections.sections[selectedSectionIndex].players.forEach(player => {
+            if (!(sections.sections.length === 0) && (selectedSectionId in players.players)) {
+                const currentRound = sections.sections[selectedSectionIndex].currentRound;
+                players.players[selectedSectionId].forEach(player => {
                     const listOfByes = player.byes;
                     if (roundInByes(currentRound + 1, listOfByes)) {
                         tempPlayersWithBye.push(player.SK);
@@ -187,11 +187,14 @@ const ByesDialog = ({selectedSectionIndex, sections}) => {
 };
 
 ByesDialog.propTypes = {
+    selectedSectionId: PropTypes.string.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
+    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections
 });
 

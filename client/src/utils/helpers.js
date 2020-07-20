@@ -56,5 +56,11 @@ export function allTruthy(obj) {
 }
 
 export function stripPrefix(value) {
-    return value.split("#")[1];
+    const splitt = value.split("#");
+    if (splitt.length === 2) {
+        return splitt[1];
+    } else if (splitt.length > 2) {
+        throw Error;
+    }
+    return splitt[0];
 }

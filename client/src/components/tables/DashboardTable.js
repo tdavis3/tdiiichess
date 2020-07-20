@@ -151,6 +151,7 @@ function GlobalFilter({
 
 const DashboardTable = ({
                             columns,
+                            data,
                             selectedSectionIndex,
                             sectionId,
                             players,
@@ -158,7 +159,6 @@ const DashboardTable = ({
                             tournament,
                             clearSections
                         }) => {
-    const data = players.players[sectionId] || [];  // What if a section has no players in it?
     const {
         getTableProps,
         headerGroups,
@@ -217,13 +217,10 @@ const DashboardTable = ({
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog tournament={tournament} sectionId={sectionId}/>
-                {/*<WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
-                {/*<ByesDialog selectedSectionIndex={selectedSectionIndex}/>*/}
-                {/*<MovePlayerDialog*/}
-                {/*    currentSectionId={sectionId}*/}
-                {/*    selectedRowIds={selectedRowIds}*/}
-                {/*/>*/}
-                <Typography className={classes.leftSection}></Typography>
+                <WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
+                <ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
+                <MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>
+                <Typography classNam={classes.leftSection}></Typography>
                 <PairingsDropdown
                     selectedSectionIndex={selectedSectionIndex}
                     currentSectionId={sectionId}
@@ -288,6 +285,7 @@ const DashboardTable = ({
 
 DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
+    data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
     players: PropTypes.object.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,

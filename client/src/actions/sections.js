@@ -21,6 +21,9 @@ export const getSections = tournamentId => async dispatch => {
         dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections`);
         dispatch({type: GET_SECTIONS, payload: res.data});
+        if (res.data.length === 0) {
+            return undefined;
+        }
         return stripPrefix(res.data[0].SK);
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

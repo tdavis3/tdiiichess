@@ -5,7 +5,8 @@ import {
     CREATE_PLAYER,
     EDIT_PLAYER,
     DELETE_PLAYER,
-    PLAYERS_ERROR
+    PLAYERS_ERROR,
+    CLEAR_PLAYERS
 } from "../actions/types";
 
 const initialState = {
@@ -30,13 +31,13 @@ export default function (state = initialState, action) {
         case GET_PLAYERS:
             return {
                 ...state,
-                players: payload,
+                players: {...state.players, [payload.sectionId]: payload.players},
                 loading: false
             };
         case CREATE_PLAYER:
             return {
                 ...state,
-                players: {...state.players, [payload.sectionId]: payload.player},
+                players: {...state.players, [payload.sectionId]: [payload.player, ...state.players[payload.sectionId]]},
                 loading: false
             };
         case EDIT_PLAYER:
@@ -60,6 +61,12 @@ export default function (state = initialState, action) {
                 players: state.players.filter(
                     player => !payload.includes(player.player_id._id)
                 ),
+                loading: false
+            };
+        case CLEAR_PLAYERS:
+            return {
+                ...state,
+                players: {},
                 loading: false
             };
         case PLAYERS_ERROR:

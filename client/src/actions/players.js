@@ -6,9 +6,9 @@ import {
     MOVE_PLAYER,
     DELETE_PLAYER,
     PLAYERS_ERROR,
-    EDIT_SECTION,
     SET_PLAYERS_LOADING,
-    PLAYERS_SUCCESS
+    PLAYERS_SUCCESS,
+    CREATE_PLAYER
 } from "./types";
 
 // Get players in a specific section
@@ -16,7 +16,7 @@ export const getPlayers = (tournamentId, sectionId) => async dispatch => {
     try {
         dispatch({type: SET_PLAYERS_LOADING});
         const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`);
-        dispatch({type: GET_PLAYERS, payload: res.data});
+        dispatch({type: GET_PLAYERS, payload: {sectionId: sectionId, players: res.data}});
     } catch (err) {
         console.log(err);
         dispatch({
@@ -36,7 +36,8 @@ export const createPlayer = (tournamentId, sectionId, player) => async dispatch 
         };
         dispatch({type: SET_PLAYERS_LOADING});
         const res = await axios.post(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`, player, config);
-        dispatch({type: EDIT_SECTION, payload: {sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}}});
+        console.log({sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}});
+        dispatch({type: CREATE_PLAYER, payload: {sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}}});
         dispatch({type: PLAYERS_SUCCESS});
         dispatch(setAlert("Player added", "success"));
     } catch (err) {
@@ -50,14 +51,14 @@ export const createPlayer = (tournamentId, sectionId, player) => async dispatch 
 };
 
 // Edit a player
-export const editPlayer = (player_id, formData) => async dispatch => {
+export const editPlayer = (playerId, formData) => async dispatch => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        const res = await axios.put(`/api/players/${player_id}`, formData, config);
+        const res = await axios.put(`/api/players/${playerId}`, formData, config);
         dispatch({type: EDIT_PLAYER, payload: res.data});
         dispatch(setAlert(res.data.msg, "success"));
     } catch (err) {

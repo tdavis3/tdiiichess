@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     }
 ));
 
-const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, movePlayer}) => {
+const MovePlayerDialog = ({selectedRowIds, selectedSectionId, players, sections, movePlayer}) => {
     const classes = useStyles();
 
     const movingPlayerInitial = {
@@ -48,10 +48,10 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
     const [open, setOpen] = useState(false);
     const [displayOpen, setDisplayOpen] = useState(false);
     const [movingPlayerInfo, setMovingPlayerInfo] = useState(movingPlayerInitial);
-    const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
+    const [destinationSectionIndex, setDestinationSectionIndex] = useState(0);
 
     const handleSectionClick = (index) => () => {
-        setSectionDisplayedIndex(index);
+        setDestinationSectionIndex(index);
     };
 
     const handleClick = () => {  // User can only move one player at a time
@@ -62,7 +62,7 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
             // Display MovePlayer modal
             setDisplayOpen(true);
             const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-            setMovingPlayerInfo(players.players[selectedIndex].SK);  // Get the data at the selected index
+            setMovingPlayerInfo(players.players[selectedSectionId][selectedIndex].SK);  // Get the data at the selected index
         }
     };
 
@@ -76,8 +76,8 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
 
     const handleMove = () => {
         const selectedIndex = parseInt(Object.keys(selectedRowIds)[0], 10);
-        const newSectionId = sections.sections[sectionDisplayedIndex].SK;
-        movePlayer(currentSectionId, players.players[selectedIndex], newSectionId);
+        const destinationSectionId = sections.sections[destinationSectionIndex].SK;
+        movePlayer(selectedSectionId, players.players[selectedSectionId][selectedIndex], destinationSectionId);
         handleClose();
     };
 
@@ -139,7 +139,7 @@ const MovePlayerDialog = ({selectedRowIds, players, sections, currentSectionId, 
                         <Grid item xs={6}>
                             <List component="nav" aria-label="target-sections">
                                 {sections.sections.map((section, index) => (
-                                    <ListItem button selected={sectionDisplayedIndex === index} data-index={index}
+                                    <ListItem button selected={destinationSectionIndex === index} data-index={index}
                                               key={index} onClick={handleSectionClick(index)}>
                                         <ListItemText primary={section.name}/>
                                     </ListItem>
@@ -165,7 +165,7 @@ MovePlayerDialog.propTypes = {
     selectedRowIds: PropTypes.object.isRequired,
     players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
-    currentSectionId: PropTypes.string.isRequired,
+    selectedSectionId: PropTypes.string.isRequired,
     movePlayer: PropTypes.func.isRequired
 };
 
