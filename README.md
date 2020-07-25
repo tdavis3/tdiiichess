@@ -14,6 +14,12 @@ Current tournament director softwares:
 - https://www.swisssys.com/
 - https://www.estima.com/chess/index.shtml
 - https://www.vegachess.com/ns/home
+- https://chesslang.com/
+- https://github.com/ornicar/lila
+
+Pairings:
+- https://github.com/BieremaBoyzProgramming/bbpPairings
+- https://web.archive.org/web/20060622121352/http://www.georgejohn.bcentralhost.com:80/GeorgeJohn/Chess/USCF/Computer/Current/Appendix_E1_TA_files.htm
 
 ---
 
