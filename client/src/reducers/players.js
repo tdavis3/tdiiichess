@@ -6,7 +6,8 @@ import {
     EDIT_PLAYER,
     DELETE_PLAYER,
     PLAYERS_ERROR,
-    CLEAR_PLAYERS
+    CLEAR_PLAYERS,
+    STOP_PLAYERS_LOADING
 } from "../actions/types";
 
 const initialState = {
@@ -24,6 +25,7 @@ export default function (state = initialState, action) {
                 loading: true
             };
         case PLAYERS_SUCCESS:
+        case STOP_PLAYERS_LOADING:
             return {
                 ...state,
                 loading: false
@@ -59,7 +61,7 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 players: state.players.filter(
-                    player => !payload.includes(player.player_id._id)
+                    player => !payload.includes(player.SK)
                 ),
                 loading: false
             };

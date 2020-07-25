@@ -196,6 +196,7 @@ const AddSectionDialog = ({tournamentId, createSection, tournamentTimeControl}) 
 AddSectionDialog.propTypes = {
     createSection: PropTypes.func.isRequired,
     tournamentId: PropTypes.string.isRequired,
+    tournamentTimeControl: PropTypes.string.isRequired
 };
 
 export default connect(null, {createSection})(AddSectionDialog);

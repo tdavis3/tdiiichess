@@ -45,7 +45,7 @@ const EditSectionDialog = ({display, setDisplay, setAnchorEl, editSection, selec
     };
 
     const handleSave = () => {
-        editSection(selectedSection.SK, section);
+        editSection(selectedSection.SK, {...selectedSection, ...section});
         setDisplay(false);
         setAnchorEl(null);
     };

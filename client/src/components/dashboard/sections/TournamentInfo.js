@@ -10,7 +10,7 @@ import {
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 
-import {dateRenderer, tournament_status} from "../../../utils/helpers";
+import {dateRenderer, stripPrefix, tournamentStatus} from "../../../utils/helpers";
 
 import copy from "copy-to-clipboard";
 
@@ -39,7 +39,7 @@ const TournamentInfo = ({tournament}) => {
     };
 
     const handleCopyToClipboard = () => {
-        copy(tournament._id);
+        copy(tournament.SK);
         setCopyClipboardText("Copied!");
     };
 
@@ -47,12 +47,12 @@ const TournamentInfo = ({tournament}) => {
         <div className={classes.box}>
             <Typography className={classes.center}>Tournament</Typography>
             <Typography>Name: {tournament.name}</Typography>
-            <Typography>Date: {dateRenderer(tournament.start_date, tournament.end_date)}</Typography>
-            <Typography>Status: {tournament_status(tournament.start_date, tournament.end_date)}</Typography>
+            <Typography>Date: {dateRenderer(tournament.startDate, tournament.endDate)}</Typography>
+            <Typography>Status: {tournamentStatus(tournament.startDate, tournament.endDate)}</Typography>
             {/* TODO: Alot of style hacking here - probably should change */}
             <Grid container spacing={1} style={{maxHeight: 30}}>
                 <Grid item xs={10}>
-                    <Typography noWrap>ID: {tournament._id}</Typography>
+                    <Typography noWrap>ID: {stripPrefix(tournament.SK)}</Typography>
                 </Grid>
                 <Grid item xs={2}>
                     <Tooltip title={copyClipboardText} onClose={handleCopyClipboardToolTipClose}>

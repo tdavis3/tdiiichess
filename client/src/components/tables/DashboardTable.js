@@ -42,6 +42,8 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
 import PairingsDropdown from "../pairings/PairingsDropdown";
+import {stripPrefix} from "../../utils/helpers";
+import {getPlayers, stopPlayersLoading, clearPlayers} from "../../actions/players";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -151,14 +153,34 @@ function GlobalFilter({
 
 const DashboardTable = ({
                             columns,
-                            data,
                             selectedSectionIndex,
                             sectionId,
                             players,
                             sections,
                             tournament,
-                            clearSections
+                            getPlayers,
+                            clearPlayers,
+                            clearSections,
+                            stopPlayersLoading
                         }) => {
+    useEffect(() => {
+        if (players.players[sectionId] === undefined) {  // Players not loaded yet
+            if (!sectionId) {  // If sections are not loaded yet just wait
+                stopPlayersLoading();
+                return;
+            }
+            getPlayers(stripPrefix(tournament.SK), sectionId);
+        } else if (sections.sections === [] && sections.loading === false) {  // No sections
+            stopPlayersLoading();
+        } else {
+            // Players were already loaded for this section
+            setData(players.players[sectionId]);
+        }
+    }, [players.players, sectionId]);
+    // TODO: I believe this re-renders one too many times and is sloppy - although it works
+
+    const [data, setData] = useState([]);
+
     const {
         getTableProps,
         headerGroups,
@@ -205,6 +227,7 @@ const DashboardTable = ({
 
     const handleBackButtonClick = () => {
         clearSections();
+        clearPlayers();
     };
 
     return (
@@ -217,10 +240,10 @@ const DashboardTable = ({
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog tournament={tournament} sectionId={sectionId}/>
-                <WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
-                <ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
-                <MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>
-                <Typography classNam={classes.leftSection}></Typography>
+                {/*<WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
+                {/*<ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
+                {/*<MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>*/}
+                <Typography className={classes.leftSection}></Typography>
                 <PairingsDropdown
                     selectedSectionIndex={selectedSectionIndex}
                     currentSectionId={sectionId}
@@ -285,13 +308,15 @@ const DashboardTable = ({
 
 DashboardTable.propTypes = {
     columns: PropTypes.array.isRequired,
-    data: PropTypes.array.isRequired,
     sections: PropTypes.object.isRequired,
     players: PropTypes.object.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
     sectionId: PropTypes.string.isRequired,
     tournament: PropTypes.object.isRequired,
-    clearSections: PropTypes.func.isRequired
+    getPlayers: PropTypes.func.isRequired,
+    clearSections: PropTypes.func.isRequired,
+    clearPlayers: PropTypes.func.isRequired,
+    stopPlayersLoading: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -299,4 +324,4 @@ const mapStateToProps = state => ({
     sections: state.sections
 });
 
-export default connect(mapStateToProps, {clearSections})(DashboardTable);
+export default connect(mapStateToProps, {getPlayers, clearSections, clearPlayers, stopPlayersLoading,})(DashboardTable);

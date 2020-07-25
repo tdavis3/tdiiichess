@@ -45,20 +45,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Dashboard = ({
-                       getPlayers,
                        getSections,
-                       players,
                        sections,
                        location
                    }) => {
     const tournament = location.state.tournament;
-    const tournamentId = stripPrefix(tournament.SK);
     useEffect(() => {
-        getSections(tournamentId).then(firstSectionId => {
-            if (firstSectionId !== "undefined") {
-                getPlayers(tournamentId, firstSectionId);
-            }
-        });
+        getSections(tournament.SK);
     }, []);
 
     const classes = useStyles();
@@ -117,7 +110,6 @@ const Dashboard = ({
                         selectedSectionIndex={sectionDisplayedIndex}
                         sectionId={selectedSectionId}
                         columns={columns}
-                        data={players.players[selectedSectionId] || []}
                     />
                     <SnackbarAlert/>
                 </Container>
@@ -127,16 +119,13 @@ const Dashboard = ({
 };
 
 Dashboard.propTypes = {
-    getPlayers: PropTypes.func.isRequired,
     getSections: PropTypes.func.isRequired,
-    players: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    players: state.players,
     sections: state.sections
 });
 
-export default connect(mapStateToProps, {getPlayers, getSections})(Dashboard);
+export default connect(mapStateToProps, {getSections})(Dashboard);

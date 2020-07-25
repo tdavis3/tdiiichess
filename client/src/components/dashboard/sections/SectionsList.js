@@ -62,7 +62,7 @@ const SectionsList = ({
                 </Grid>
                 <Grid item xs={2}>
                     <AddSectionDialog
-                        tournamentId={stripPrefix(tournament.SK)}
+                        tournamentId={tournament.SK}
                         tournamentTimeControl={tournament.timeControl}
                     />
                 </Grid>

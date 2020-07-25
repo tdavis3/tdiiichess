@@ -8,7 +8,10 @@ import {
     PLAYERS_ERROR,
     SET_PLAYERS_LOADING,
     PLAYERS_SUCCESS,
-    CREATE_PLAYER
+    CREATE_PLAYER,
+    STOP_PLAYERS_LOADING,
+    CLEAR_SECTIONS,
+    CLEAR_PLAYERS
 } from "./types";
 
 // Get players in a specific section
@@ -116,4 +119,13 @@ export const deletePlayer = data => async dispatch => {
             });
         }
     }
+};
+
+// Clear sections in state
+export const clearPlayers = () => async dispatch => {
+    dispatch({type: CLEAR_PLAYERS});
+};
+
+export const stopPlayersLoading = () => async dispatch => {
+    dispatch({type: STOP_PLAYERS_LOADING});
 };

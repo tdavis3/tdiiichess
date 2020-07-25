@@ -29,7 +29,7 @@ export function dateRenderer(startDate, endDate) {
     return 'Error';
 }
 
-export function tournament_status(startDate, endDate) {
+export function tournamentStatus(startDate, endDate) {
     const today = moment();
     const start = moment(startDate);
     const end = moment(endDate);

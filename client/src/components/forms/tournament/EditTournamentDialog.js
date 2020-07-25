@@ -23,7 +23,7 @@ import {editTournament} from "../../../actions/tournaments";
 
 const EditTournamentDialog = ({editTournament, selectedTournament}) => {
 
-    const initial_tournament = {
+    const initialTournament = {
         name: selectedTournament.name,
         printingName: selectedTournament.printingName,
         timeControl: selectedTournament.timeControl,
@@ -32,11 +32,11 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
     };
 
     useEffect(() => {
-        setTournament(initial_tournament);
+        setTournament(initialTournament);
     }, [selectedTournament]);
 
     const [open, setOpen] = useState(false);
-    const [tournament, setTournament] = useState(initial_tournament);
+    const [tournament, setTournament] = useState(initialTournament);
     const [selectedStartDate, setStartDateChange] = useState(selectedTournament.startDate);
     const [selectedEndDate, setEndDateChange] = useState(selectedTournament.endDate);
 

@@ -38,17 +38,17 @@ export default function (state = initialState, action) {
                 loading: false
             };
         case EDIT_TOURNAMENT:
-            const updated_tournaments = [];
+            const updatedTournaments = [];
             state.tournaments.forEach(tournament => {
                 if (tournament.SK === payload.SK) {
-                    updated_tournaments.push(payload);
+                    updatedTournaments.push(payload);
                 } else {
-                    updated_tournaments.push(tournament);
+                    updatedTournaments.push(tournament);
                 }
             });
             return {
                 ...state,
-                tournaments: updated_tournaments,
+                tournaments: updatedTournaments,
                 loading: false
             };
         case DELETE_TOURNAMENT:

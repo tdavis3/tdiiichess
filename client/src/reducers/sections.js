@@ -53,14 +53,14 @@ export default function (state = initialState, action) {
                 loading: false
             };
         case MOVE_PLAYER:
-            const oldSectionId = payload.updatedOldSection._id;
-            const newSectionId = payload.updatedNewSection._id;
+            const oldSectionId = payload.updatedOldSection.SK;
+            const newSectionId = payload.updatedNewSection.SK;
             const newSections = [];
             // Replace the old and new sections
             state.sections.forEach(section => {
-                if (section._id === oldSectionId) {
+                if (section.SK === oldSectionId) {
                     newSections.push(payload.updatedOldSection);
-                } else if (section._id === newSectionId) {
+                } else if (section.SK === newSectionId) {
                     newSections.push(payload.updatedNewSection);
                 } else {
                     newSections.push(section);
@@ -74,7 +74,7 @@ export default function (state = initialState, action) {
         case DELETE_SECTION:
             return {
                 ...state,
-                sections: state.sections.filter(section => section._id !== payload),
+                sections: state.sections.filter(section => section.SK !== payload),
                 loading: false
             };
         case CLEAR_SECTIONS:

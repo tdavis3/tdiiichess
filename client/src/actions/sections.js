@@ -10,7 +10,8 @@ import {
     CLEAR_SECTIONS,
     SECTIONS_ERROR,
     SET_SECTIONS_LOADING,
-    PLAYERS_SUCCESS
+    PLAYERS_SUCCESS,
+    STOP_SECTIONS_LOADING
 } from "./types";
 import {stripPrefix} from "../utils/helpers";
 
@@ -19,7 +20,7 @@ import {stripPrefix} from "../utils/helpers";
 export const getSections = tournamentId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections`);
+        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${stripPrefix(tournamentId)}/sections`);
         dispatch({type: GET_SECTIONS, payload: res.data});
         if (res.data.length === 0) {
             return undefined;
@@ -44,7 +45,7 @@ export const createSection = (tournamentId, section) => async dispatch => {
         };
         dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.post(
-            `https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections`,
+            `https://api.tdiiichess.com/users/1234/tournaments/${stripPrefix(tournamentId)}/sections`,
             section,
             config
         );
@@ -60,7 +61,7 @@ export const createSection = (tournamentId, section) => async dispatch => {
 };
 
 // Edit a section
-export const editSection = (sectionId, formData) => async dispatch => {
+export const editSection = (sectionId, sectionFields) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -68,8 +69,8 @@ export const editSection = (sectionId, formData) => async dispatch => {
             }
         };
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.put(`/api/sections/${sectionId}`, formData, config);
-        dispatch({type: EDIT_SECTION, payload: res.data});
+        await axios.put(`https://api.tdiiichess.com/sections/${stripPrefix(sectionId)}`, sectionFields, config);
+        dispatch({type: EDIT_SECTION, payload: sectionFields});
         dispatch(setAlert("Section edited", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
@@ -102,7 +103,7 @@ export const duplicateSection = (sectionId) => async dispatch => {
 };
 
 // Move a section
-export const moveSection = (sectionId, newTournamentId) => async dispatch => {
+export const moveSection = (sectionId, destinationTournamentId) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -110,8 +111,8 @@ export const moveSection = (sectionId, newTournamentId) => async dispatch => {
             }
         };
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.put(`/api/sections/${sectionId}/tournaments/${newTournamentId}`, {}, config);
-        dispatch({type: MOVE_SECTION, payload: res.data});
+        await axios.put(`/users/1234/sections/${sectionId}/tournaments/${destinationTournamentId}`, {}, config);
+        dispatch({type: MOVE_SECTION, payload: sectionId});
         dispatch(setAlert("Section moved", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
@@ -123,10 +124,10 @@ export const moveSection = (sectionId, newTournamentId) => async dispatch => {
 };
 
 // Delete a section
-export const deleteSection = id => async dispatch => {
+export const deleteSection = sectionId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.delete(`/api/sections/${id}`);
+        const res = await axios.delete(`/api/sections/${sectionId}`);
         dispatch({type: DELETE_SECTION, payload: res.data});
         dispatch(setAlert("Section deleted", "success"));
     } catch (err) {
@@ -141,4 +142,8 @@ export const deleteSection = id => async dispatch => {
 // Clear sections in state
 export const clearSections = () => async dispatch => {
     dispatch({type: CLEAR_SECTIONS});
+};
+
+export const stopSectionsLoading = () => async dispatch => {
+    dispatch({type: STOP_SECTIONS_LOADING});
 };
