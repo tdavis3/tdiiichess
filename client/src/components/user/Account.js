@@ -140,7 +140,7 @@ const Account = ({auth, account, getUserAnalytics}) => {
                         <div>
                             <Typography
                                 style={{display: 'inline-flex', verticalAlign: "middle", marginRight: 8}}
-                                variant={"h6"}>{auth.isAuthenticated ? auth.user.first_name.concat(" ", auth.user.last_name) : null} </Typography>
+                                variant={"h6"}>{auth.isAuthenticated ? auth.user.given_name.concat(" ", auth.user.family_name) : null} </Typography>
                             {
                                 auth.user.admin ? (
                                     <Chip

@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import {Redirect} from "react-router-dom";
+import UserPool from "../../config/UserPool";
+import {CognitoUser, AuthenticationDetails, CognitoUserAttribute} from "amazon-cognito-identity-js";
 
 import {
     Avatar,

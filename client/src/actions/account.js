@@ -1,61 +1,60 @@
 import axios from "axios";
 import {setAlert} from "./alert";
 import {
-    USER_LOADED,
+    CHANGE_EMAIL,
     GET_USER_ANALYTICS,
     GET_ADMIN_ANALYTICS
 } from "./types";
+import UserPool from "../config/UserPool";
+import {CognitoUserAttribute} from "amazon-cognito-identity-js";
 
 
-export const changeEmail = (old_email, new_email) => async dispatch => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-    const body = JSON.stringify({old_email, new_email});
+export const changeEmail = (oldEmail, newEmail) => async dispatch => {
     try {
-        const res = await axios.put("/api/users", body, config);
-        // Check if res.data.result === 1
-        if (res.data.err === 11000) {
-            const snackbar_fail_msg = "There is already an account associated with this email.";
-            dispatch(setAlert(snackbar_fail_msg, "error"));
-            return;
-        }
+        const user = UserPool.getCurrentUser();
+        user.getSession((err, session) => {  // The user should already be logged in
+            if (err) {
+                console.error();
+            }
+        });
+        const attributes = [
+            new CognitoUserAttribute({Name: "email", Value: newEmail})
+        ];
+        user.updateAttributes(attributes, (err, results) => {
+            if (err) console.log(err);
+            console.log(results);
+            dispatch({type: CHANGE_EMAIL, payload: newEmail});
+        });
         const snackbar_success_msg = "Your email was successfully changed.";
         dispatch(setAlert(snackbar_success_msg, "success"));
-        // Load the updated user
-        dispatch({type: USER_LOADED, payload: res.data.updated_user});
     } catch (err) {
         console.log(err);
     }
 };
 
-export const changePassword = (user_id, old_password, new_password) => async dispatch => {
-    const config = {
-        headers: {
-            "Content-Type": "application/json"
-        }
-    };
-    const body = JSON.stringify({user_id, old_password, new_password});
+export const changePassword = (oldPassword, newPassword) => async dispatch => {
     try {
-        const res = await axios.put(`/api/users/${user_id}`, body, config);
-        // Check if res.data.result === 1
-        if (res.data.err === "Passwords don't match") {
-            const snackbar_fail_msg = "You entered an incorrect old password. Try again.";
-            dispatch(setAlert(snackbar_fail_msg, "error"));
-            return;
-        }
-        const snackbar_success_msg = "Your password was successfully changed.";
-        dispatch(setAlert(snackbar_success_msg, "success"));
+        const user = UserPool.getCurrentUser();
+        user.getSession((err, session) => {  // The user should already be logged in
+            if (err) {
+                console.error();
+            }
+        });
+        user.changePassword(oldPassword, newPassword, (err, result) => {
+            if (err) console.error(err);
+            if (result === 'SUCCESS') {
+                const snackbar_success_msg = "Your password was successfully changed.";
+                dispatch(setAlert(snackbar_success_msg, "success"));
+            }
+        });
     } catch (err) {
         console.log(err);
     }
 };
 
-export const getUserAnalytics = (user_id) => async dispatch => {
+export const getUserAnalytics = (userId) => async dispatch => {
     try {
-        const res = await axios.get(`/api/analytics/users/${user_id}`);
+        const res = await axios.get(`/api/analytics/users/${userId}`);
         dispatch({type: GET_USER_ANALYTICS, payload: res.data});
     } catch (err) {
         console.log(err);

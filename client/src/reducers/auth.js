@@ -3,6 +3,7 @@ import {
   REGISTER_FAIL,
   USER_LOADED,
   AUTH_ERROR,
+  CHANGE_EMAIL,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT
@@ -28,14 +29,19 @@ export default function(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
-      localStorage.setItem("token", payload.token);
-      setAuthToken(payload.token);
+      //localStorage.setItem("token", payload.token);
+      //setAuthToken(payload.token);
       return {
         ...state,
         isAuthenticated: true,
         loading: false,
-        user: payload.user
+        user: payload
       };
+    case CHANGE_EMAIL:
+        return {
+          ...state,
+          user: {...state.user, email: payload}
+        };
     case LOGOUT:
     case LOGIN_FAIL:
     case AUTH_ERROR:

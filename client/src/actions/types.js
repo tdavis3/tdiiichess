@@ -9,6 +9,7 @@ export const AUTH_ERROR = "AUTH_ERROR";
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
+export const CHANGE_EMAIL = "CHANGE_EMAIL";
 
 export const GET_USER_ANALYTICS = "GET_USER_ANALYTICS";
 export const GET_ADMIN_ANALYTICS = "GET_ADMIN_ANALYTICS";

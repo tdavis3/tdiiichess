@@ -19,11 +19,11 @@ import Config from "../../../config/default";
 import {allTruthy} from "../../../utils/helpers";
 
 
-const EditUserPasswordDialog = ({auth, changePassword}) => {
+const EditUserPasswordDialog = ({changePassword}) => {
 
     const initialForm = {
-        old_password: "",
-        new_password: "",
+        oldPassword: "",
+        newPassword: "",
         confirmNewPassword: ""
     };
 
@@ -51,8 +51,8 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
 
     const validateFields = () => {
         let newErrorData = {};
-        newErrorData.passwordValidLength = (formData.new_password.length >= Config.validMinPasswordLength && formData.new_password.length <= Config.validMaxPasswordLength);
-        newErrorData.passwordsMatch = (formData.new_password === formData.confirmNewPassword && formData.new_password !== "");
+        newErrorData.passwordValidLength = (formData.newPassword.length >= Config.validMinPasswordLength && formData.newPassword.length <= Config.validMaxPasswordLength);
+        newErrorData.passwordsMatch = (formData.newPassword === formData.confirmNewPassword && formData.newPassword !== "");
         if (!allTruthy(newErrorData)) {
             newErrorData.display = true;
             setErrorData(newErrorData);
@@ -63,7 +63,7 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
 
     const handleSave = () => {
         if (validateFields()) {
-            changePassword(auth.user._id, formData.old_password, formData.new_password);
+            changePassword(formData.oldPassword, formData.newPassword);
             setOpen(false);
             setFormData(initialForm);
         }
@@ -74,7 +74,7 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
         if (e.target.id === 'new_password') {
             setErrorData({...errorData, passwordsMatch: (e.target.value === formData.confirmNewPassword)})
         } else if (e.target.id === 'confirm_new_password') {
-            setErrorData({...errorData, passwordsMatch: (e.target.value === formData.new_password)})
+            setErrorData({...errorData, passwordsMatch: (e.target.value === formData.newPassword)})
         }
     }
 
@@ -99,8 +99,8 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
                         fullWidth
                         variant={"outlined"}
                         type={"password"}
-                        id="old_password"
-                        value={formData.old_password}
+                        id="oldPassword"
+                        value={formData.oldPassword}
                         onChange={handleChange}
                         required
                     />
@@ -111,8 +111,8 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
                         label="New password"
                         type={"password"}
                         fullWidth
-                        id="new_password"
-                        value={formData.new_password}
+                        id="newPassword"
+                        value={formData.newPassword}
                         onChange={handleChange}
                         error={!errorData.passwordValidLength && errorData.display}
                         helperText={"Must be 8-20 characters."}
@@ -146,12 +146,7 @@ const EditUserPasswordDialog = ({auth, changePassword}) => {
 };
 
 EditUserPasswordDialog.propTypes = {
-    changePassword: PropTypes.func.isRequired,
-    auth: PropTypes.object.isRequired
+    changePassword: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-    auth: state.auth
-});
-
-export default connect(mapStateToProps, {changePassword})(EditUserPasswordDialog);
+export default connect(null, {changePassword})(EditUserPasswordDialog);

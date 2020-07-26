@@ -24,7 +24,7 @@ import {validate} from "@material-ui/pickers";
 const EditUserEmailDialog = ({auth, changeEmail}) => {
 
     const initialForm = {
-        new_email: "",
+        newEmail: "",
         confirmNewEmail: ""
     };
 
@@ -52,8 +52,8 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
 
     const validateFields = () => {
         let newErrorData = {};
-        newErrorData.validEmail = isValidEmail(formData.new_email);
-        newErrorData.emailsMatch = (formData.new_email === formData.confirmNewEmail && formData.new_email !== "");
+        newErrorData.validEmail = isValidEmail(formData.newEmail);
+        newErrorData.emailsMatch = (formData.newEmail === formData.confirmNewEmail && formData.newEmail !== "");
         if (!allTruthy(newErrorData)) {
             newErrorData.display = true;
             setErrorData(newErrorData);
@@ -64,7 +64,7 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
 
     const handleSave = () => {
         if (validateFields()) {
-            changeEmail(auth.user.email, formData.new_email);
+            changeEmail(auth.user.email, formData.newEmail);
             setOpen(false);
             setFormData(initialForm);
         }
@@ -105,8 +105,8 @@ const EditUserEmailDialog = ({auth, changeEmail}) => {
                         label="New email"
                         type="text"
                         fullWidth
-                        id="new_email"
-                        value={formData.new_email}
+                        id="newEmail"
+                        value={formData.newEmail}
                         onChange={handleChange}
                         error={!errorData.validEmail && errorData.display}
                         helperText={!errorData.validEmail ? "Not a valid email format." : ""}

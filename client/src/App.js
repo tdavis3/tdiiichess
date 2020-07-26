@@ -39,7 +39,7 @@ const App = () => {
     // A hook - learn more about
     useEffect(() => {
         store.dispatch(loadUser());
-    }, []); // Will only run once because of the second parameter
+    }, []); // Will only run once because of the second parameter of an empty array
 
     const classes = useStyles();
 

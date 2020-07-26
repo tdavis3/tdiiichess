@@ -82,7 +82,7 @@ const DrawerHeader = ({auth, logout}) => {
                 <Grid item xs={9} container>
                     <Grid item xs={12}>
                         <Typography className={classes.user} noWrap>
-                            {auth.user.first_name.concat(" ", auth.user.last_name)}</Typography>
+                            {auth.user.given_name.concat(" ", auth.user.family_name)}</Typography>
                     </Grid>
                     <Grid item xs={12}>
                         <Typography className={classes.user} noWrap>{auth.user.email}</Typography>
