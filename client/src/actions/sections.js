@@ -20,7 +20,7 @@ import {stripPrefix} from "../utils/helpers";
 export const getSections = tournamentId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${stripPrefix(tournamentId)}/sections`);
+        const res = await axios.get(`https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/sections`);
         dispatch({type: GET_SECTIONS, payload: res.data});
         if (res.data.length === 0) {
             return undefined;
@@ -45,7 +45,7 @@ export const createSection = (tournamentId, section) => async dispatch => {
         };
         dispatch({type: SET_SECTIONS_LOADING});
         const res = await axios.post(
-            `https://api.tdiiichess.com/users/1234/tournaments/${stripPrefix(tournamentId)}/sections`,
+            `https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/sections`,
             section,
             config
         );
@@ -111,7 +111,7 @@ export const moveSection = (sectionId, destinationTournamentId) => async dispatc
             }
         };
         dispatch({type: SET_SECTIONS_LOADING});
-        await axios.put(`/users/1234/sections/${sectionId}/tournaments/${destinationTournamentId}`, {}, config);
+        await axios.put(`https://api.tdiiichess.com/sections/${sectionId}/tournaments/${destinationTournamentId}`, {}, config);
         dispatch({type: MOVE_SECTION, payload: sectionId});
         dispatch(setAlert("Section moved", "success"));
     } catch (err) {
@@ -127,7 +127,7 @@ export const moveSection = (sectionId, destinationTournamentId) => async dispatc
 export const deleteSection = sectionId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.delete(`/api/sections/${sectionId}`);
+        const res = await axios.delete(`https://api.tdiiichess.com/sections/${sectionId}`);
         dispatch({type: DELETE_SECTION, payload: res.data});
         dispatch(setAlert("Section deleted", "success"));
     } catch (err) {

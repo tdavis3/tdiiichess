@@ -14,10 +14,6 @@ import UserPool from "../config/UserPool";
 import setAuthToken from "../utils/setAuthToken";
 
 export const loadUser = () => async dispatch => {
-  //if (localStorage.token) {
-  //  setAuthToken(localStorage.token);
-  //}
-
   try {
     const user = UserPool.getCurrentUser();
     console.log(user);
@@ -26,6 +22,7 @@ export const loadUser = () => async dispatch => {
             if (err) {console.error();}
             console.log("already logged in");
             console.log(session);
+            setAuthToken(session.getIdToken().getJwtToken());
             dispatch({ type: USER_LOADED, payload: session.idToken.payload });
         });
     }
@@ -35,23 +32,28 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = ({first_name, last_name, email, password}) => async dispatch => {
+export const register = ({firstName, lastName, email, password}) => async dispatch => {
   try {
-    const firstName = new CognitoUserAttribute({
+    const firstNameAttribute = new CognitoUserAttribute({
         Name: 'given_name',
-        Value: first_name
+        Value: firstName
     });
-    const lastName = new CognitoUserAttribute({
+    const lastNameAttribute = new CognitoUserAttribute({
         Name: 'family_name',
-        Value: last_name
+        Value: lastName
     });
-    const phoneNumber = new CognitoUserAttribute({
+    const phoneNumberAttribute = new CognitoUserAttribute({
         Name: 'phone_number',
         Value: '+19172142571'
     });
-    UserPool.signUp(email, password, [firstName, lastName, phoneNumber], null, (err, data) => {
+    UserPool.signUp(email, password, [firstNameAttribute, lastNameAttribute, phoneNumberAttribute], null, (err, data) => {
         if (err) console.error(err);
         console.log(data);
+        /*
+        TODO: Consider options for signUp
+            - Add pre-lambda trigger to automatically confirm a user so they don't have to
+        */
+        // login(email, password);
         // dispatch({ type: REGISTER_SUCCESS, payload: res.data });  // Probably not needed
         // TODO: Automatically sign them in after a successful signUp
    });

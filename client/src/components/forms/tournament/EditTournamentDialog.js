@@ -61,7 +61,7 @@ const EditTournamentDialog = ({editTournament, selectedTournament}) => {
     const handleSave = () => {  // event parameter
         const userId = selectedTournament.PK.split("#")[1];
         const tournamentId = selectedTournament.SK.split("#")[1];
-        editTournament(userId, tournamentId, {...selectedTournament, ...tournament});
+        editTournament(tournamentId, {...selectedTournament, ...tournament});
         setOpen(false);
     };
 

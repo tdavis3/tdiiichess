@@ -15,8 +15,7 @@ import {
 export const getCurrentTournaments = () => async dispatch => {
     try {
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        // const res = await axios.get("/api/tournaments");
-        const res = await axios.get("https://api.tdiiichess.com/users/1234/tournaments");
+        const res = await axios.get("https://api.tdiiichess.com/tournaments");
         dispatch({type: GET_TOURNAMENTS, payload: res.data});
     } catch (err) {
         dispatch({
@@ -35,7 +34,7 @@ export const createTournament = tournament => async dispatch => {
             }
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        const res = await axios.post("https://api.tdiiichess.com/users/1234/tournaments", tournament, config);
+        const res = await axios.post("https://api.tdiiichess.com/tournaments", tournament, config);
         dispatch({type: CREATE_TOURNAMENT, payload: {...tournament, PK: res.data.PK, SK: res.data.SK}});
         dispatch(setAlert("Tournament created", "success"));
     } catch (err) {
@@ -48,7 +47,7 @@ export const createTournament = tournament => async dispatch => {
 };
 
 // Edit Tournament
-export const editTournament = (userId, tournamentId, tournament) => async dispatch => {
+export const editTournament = (tournamentId, tournament) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -57,7 +56,7 @@ export const editTournament = (userId, tournamentId, tournament) => async dispat
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
         await axios.put(
-            `https://api.tdiiichess.com/users/${userId}/tournaments/${tournamentId}`,
+            `https://api.tdiiichess.com/tournaments/${tournamentId}`,
             tournament,
             config
         );
@@ -94,12 +93,11 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
 };
 
 // Delete a tournament
-export const deleteTournament = (userId, tournamentId) => async dispatch => {
+export const deleteTournament = (tournamentId) => async dispatch => {
     try {
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        // const res = await axios.delete(`/api/tournaments/${id}`);
         const res = await axios.delete(
-            `https://api.tdiiichess.com/users/${userId}/tournaments/${tournamentId}`);
+            `https://api.tdiiichess.com/tournaments/${tournamentId}`);
         dispatch({type: DELETE_TOURNAMENT, payload: res.data});
         dispatch({type: CLEAR_SECTIONS, payload: res.data});
         dispatch(setAlert("Tournaments deleted", "success"));
