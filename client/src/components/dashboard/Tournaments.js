@@ -74,8 +74,9 @@ const Tournaments = ({tournaments, duplicateTournament, getTournaments}) => {
         setCopyClipboardText("Copied!");
     };
 
-    const handleDuplicateTournament = (tournamentId) => () => {
-        duplicateTournament(tournamentId);
+    const handleDuplicateTournament = (tournament) => () => {
+        console.log("Duplicate tournament: ", tournament);
+        duplicateTournament(tournament.SK, tournament);
     }
 
     const columns = useMemo(
@@ -175,7 +176,7 @@ const Tournaments = ({tournaments, duplicateTournament, getTournaments}) => {
                             <Grid item xs={3}>
                                 <Tooltip title={"Duplicate"}>
                                     <IconButton aria-label="duplicate"
-                                                onClick={handleDuplicateTournament(cell.row.original.tournamentId)}>
+                                                onClick={handleDuplicateTournament(cell.row.original)}>
                                         <FileCopyIcon fontSize={"small"}/>
                                     </IconButton>
                                 </Tooltip>

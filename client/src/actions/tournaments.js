@@ -73,7 +73,7 @@ export const editTournament = (tournamentId, tournament) => async dispatch => {
 };
 
 // Duplicate a tournament
-export const duplicateTournament = (tournamentId) => async dispatch => {
+export const duplicateTournament = (tournamentId, tournament) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -81,7 +81,7 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
             }
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        const res = await axios.post(`https//api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/duplicate`, {}, config);
+        const res = await axios.post(`https//api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}`, tournament, config);
         dispatch({type: DUPLICATE_TOURNAMENT, payload: res.data});
         dispatch(setAlert("Tournament duplicated", "success"));
     } catch (err) {
