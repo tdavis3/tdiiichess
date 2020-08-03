@@ -21,6 +21,7 @@ import "./App.css";
 import {makeStyles} from "@material-ui/core/styles";
 
 if (localStorage.token) {
+    console.log("local storage filled");
     setAuthToken(localStorage.token);
 }
 
@@ -36,10 +37,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const App = () => {
-    // A hook - learn more about
-    useEffect(() => {
-        store.dispatch(loadUser());
-    }, []); // Will only run once because of the second parameter of an empty array
+    // useEffect(() => {
+    //     store.dispatch(loadUser());
+    // }, []); // Will only run once because of the second parameter is an empty array
 
     const classes = useStyles();
 

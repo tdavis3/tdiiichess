@@ -25,8 +25,8 @@ import {editPlayer} from "../../../actions/players";
 const EditPlayerDialog = ({editPlayer, selected_edit}) => {
 
     const originalPlayer = {
-        first_name: selected_edit.player_id.first_name,
-        last_name: selected_edit.player_id.last_name,
+        firstName: selected_edit.player_id.firstName,
+        lastName: selected_edit.player_id.lastName,
         suffix: selected_edit.player_id.suffix,
         uscf_id: selected_edit.player_id.uscf_id,
         uscf_reg_rating: selected_edit.player_id.uscf_reg_rating,
@@ -98,8 +98,8 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
                                 label="First Name"
                                 type="text"
                                 fullWidth
-                                id="first_name"
-                                value={player.first_name}
+                                id="firstName"
+                                value={player.firstName}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -111,8 +111,8 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
                                 label="Last Name"
                                 type="text"
                                 fullWidth
-                                id="last_name"
-                                value={player.last_name}
+                                id="lastName"
+                                value={player.lastName}
                                 onChange={handleChange}
                             />
                         </Grid>

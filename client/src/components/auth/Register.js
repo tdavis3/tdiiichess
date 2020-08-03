@@ -1,7 +1,5 @@
 import React, {useState} from "react";
 import {Redirect} from "react-router-dom";
-import UserPool from "../../config/UserPool";
-import {CognitoUser, AuthenticationDetails, CognitoUserAttribute} from "amazon-cognito-identity-js";
 
 import {
     Avatar,
@@ -50,14 +48,14 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     const classes = useStyles();
 
     const [formData, setFormData] = useState({
-        first_name: "",
-        last_name: "",
+        firstName: "",
+        lastName: "",
         email: "",
         password: "",
         confirmPassword: ""
     });
 
-    const {first_name, last_name, email, password, confirmPassword} = formData;
+    const {firstName, lastName, email, password, confirmPassword} = formData;
 
     const [errorData, setErrorData] = useState({
         display: false,
@@ -74,8 +72,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
 
     const validateFields = () => {
         let newErrorData = {};
-        newErrorData.validFirstName = (first_name !== "");
-        newErrorData.validLastName = (last_name !== "");
+        newErrorData.validFirstName = (firstName !== "");
+        newErrorData.validLastName = (lastName !== "");
         newErrorData.passwordValidLength = (password.length >= Config.validMinPasswordLength && password.length <= Config.validMaxPasswordLength);
         newErrorData.passwordsMatch = (password === confirmPassword && password !== "");
         newErrorData.validEmail = isValidEmail(email);
@@ -90,7 +88,7 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     const onSubmit = async e => {
         e.preventDefault();
         if (validateFields()) {
-            register({first_name, last_name, email, password});
+            register({firstName, lastName, email, password});
         }
     };
 
@@ -124,8 +122,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                         autoComplete="given-name"
                                         variant="outlined"
                                         fullWidth
-                                        id="first_name"
-                                        value={first_name}
+                                        id="firstName"
+                                        value={firstName}
                                         onChange={onChange}
                                         label="First name"
                                         size={"small"}
@@ -139,8 +137,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
                                         autoComplete="family-name"
                                         variant="outlined"
                                         fullWidth
-                                        id="last_name"
-                                        value={last_name}
+                                        id="lastName"
+                                        value={lastName}
                                         onChange={onChange}
                                         label="Last name"
                                         size={"small"}

@@ -66,7 +66,7 @@ const Navbar = ({auth}) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    const guestLinks = (
+    const navLinks = (
         <Container>
             <Button href="/">
                 Home
@@ -124,11 +124,9 @@ const Navbar = ({auth}) => {
                     </Box>
                     <div className={classes.grow}/>
                     <div className={classes.sectionDesktop}>
-                        {!auth.loading && (
-                            <div>
-                                {guestLinks}
-                            </div>
-                        )}
+                        <div>
+                            {navLinks}
+                        </div>
                     </div>
                     <div className={classes.sectionMobile}>
                         <IconButton

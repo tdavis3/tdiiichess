@@ -16,12 +16,12 @@ import setAuthToken from "../utils/setAuthToken";
 export const loadUser = () => async dispatch => {
   try {
     const user = UserPool.getCurrentUser();
-    console.log(user);
+    console.log("Current User: ", user);
     if (user) {
         user.getSession((err, session) => {
             if (err) {console.error();}
-            console.log("already logged in");
-            console.log(session);
+            console.log("Already logged in with session: ", session);
+            console.log("Session Id: ", session.getIdToken().getJwtToken());
             setAuthToken(session.getIdToken().getJwtToken());
             dispatch({ type: USER_LOADED, payload: session.idToken.payload });
         });
@@ -48,13 +48,7 @@ export const register = ({firstName, lastName, email, password}) => async dispat
     });
     UserPool.signUp(email, password, [firstNameAttribute, lastNameAttribute, phoneNumberAttribute], null, (err, data) => {
         if (err) console.error(err);
-        console.log(data);
-        /*
-        TODO: Consider options for signUp
-            - Add pre-lambda trigger to automatically confirm a user so they don't have to
-        */
-        // login(email, password);
-        // dispatch({ type: REGISTER_SUCCESS, payload: res.data });  // Probably not needed
+        dispatch(login(email, password));
         // TODO: Automatically sign them in after a successful signUp
    });
   } catch (err) {
@@ -80,6 +74,7 @@ export const login = (email, password) => async dispatch => {
     user.authenticateUser(authDetails, {
       onSuccess: data => {
           console.log('onSuccess:', data);
+          setAuthToken(data.idToken.jwtToken);
           dispatch({ type: LOGIN_SUCCESS, payload: data.idToken.payload });
       },
       onFailure: err => {
