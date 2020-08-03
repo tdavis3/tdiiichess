@@ -54,6 +54,9 @@ const useStyles = makeStyles(theme => ({
 
 const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) => {
     useEffect(() => {
+        if (tournaments.tournaments.length !== 0) {
+            return;  // Do not want to keep reloading unnecessarily
+        }
         getCurrentTournaments();
     }, []);
 
@@ -192,16 +195,8 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
     );
 
     const data = useMemo(() => {
-        if (tournaments.loading) {
-            return [];
-        } else {
-            if (tournaments.tournaments.length === 0) {
-                return [];
-            } else {
-                return tournaments.tournaments;
-            }
-        }
-    }, [tournaments.loading, tournaments.tournaments]);
+        return tournaments.tournaments;
+    }, [tournaments.tournaments]);
 
     return (
         <div className={classes.root}>

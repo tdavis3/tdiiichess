@@ -13,12 +13,13 @@ import {
     CLEAR_SECTIONS,
     CLEAR_PLAYERS
 } from "./types";
+import {stripPrefix} from "../utils/helpers";
 
 // Get players in a specific section
 export const getPlayers = (tournamentId, sectionId) => async dispatch => {
     try {
         dispatch({type: SET_PLAYERS_LOADING});
-        const res = await axios.get(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`);
+        const res = await axios.get(`https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/sections/${stripPrefix(sectionId)}/players`);
         dispatch({type: GET_PLAYERS, payload: {sectionId: sectionId, players: res.data}});
     } catch (err) {
         console.log(err);
@@ -38,8 +39,7 @@ export const createPlayer = (tournamentId, sectionId, player) => async dispatch 
             }
         };
         dispatch({type: SET_PLAYERS_LOADING});
-        const res = await axios.post(`https://api.tdiiichess.com/users/1234/tournaments/${tournamentId}/sections/${sectionId}/players`, player, config);
-        console.log({sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}});
+        const res = await axios.post(`https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/sections/${stripPrefix(sectionId)}/players`, player, config);
         dispatch({type: CREATE_PLAYER, payload: {sectionId, player: {...player, PK: res.data.PK, SK: res.data.SK}}});
         dispatch({type: PLAYERS_SUCCESS});
         dispatch(setAlert("Player added", "success"));
@@ -54,23 +54,19 @@ export const createPlayer = (tournamentId, sectionId, player) => async dispatch 
 };
 
 // Edit a player
-export const editPlayer = (playerId, formData) => async dispatch => {
+export const editPlayer = (playerId, player) => async dispatch => {
     try {
         const config = {
             headers: {
                 "Content-Type": "application/json"
             }
         };
-        const res = await axios.put(`/api/players/${playerId}`, formData, config);
-        dispatch({type: EDIT_PLAYER, payload: res.data});
-        dispatch(setAlert(res.data.msg, "success"));
+        await axios.put(`https://api.tdiiichess.com/players/${playerId}`, player, config);
+        dispatch({type: EDIT_PLAYER, payload: player});
+        dispatch(setAlert("Player edited", "success"));
     } catch (err) {
         console.log(err);
         dispatch(setAlert(err.response.data.msg, "error"));
-        // dispatch({
-        //     type: PLAYERS_ERROR,
-        //     payload: {msg: err.response.statusText, status: err.response.status}
-        // });
     }
 };
 

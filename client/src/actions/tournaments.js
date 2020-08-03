@@ -10,6 +10,7 @@ import {
     TOURNAMENTS_ERROR,
     CLEAR_SECTIONS
 } from "./types";
+import {stripPrefix} from "../utils/helpers";
 
 // Get current users tournaments
 export const getCurrentTournaments = () => async dispatch => {
@@ -56,7 +57,7 @@ export const editTournament = (tournamentId, tournament) => async dispatch => {
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
         await axios.put(
-            `https://api.tdiiichess.com/tournaments/${tournamentId}`,
+            `https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}`,
             tournament,
             config
         );
@@ -80,7 +81,7 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
             }
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        const res = await axios.post(`https//api.tdiiichess.com/tournaments/${tournamentId}/duplicate`, {}, config);
+        const res = await axios.post(`https//api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}/duplicate`, {}, config);
         dispatch({type: DUPLICATE_TOURNAMENT, payload: res.data});
         dispatch(setAlert("Tournament duplicated", "success"));
     } catch (err) {
@@ -96,10 +97,10 @@ export const duplicateTournament = (tournamentId) => async dispatch => {
 export const deleteTournament = (tournamentId) => async dispatch => {
     try {
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        const res = await axios.delete(
-            `https://api.tdiiichess.com/tournaments/${tournamentId}`);
-        dispatch({type: DELETE_TOURNAMENT, payload: res.data});
-        dispatch({type: CLEAR_SECTIONS, payload: res.data});
+        await axios.delete(
+            `https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}`);
+        dispatch({type: DELETE_TOURNAMENT, payload: tournamentId});
+        dispatch({type: CLEAR_SECTIONS});
         dispatch(setAlert("Tournaments deleted", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

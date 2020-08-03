@@ -22,25 +22,25 @@ import {connect} from "react-redux";
 import {editPlayer} from "../../../actions/players";
 
 
-const EditPlayerDialog = ({editPlayer, selected_edit}) => {
+const EditPlayerDialog = ({editPlayer, selectedPlayer}) => {
 
     const originalPlayer = {
-        firstName: selected_edit.player_id.firstName,
-        lastName: selected_edit.player_id.lastName,
-        suffix: selected_edit.player_id.suffix,
-        uscf_id: selected_edit.player_id.uscf_id,
-        uscf_reg_rating: selected_edit.player_id.uscf_reg_rating,
-        uscf_blitz_rating: selected_edit.player_id.uscf_blitz_rating,
-        uscf_quick_rating: selected_edit.player_id.uscf_quick_rating,
-        state: selected_edit.player_id.state,
-        fide_id: selected_edit.player_id.fide_id,
-        fide_rating: selected_edit.player_id.fide_rating,
-        expired: selected_edit.player_id.expired,
-        email: selected_edit.player_id.email,
-        cell: selected_edit.player_id.cell,
-        dob: selected_edit.player_id.dob,
-        withdrew: selected_edit.player_id.withdrew,
-        byes: selected_edit.byes
+        firstName: selectedPlayer.firstName,
+        lastName: selectedPlayer.lastName,
+        suffix: selectedPlayer.suffix,
+        uscfId: selectedPlayer.uscfId,
+        uscfRegRating: selectedPlayer.uscfRegRating,
+        uscfBlitzRating: selectedPlayer.uscfBlitzRating,
+        uscfQuickRating: selectedPlayer.uscfQuickRating,
+        state: selectedPlayer.state,
+        fideId: selectedPlayer.fideId,
+        fideRating: selectedPlayer.fideRating,
+        expired: selectedPlayer.expired,
+        email: selectedPlayer.email,
+        cell: selectedPlayer.cell,
+        dob: selectedPlayer.dob,
+        withdrew: selectedPlayer.withdrew,
+        byes: selectedPlayer.byes
     };
 
     const [player, setPlayer] = useState(originalPlayer);
@@ -61,7 +61,7 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
     };
 
     const handleSave = () => {
-        editPlayer(selected_edit.player_id._id, player);
+        editPlayer(selectedPlayer.SK, player);
         setPlayer(originalPlayer);
         setOpen(false);
     };
@@ -127,7 +127,7 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
                                 type="text"
                                 fullWidth
                                 id="uscf_id"
-                                value={player.uscf_id}
+                                value={player.uscfId}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -140,7 +140,7 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
                                 type="text"
                                 fullWidth
                                 id="uscf_reg_rating"
-                                value={player.uscf_reg_rating}
+                                value={player.uscfRegRating}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -247,6 +247,7 @@ const EditPlayerDialog = ({editPlayer, selected_edit}) => {
 
 EditPlayerDialog.propTypes = {
     editPlayer: PropTypes.func.isRequired,
+    selectedEdit: PropTypes.object.isRequired
 };
 
 export default connect(null, {editPlayer})(EditPlayerDialog);

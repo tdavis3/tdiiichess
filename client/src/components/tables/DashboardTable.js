@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 import {
     // Paper,
@@ -163,13 +163,16 @@ const DashboardTable = ({
                             clearSections,
                             stopPlayersLoading
                         }) => {
+
+    let history = useHistory();
+
     useEffect(() => {
         if (players.players[sectionId] === undefined) {  // Players not loaded yet
             if (!sectionId) {  // If sections are not loaded yet just wait
                 stopPlayersLoading();
                 return;
             }
-            getPlayers(stripPrefix(tournament.SK), sectionId);
+            getPlayers(tournament.SK, sectionId);
         } else if (sections.sections === [] && sections.loading === false) {  // No sections
             stopPlayersLoading();
         } else {
@@ -228,6 +231,7 @@ const DashboardTable = ({
     const handleBackButtonClick = () => {
         clearSections();
         clearPlayers();
+        history.goBack();
     };
 
     return (
@@ -235,7 +239,7 @@ const DashboardTable = ({
         <div>
             <CssBaseline/>
             <Toolbar>  {/*TODO Clean this toolbar up*/}
-                <IconButton component={Link} to={'/tournaments'} onClick={handleBackButtonClick}>
+                <IconButton onClick={handleBackButtonClick}>
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>

@@ -43,18 +43,18 @@ export default function (state = initialState, action) {
                 loading: false
             };
         case EDIT_PLAYER:
-            const updated_players = [];
+            const updatedPlayers = [];
             state.players.forEach(player => {
                 if (player.SK === payload.SK) {
-                    updated_players.push(payload);
+                    updatedPlayers.push(payload);
                 } else {
-                    updated_players.push(player);
+                    updatedPlayers.push(player);
                 }
                 return;
             });
             return {
                 ...state,
-                players: updated_players,
+                players: updatedPlayers,
                 loading: false
             };
         case DELETE_PLAYER:

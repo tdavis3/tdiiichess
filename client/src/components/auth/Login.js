@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 
 import {
     Avatar,
@@ -42,6 +42,9 @@ const useStyles = makeStyles(theme => ({
 
 
 const Login = ({auth, login}) => {
+
+    let history = useHistory();
+
     const classes = useStyles();
 
     const [formData, setFormData] = useState({
@@ -61,7 +64,8 @@ const Login = ({auth, login}) => {
 
     // Redirect if logged in
     if (auth.isAuthenticated) {
-        return <Redirect to="/tournaments"/>;
+        // return <Redirect to="/tournaments"/>;
+        history.push('/tournaments');
     }
 
     return (

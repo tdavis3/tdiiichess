@@ -24,7 +24,6 @@ import ByeInput from "./ByeInput";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {createPlayer} from "../../../actions/players";
-import {stripPrefix} from "../../../utils/helpers";
 
 
 const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
@@ -94,7 +93,7 @@ const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
     };
 
     const handleSave = () => {
-        createPlayer(stripPrefix(tournament.SK), sectionId, player);
+        createPlayer(tournament.SK, sectionId, player);
         setPlayer(initialPlayer);
         setOpen(false);
     };

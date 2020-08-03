@@ -26,7 +26,7 @@ const DeleteTournamentDialog = ({deleteTournament, tournament}) => {
     };
 
     const handleYes = () => {
-        deleteTournament(tournament._id);
+        deleteTournament(tournament.SK);
         setOpen(false);
     };
 
