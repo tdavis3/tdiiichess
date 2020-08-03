@@ -13,7 +13,7 @@ import {
 import {stripPrefix} from "../utils/helpers";
 
 // Get current users tournaments
-export const getCurrentTournaments = () => async dispatch => {
+export const getTournaments = () => async dispatch => {
     try {
         dispatch({type: SET_TOURNAMENTS_LOADING});
         const res = await axios.get("https://api.tdiiichess.com/tournaments");

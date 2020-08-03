@@ -10,9 +10,10 @@ import {
     TableSortLabel,
     Toolbar,
     InputBase,
-    LinearProgress
+    LinearProgress, IconButton, Tooltip
 } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TournamentTableOptions from "./TournamentTableOptions";
 import {fade, makeStyles} from '@material-ui/core/styles';
@@ -21,6 +22,7 @@ import {useRowSelect, useSortBy, useTable, useFilters, useGlobalFilter, useAsync
 
 import PropTypes from 'prop-types';
 import AddTournamentDialog from "../forms/tournament/AddTournamentDialog";
+import {getTournaments} from "../../actions/tournaments";
 import {connect} from "react-redux";
 
 
@@ -133,7 +135,8 @@ function DefaultColumnFilter({
 const TournamentTable = ({
                              columns,
                              data,
-                             tournaments
+                             tournaments,
+                             getTournaments
                          }) => {
 
     const defaultColumn = useMemo(
@@ -168,6 +171,10 @@ const TournamentTable = ({
 
     const classes = useStyles();
 
+    const handleRefresh = () => {
+        getTournaments();
+    };
+
     return (
         <div>
             <CssBaseline/>
@@ -176,6 +183,11 @@ const TournamentTable = ({
                 {/* Understand why exactly this dialog does not need a userId reference?? */}
                 <AddTournamentDialog/>
                 <Typography className={classes.leftSection}></Typography>
+                <Tooltip title="Refresh">
+                    <IconButton aria-label="refresh" onClick={handleRefresh}>
+                        <RefreshIcon/>
+                    </IconButton>
+                </Tooltip>
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}
                     globalFilter={globalFilter}
@@ -231,11 +243,12 @@ const TournamentTable = ({
 TournamentTable.propTypes = {
     columns: PropTypes.array.isRequired,
     data: PropTypes.array.isRequired,
-    tournaments: PropTypes.object.isRequired
+    tournaments: PropTypes.object.isRequired,
+    getTournaments: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
     tournaments: state.tournaments
 });
 
-export default connect(mapStateToProps)(TournamentTable);
+export default connect(mapStateToProps, {getTournaments})(TournamentTable);

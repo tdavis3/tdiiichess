@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Redirect, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 import {
     Avatar,
@@ -64,7 +64,6 @@ const Login = ({auth, login}) => {
 
     // Redirect if logged in
     if (auth.isAuthenticated) {
-        // return <Redirect to="/tournaments"/>;
         history.push('/tournaments');
     }
 

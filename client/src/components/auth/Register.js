@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {Redirect, useHistory} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 import {
     Avatar,
@@ -96,7 +96,6 @@ const Register = ({setAlert, register, isAuthenticated}) => {
     };
 
     if (isAuthenticated) {
-        // return <Redirect to="/tournaments"/>;
         history.push('/tournaments');
     }
 

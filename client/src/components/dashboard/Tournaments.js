@@ -25,7 +25,7 @@ import DeleteTournamentDialog from "../forms/tournament/DeleteTournamentDialog";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import {setAlert} from "../../actions/alert";
-import {getCurrentTournaments, duplicateTournament} from "../../actions/tournaments";
+import {getTournaments, duplicateTournament} from "../../actions/tournaments";
 
 import copy from "copy-to-clipboard";
 import MainDrawer from "../layout/MainDrawer";
@@ -52,12 +52,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) => {
+const Tournaments = ({tournaments, duplicateTournament, getTournaments}) => {
     useEffect(() => {
         if (tournaments.tournaments.length !== 0) {
             return;  // Do not want to keep reloading unnecessarily
         }
-        getCurrentTournaments();
+        getTournaments();
     }, []);
 
     const classes = useStyles();
@@ -222,7 +222,7 @@ const Tournaments = ({tournaments, duplicateTournament, getCurrentTournaments}) 
 
 Tournaments.propTypes = {
     setAlert: PropTypes.func.isRequired,
-    getCurrentTournaments: PropTypes.func.isRequired,
+    getTournaments: PropTypes.func.isRequired,
     duplicateTournament: PropTypes.func.isRequired,
     tournaments: PropTypes.object.isRequired
 };
@@ -233,6 +233,6 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps, {
     setAlert,
-    getCurrentTournaments,
+    getTournaments,
     duplicateTournament
 })(Tournaments);

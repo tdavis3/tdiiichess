@@ -19,7 +19,6 @@ import {getSections} from "../../../actions/sections";
 import TournamentInfo from "./TournamentInfo";
 import SectionsList from "./SectionsList";
 import {stripPrefix} from "../../../utils/helpers";
-import {getPlayers} from "../../../actions/players";
 
 let moment = require('moment');
 moment().format();
