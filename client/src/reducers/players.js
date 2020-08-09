@@ -14,7 +14,7 @@ import {
 
 const initialState = {
     players: {},
-    loading: true,
+    loading: false,
     scraper: {
         players: []
     },

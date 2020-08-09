@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import {Button, Grid, LinearProgress, List, ListItem, TextField} from "@material-ui/core";
+import {Button, Grid, LinearProgress, List, ListItem, TextField, Typography} from "@material-ui/core";
 
 import PropTypes from 'prop-types';
-import {scrapePlayerInfo} from "../../../../actions/players";
 import {connect} from "react-redux";
-import Typography from "@material-ui/core/Typography";
+import {scrapePlayerInfo} from "../../../../actions/players";
 
-const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
+
+const AddPlayerSearch = ({scraper, handlePlayerTransfer, scrapePlayerInfo}) => {
 
     const [player, setPlayer] = useState({
         firstName: "",
@@ -27,11 +27,6 @@ const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
         }
     };
 
-    const handlePlayerTransfer = (index) => () => {
-        console.log(scraper.players[index]);
-        // TODO: Transfer the player to the registration tab
-    };
-
     return (
         <div>
             {scraper.loading && <LinearProgress/>}
@@ -41,7 +36,7 @@ const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="First Name"
+                        label="First name"
                         type="text"
                         fullWidth
                         id="firstName"
@@ -55,7 +50,7 @@ const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="Last Name"
+                        label="Last name"
                         type="text"
                         fullWidth
                         id="lastName"
@@ -101,16 +96,17 @@ const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
             </Button>
             <List component="nav" aria-label="scraped players USCF">
                 {scraper.players.map((player, index) => (
-                    <ListItem button data-index={index} key={index} onDoubleClick={handlePlayerTransfer(index)}>
+                    <ListItem button data-index={index} key={index}
+                              onDoubleClick={() => handlePlayerTransfer(index)}>
                         <Grid container spacing={3}>
-                            <Grid item xs={3}>
+                            <Grid item xs={4}>
                                 <Typography>{player.fullName}</Typography>
                             </Grid>
-                            <Grid item xs={3}>
+                            <Grid item xs={2}>
                                 <Typography>{player.state}</Typography>
                             </Grid>
                             <Grid item xs={3}>
-                                <Typography>{player.regularRating}</Typography>
+                                <Typography>{player.regularRating || player.rating}</Typography>
                             </Grid>
                             <Grid item xs={3}>
                                 <Typography>{player.expirationDate}</Typography>
@@ -125,6 +121,7 @@ const AddPlayerSearch = ({scraper, scrapePlayerInfo}) => {
 
 AddPlayerSearch.propTypes = {
     scraper: PropTypes.object.isRequired,
+    handlePlayerTransfer: PropTypes.func.isRequired,
     scrapePlayerInfo: PropTypes.func.isRequired
 };
 

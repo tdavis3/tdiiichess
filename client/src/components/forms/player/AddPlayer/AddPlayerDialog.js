@@ -2,11 +2,9 @@ import React, {useState} from 'react';
 
 import {
     Tooltip,
-    Button,
     IconButton,
     Dialog,
     DialogTitle,
-    DialogActions,
     DialogContentText,
     Box,
     Tab,
@@ -19,7 +17,6 @@ import AddPlayerManual from "./AddPlayerManual";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
-import {createPlayer} from "../../../../actions/players";
 
 
 function TabPanel(props) {
@@ -56,10 +53,11 @@ function a11yProps(index) {
 }
 
 
-const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
+const AddPlayerDialog = ({sectionId, tournament, sections, scraper}) => {
 
     const [tabIndex, setTabIndex] = useState(0);
     const [open, setOpen] = useState(false);
+    const [playerToTransfer, setPlayerToTransfer] = useState({});
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -69,10 +67,9 @@ const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
         setOpen(false);
     };
 
-    const handleSave = () => {
-        // createPlayer(tournament.SK, sectionId, player);
-        // setPlayer(initialPlayer);
-        setOpen(false);
+    const handlePlayerTransfer = (index) => {
+        setPlayerToTransfer(scraper.players[index]);
+        setTabIndex(0);
     };
 
     const handleTabChange = (event, newIndex) => {
@@ -109,36 +106,28 @@ const AddPlayerDialog = ({sectionId, sections, tournament, createPlayer}) => {
                 </Tabs>
                 <TabPanel value={tabIndex} index={0}>
                     <DialogContentText>Enter details</DialogContentText>
-                    <AddPlayerManual/>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSave}
-                                disabled={true}
-                                color="primary">
-                            Save
-                        </Button>
-                    </DialogActions>
+                    <AddPlayerManual playerToTransfer={playerToTransfer} sectionId={sectionId} tournament={tournament}
+                                     handleClose={handleClose}/>
                 </TabPanel>
                 <TabPanel value={tabIndex} index={1}>
-                    <DialogContentText>Search the USCF database by ID or lastname and state</DialogContentText>
-                    <AddPlayerSearch/>
+                    <DialogContentText>Search the USCF database by ID or last name and state</DialogContentText>
+                    <AddPlayerSearch handlePlayerTransfer={handlePlayerTransfer}/>
                 </TabPanel>
             </Dialog>
         </div>
-    )
+    );
 };
 
 AddPlayerDialog.propTypes = {
-    createPlayer: PropTypes.func.isRequired,
+    scraper: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     sectionId: PropTypes.string.isRequired,
     tournament: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-    sections: state.sections
+    sections: state.sections,
+    scraper: state.players.scraper
 });
 
-export default connect(mapStateToProps, {createPlayer})(AddPlayerDialog);
+export default connect(mapStateToProps)(AddPlayerDialog);

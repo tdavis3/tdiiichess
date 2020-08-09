@@ -1,23 +1,28 @@
 import React, {useState} from 'react';
-import {Checkbox, FormControlLabel, Grid, TextField} from "@material-ui/core";
+import {Button, Checkbox, FormControlLabel, Grid, TextField} from "@material-ui/core";
 import {KeyboardDatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import ByeInput from "../ByeInput";
 
-const AddPlayerManual = () => {
+import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+import {createPlayer} from "../../../../actions/players";
+
+
+const AddPlayerManual = ({sectionId, tournament, playerToTransfer, handleClose, createPlayer}) => {
 
     const initialPlayer = {
-        firstName: "",
-        lastName: "",
-        suffix: "",
-        uscfId: "",
-        uscfRegRating: "",
-        uscfBlitzRating: "",
-        uscfQuickRating: "",
-        state: "",
-        fideId: "",
+        firstName: playerToTransfer.firstName || "",
+        lastName: playerToTransfer.lastName || "",
+        suffix: playerToTransfer.suffix || "",
+        uscfId: playerToTransfer.uscfId || "",
+        uscfRegRating: playerToTransfer.regularRating || "",
+        uscfBlitzRating: playerToTransfer.blitzRating || "",
+        uscfQuickRating: playerToTransfer.quickRating || "",
+        state: playerToTransfer.state || "",
+        fideId: playerToTransfer.fideId || "",
         fideRating: "",
-        expires: "",
+        expires: playerToTransfer.expirationDate || "",
         email: "",
         cell: "",
         dob: null,
@@ -68,6 +73,12 @@ const AddPlayerManual = () => {
             setPlayer({...player, [e.target.id]: e.target.value});
         }
     };
+
+    const handleAdd = () => {
+        createPlayer(tournament.SK, sectionId, player);
+        handleClose();
+    };
+
     return (
         <div>
             <Grid container spacing={3}>
@@ -76,7 +87,7 @@ const AddPlayerManual = () => {
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="First Name"
+                        label="First name"
                         type="text"
                         fullWidth
                         id="firstName"
@@ -89,7 +100,7 @@ const AddPlayerManual = () => {
                         autoFocus
                         variant={"outlined"}
                         margin="dense"
-                        label="Last Name"
+                        label="Last name"
                         type="text"
                         fullWidth
                         id="lastName"
@@ -154,7 +165,6 @@ const AddPlayerManual = () => {
                     />
                 </Grid>
             </Grid>
-
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <Grid container alignItems={"center"} spacing={3}>
                     <Grid item xs={6}>
@@ -212,10 +222,29 @@ const AddPlayerManual = () => {
                     />
                 </Grid>
             </Grid>
+            <Button onClick={handleClose} color="primary">
+                Cancel
+            </Button>
+            <Button onClick={handleAdd}
+                    disabled={player.firstName === ""}
+                    color="primary">
+                Add
+            </Button>
         </div>
     );
 };
 
-AddPlayerManual.propTypes = {};
+AddPlayerManual.propTypes = {
+    sectionId: PropTypes.string.isRequired,
+    tournament: PropTypes.object.isRequired,
+    playerToTransfer: PropTypes.object.isRequired,
+    handleClose: PropTypes.func.isRequired,
+    createPlayer: PropTypes.func.isRequired
+};
 
-export default AddPlayerManual;
+const mapStateToProps = state => ({
+    sections: state.sections,
+    scraper: state.players.scraper
+});
+
+export default connect(mapStateToProps, {createPlayer})(AddPlayerManual);

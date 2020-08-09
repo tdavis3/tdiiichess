@@ -11,7 +11,7 @@ import {
 
 const initialState = {
     tournaments: [],
-    loading: true,
+    loading: false,
     error: {}
 };
 

@@ -13,7 +13,7 @@ import {
 
 const initialState = {
     sections: [],
-    loading: true,
+    loading: false,
     error: {}
 };
 
