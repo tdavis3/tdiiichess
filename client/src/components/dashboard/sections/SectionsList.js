@@ -67,7 +67,7 @@ const SectionsList = ({
                 </Grid>
             </Grid>
             {sections.loading && <LinearProgress/>}
-            <List component="nav" aria-label="secondary mailbox folders">
+            <List component="nav" aria-label="sections">
                 {sections.sections.map((section, index) => (
                     <ListItem button selected={sectionDisplayedIndex === index} data-index={index} key={index}
                               onClick={handleSectionClick(index)}

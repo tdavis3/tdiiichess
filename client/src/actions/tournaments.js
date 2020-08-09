@@ -81,8 +81,11 @@ export const duplicateTournament = (tournamentId, tournament) => async dispatch 
             }
         };
         dispatch({type: SET_TOURNAMENTS_LOADING});
-        const res = await axios.post(`https//api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}`, tournament, config);
-        dispatch({type: DUPLICATE_TOURNAMENT, payload: res.data});
+        const res = await axios.post(`https://api.tdiiichess.com/tournaments/${stripPrefix(tournamentId)}`, tournament, config);
+        dispatch({
+            type: DUPLICATE_TOURNAMENT,
+            payload: {...tournament, name: tournament.name.concat(" Copy"), PK: res.data.PK, SK: res.data.SK}
+        });
         dispatch(setAlert("Tournament duplicated", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

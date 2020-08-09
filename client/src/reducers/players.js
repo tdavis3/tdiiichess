@@ -7,12 +7,17 @@ import {
     DELETE_PLAYER,
     PLAYERS_ERROR,
     CLEAR_PLAYERS,
-    STOP_PLAYERS_LOADING
+    STOP_PLAYERS_LOADING,
+    SET_USCF_SCRAPER_LOADING,
+    USCF_SCRAPER_SUCCESS
 } from "../actions/types";
 
 const initialState = {
     players: {},
     loading: true,
+    scraper: {
+        players: []
+    },
     error: {}
 };
 
@@ -76,6 +81,23 @@ export default function (state = initialState, action) {
                 ...state,
                 error: payload,
                 loading: false
+            };
+        case SET_USCF_SCRAPER_LOADING:
+            return {
+                ...state,
+                scraper: {
+                    ...state.scraper,
+                    loading: true
+                }
+            };
+        case USCF_SCRAPER_SUCCESS:
+            return {
+                ...state,
+                scraper: {
+                    ...state.scraper,
+                    players: payload,
+                    loading: false
+                }
             };
         default:
             return state;

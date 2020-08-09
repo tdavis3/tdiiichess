@@ -87,7 +87,7 @@ const ByeInput = ({chipByeData, handleByesAdd, handleByesDelete}) => {
             <Grid item xs={2}>
                 <Button
                     onClick={handleByesAdd(round, byePoint)}
-                    disabled={(round === 0)}
+                    disabled={round === 0}
                 >
                     Add
                 </Button>
@@ -97,7 +97,7 @@ const ByeInput = ({chipByeData, handleByesAdd, handleByesDelete}) => {
                     return (
                         <li key={index}>
                             <Chip
-                                label={bye.bye_point.toString().concat(" / Round ", bye.round_number)}
+                                label={bye.byePoint.toString().concat(" / Round ", bye.roundNumber)}
                                 onDelete={handleByesDelete(bye)}
                                 className={classes.chip}
                             />

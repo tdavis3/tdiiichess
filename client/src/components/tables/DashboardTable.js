@@ -34,7 +34,7 @@ import {
 
 import SectionTableOptions from "./SectionTableOptions";
 import ByesDialog from "../forms/section/ByesDialog";
-import AddPlayerDialog from "../forms/player/AddPlayerDialog";
+import AddPlayerDialog from "../forms/player/AddPlayer/AddPlayerDialog";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
 import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
 
@@ -244,8 +244,8 @@ const DashboardTable = ({
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog tournament={tournament} sectionId={sectionId}/>
-                {/*<WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
-                {/*<ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
+                <WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
+                <ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
                 {/*<MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>*/}
                 <Typography className={classes.leftSection}></Typography>
                 <PairingsDropdown

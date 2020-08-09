@@ -26,15 +26,15 @@ const MoveSectionDialog = ({
                                moveSection
                            }) => {
 
-    const [destinationTournament, setDestinationTournament] = useState("");
+    const [destinationTournamentId, setDestinationTournamentId] = useState("");
     const [errorData, setErrorData] = useState({
         validObjectId: false
     });
 
     const handleMove = () => {
         if (errorData.validObjectId) {
-            if (section.SK !== destinationTournament) {
-                moveSection(section.SK, destinationTournament);
+            if (section.SK !== destinationTournamentId) {
+                moveSection(section.SK, destinationTournamentId);
                 setNextToDisplay();  // Since a section is deleted from the list of sections
                 setDisplay(false);
                 setAnchorEl(null);
@@ -50,10 +50,9 @@ const MoveSectionDialog = ({
     };
 
     const handleChange = e => {
-        setDestinationTournament(e.target.value);
+        setDestinationTournamentId(e.target.value);
         if (e.target.id === 'destinationTournamentId') {
-            // Valid MongoDB ObjectID check
-            setErrorData({...errorData, validObjectId: !!(e.target.value.match(/^[0-9a-fA-F]{24}$/))});
+            setErrorData({...errorData, validObjectId: !!(e.target.value.includes("#"))});
         }
     };
 
@@ -80,7 +79,7 @@ const MoveSectionDialog = ({
                                 type="text"
                                 fullWidth
                                 id="destinationTournamentId"
-                                value={destinationTournament}
+                                value={destinationTournamentId}
                                 onChange={handleChange}
                                 error={!errorData.validObjectId}
                                 helperText={errorData.validObjectId ? "" : "Invalid ID"}

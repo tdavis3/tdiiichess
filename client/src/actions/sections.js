@@ -82,7 +82,7 @@ export const editSection = (sectionId, sectionFields) => async dispatch => {
 };
 
 // Duplicate a section
-export const duplicateSection = (sectionId) => async dispatch => {
+export const duplicateSection = (sectionId, section) => async dispatch => {
     try {
         const config = {
             headers: {
@@ -90,8 +90,8 @@ export const duplicateSection = (sectionId) => async dispatch => {
             }
         };
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.post(`/api/sections/${sectionId}/duplicate`, {}, config);
-        dispatch({type: DUPLICATE_SECTION, payload: res.data});
+        const res = await axios.post(`https://api.tdiiichess.com/sections/${stripPrefix(sectionId)}`, {}, config);
+        dispatch({type: DUPLICATE_SECTION, payload: {...section, PK: res.data.PK, SK: res.data.SK}});
         dispatch(setAlert("Section duplicated", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
@@ -111,7 +111,7 @@ export const moveSection = (sectionId, destinationTournamentId) => async dispatc
             }
         };
         dispatch({type: SET_SECTIONS_LOADING});
-        await axios.put(`https://api.tdiiichess.com/sections/${sectionId}/tournaments/${destinationTournamentId}`, {}, config);
+        await axios.post(`https://api.tdiiichess.com/sections/${stripPrefix(sectionId)}/tournaments/${stripPrefix(destinationTournamentId)}`, {}, config);
         dispatch({type: MOVE_SECTION, payload: sectionId});
         dispatch(setAlert("Section moved", "success"));
     } catch (err) {
@@ -127,8 +127,8 @@ export const moveSection = (sectionId, destinationTournamentId) => async dispatc
 export const deleteSection = sectionId => async dispatch => {
     try {
         dispatch({type: SET_SECTIONS_LOADING});
-        const res = await axios.delete(`https://api.tdiiichess.com/sections/${sectionId}`);
-        dispatch({type: DELETE_SECTION, payload: res.data});
+        await axios.delete(`https://api.tdiiichess.com/sections/${stripPrefix(sectionId)}`);
+        dispatch({type: DELETE_SECTION, payload: sectionId});
         dispatch(setAlert("Section deleted", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));

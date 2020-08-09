@@ -40,7 +40,7 @@ const SectionContextMenu = ({
     };
 
     const handleDuplicate = () => {
-        duplicateSection(rightClickedSection._id);
+        duplicateSection(rightClickedSection.SK);
         setAnchorEl(null);
     };
 
@@ -49,7 +49,7 @@ const SectionContextMenu = ({
     };
 
     const handleDelete = () => {
-        deleteSection(rightClickedSection._id);
+        deleteSection(rightClickedSection.SK);
         setNextToDisplay();  // Since a section is deleted from the list of sections
         setAnchorEl(null);
     };

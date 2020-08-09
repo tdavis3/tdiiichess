@@ -10,8 +10,9 @@ import {
     PLAYERS_SUCCESS,
     CREATE_PLAYER,
     STOP_PLAYERS_LOADING,
-    CLEAR_SECTIONS,
-    CLEAR_PLAYERS
+    CLEAR_PLAYERS,
+    SET_USCF_SCRAPER_LOADING,
+    USCF_SCRAPER_SUCCESS
 } from "./types";
 import {stripPrefix} from "../utils/helpers";
 
@@ -61,7 +62,7 @@ export const editPlayer = (playerId, player) => async dispatch => {
                 "Content-Type": "application/json"
             }
         };
-        await axios.put(`https://api.tdiiichess.com/players/${playerId}`, player, config);
+        await axios.put(`https://api.tdiiichess.com/players/${stripPrefix(playerId)}`, player, config);
         dispatch({type: EDIT_PLAYER, payload: player});
         dispatch(setAlert("Player edited", "success"));
     } catch (err) {
@@ -124,4 +125,24 @@ export const clearPlayers = () => async dispatch => {
 
 export const stopPlayersLoading = () => async dispatch => {
     dispatch({type: STOP_PLAYERS_LOADING});
+};
+
+// USCF player scraper
+export const scrapePlayerInfo = (scrapeData) => async dispatch => {
+    try {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        };
+        dispatch({type: SET_USCF_SCRAPER_LOADING});
+        const res = await axios.post(`https://api.tdiiichess.com/uscfScraper`, scrapeData, config);
+        if (Array.isArray(res.data)) {
+            dispatch({type: USCF_SCRAPER_SUCCESS, payload: res.data});
+        } else {
+            dispatch({type: USCF_SCRAPER_SUCCESS, payload: [res.data]});
+        }
+    } catch (err) {
+        console.log(err);
+    }
 };

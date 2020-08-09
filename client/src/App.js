@@ -37,9 +37,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const App = () => {
-    // useEffect(() => {
-    //     store.dispatch(loadUser());
-    // }, []); // Will only run once because of the second parameter is an empty array
+    useEffect(() => {
+        store.dispatch(loadUser());
+    }, []); // Will only run once because of the second parameter is an empty array
 
     const classes = useStyles();
 
