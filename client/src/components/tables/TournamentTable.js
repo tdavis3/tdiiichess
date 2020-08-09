@@ -178,7 +178,7 @@ const TournamentTable = ({
     return (
         <div>
             <CssBaseline/>
-            <Toolbar>  {/*TODO Clean this toolbar up*/}
+            <Toolbar>
                 <Typography style={{fontSize: 20}}>Tournaments</Typography>
                 {/* Understand why exactly this dialog does not need a userId reference?? */}
                 <AddTournamentDialog/>

@@ -62,7 +62,7 @@ const Dashboard = ({
         () => [
             {
                 Header: 'Player',
-                accessor: 'SK',
+                accessor: d => `${d.firstName} ${d.lastName} ${d.suffix}`,
                 width: 150,
                 minWidth: 150,
                 maxWidth: 150,

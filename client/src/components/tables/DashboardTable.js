@@ -15,7 +15,7 @@ import {
     InputBase,
     Checkbox,
     IconButton,
-    LinearProgress
+    LinearProgress, Tooltip
 } from "@material-ui/core";
 import {fade, makeStyles} from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
@@ -31,18 +31,18 @@ import {
     useGlobalFilter,
     useAsyncDebounce
 } from 'react-table';
+import RefreshIcon from "@material-ui/icons/Refresh";
 
-import SectionTableOptions from "./SectionTableOptions";
 import ByesDialog from "../forms/section/ByesDialog";
-import AddPlayerDialog from "../forms/player/AddPlayer/AddPlayerDialog";
+import SectionTableOptions from "./SectionTableOptions";
+import PairingsDropdown from "../pairings/PairingsDropdown";
 import MovePlayerDialog from "../forms/player/MovePlayerDialog";
 import WithdrawalsDialog from "../forms/section/WithdrawalsDialog";
+import AddPlayerDialog from "../forms/player/AddPlayer/AddPlayerDialog";
 
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
-import PairingsDropdown from "../pairings/PairingsDropdown";
-import {stripPrefix} from "../../utils/helpers";
 import {getPlayers, stopPlayersLoading, clearPlayers} from "../../actions/players";
 
 
@@ -234,18 +234,22 @@ const DashboardTable = ({
         history.goBack();
     };
 
+    const handleRefresh = () => {
+        getPlayers(tournament.SK, sectionId);
+    };
+
     return (
         // <Paper>
         <div>
             <CssBaseline/>
-            <Toolbar>  {/*TODO Clean this toolbar up*/}
+            <Toolbar>
                 <IconButton onClick={handleBackButtonClick}>
                     <NavigateBeforeIcon fontSize={"large"}/>
                 </IconButton>
                 <Typography variant={'h6'}>Players</Typography>
                 <AddPlayerDialog tournament={tournament} sectionId={sectionId}/>
-                <WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
-                <ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>
+                {/*<WithdrawalsDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
+                {/*<ByesDialog selectedSectionId={sectionId} selectedSectionIndex={selectedSectionIndex}/>*/}
                 {/*<MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>*/}
                 <Typography className={classes.leftSection}></Typography>
                 <PairingsDropdown
@@ -254,6 +258,11 @@ const DashboardTable = ({
                 />
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>
+                <Tooltip title="Refresh">
+                    <IconButton aria-label="refresh" onClick={handleRefresh}>
+                        <RefreshIcon/>
+                    </IconButton>
+                </Tooltip>
                 <GlobalFilter
                     preGlobalFilteredRows={preGlobalFilteredRows}
                     globalFilter={globalFilter}
