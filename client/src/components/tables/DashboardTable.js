@@ -43,7 +43,7 @@ import AddPlayerDialog from "../forms/player/AddPlayer/AddPlayerDialog";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {clearSections} from "../../actions/sections";
-import {getPlayers, stopPlayersLoading, clearPlayers} from "../../actions/players";
+import {getPlayers, stopPlayersLoading, clearPlayers, clearScrapedPlayers} from "../../actions/players";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -161,6 +161,7 @@ const DashboardTable = ({
                             getPlayers,
                             clearPlayers,
                             clearSections,
+                            clearScrapedPlayers,
                             stopPlayersLoading
                         }) => {
 
@@ -231,6 +232,7 @@ const DashboardTable = ({
     const handleBackButtonClick = () => {
         clearSections();
         clearPlayers();
+        clearScrapedPlayers();
         history.goBack();
     };
 
@@ -327,6 +329,7 @@ DashboardTable.propTypes = {
     sectionId: PropTypes.string.isRequired,
     tournament: PropTypes.object.isRequired,
     getPlayers: PropTypes.func.isRequired,
+    clearScrapedPlayers: PropTypes.func.isRequired,
     clearSections: PropTypes.func.isRequired,
     clearPlayers: PropTypes.func.isRequired,
     stopPlayersLoading: PropTypes.func.isRequired
@@ -337,4 +340,10 @@ const mapStateToProps = state => ({
     sections: state.sections
 });
 
-export default connect(mapStateToProps, {getPlayers, clearSections, clearPlayers, stopPlayersLoading,})(DashboardTable);
+export default connect(mapStateToProps, {
+    getPlayers,
+    clearSections,
+    clearPlayers,
+    clearScrapedPlayers,
+    stopPlayersLoading,
+})(DashboardTable);

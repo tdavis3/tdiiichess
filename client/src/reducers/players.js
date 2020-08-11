@@ -9,13 +9,15 @@ import {
     CLEAR_PLAYERS,
     STOP_PLAYERS_LOADING,
     SET_USCF_SCRAPER_LOADING,
-    USCF_SCRAPER_SUCCESS
+    USCF_SCRAPER_SUCCESS,
+    CLEAR_SCRAPER
 } from "../actions/types";
 
 const initialState = {
     players: {},
     loading: false,
     scraper: {
+        loading: false,
         players: []
     },
     error: {}
@@ -97,6 +99,14 @@ export default function (state = initialState, action) {
                     ...state.scraper,
                     players: payload,
                     loading: false
+                }
+            };
+        case CLEAR_SCRAPER:
+            return {
+                ...state,
+                scraper: {
+                    loading: false,
+                    players: []
                 }
             };
         default:

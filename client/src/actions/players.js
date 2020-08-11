@@ -12,7 +12,8 @@ import {
     STOP_PLAYERS_LOADING,
     CLEAR_PLAYERS,
     SET_USCF_SCRAPER_LOADING,
-    USCF_SCRAPER_SUCCESS
+    USCF_SCRAPER_SUCCESS,
+    CLEAR_SCRAPER
 } from "./types";
 import {stripPrefix} from "../utils/helpers";
 
@@ -145,4 +146,9 @@ export const scrapePlayerInfo = (scrapeData) => async dispatch => {
     } catch (err) {
         console.log(err);
     }
+};
+
+// Clear scraped players in state
+export const clearScrapedPlayers = () => async dispatch => {
+    dispatch({type: CLEAR_SCRAPER});
 };

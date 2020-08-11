@@ -53,7 +53,7 @@ function a11yProps(index) {
 }
 
 
-const AddPlayerDialog = ({sectionId, tournament, sections, scraper}) => {
+const AddPlayerDialog = ({sectionId, tournament, players, sections, scraper}) => {
 
     const [tabIndex, setTabIndex] = useState(0);
     const [open, setOpen] = useState(false);
@@ -81,7 +81,7 @@ const AddPlayerDialog = ({sectionId, tournament, sections, scraper}) => {
             <Tooltip title="Add">
                 <span>
                     <IconButton aria-label="add" onClick={handleClickOpen}
-                                disabled={sections.sections.length === 0}>
+                                disabled={sections.sections.length === 0 || players.loading}>
                     <AddCircleOutlineIcon/>
                 </IconButton>
                 </span>
@@ -119,6 +119,7 @@ const AddPlayerDialog = ({sectionId, tournament, sections, scraper}) => {
 };
 
 AddPlayerDialog.propTypes = {
+    players: PropTypes.object.isRequired,
     scraper: PropTypes.object.isRequired,
     sections: PropTypes.object.isRequired,
     sectionId: PropTypes.string.isRequired,
@@ -126,6 +127,7 @@ AddPlayerDialog.propTypes = {
 };
 
 const mapStateToProps = state => ({
+    players: state.players,
     sections: state.sections,
     scraper: state.players.scraper
 });
