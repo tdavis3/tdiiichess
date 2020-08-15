@@ -4,6 +4,7 @@ import {Button, Grid, LinearProgress, List, ListItem, TextField, Typography} fro
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {scrapePlayerInfo} from "../../../../actions/players";
+import {ratingParser} from "../../../../utils/helpers";
 
 
 const AddPlayerSearch = ({scraper, handlePlayerTransfer, scrapePlayerInfo}) => {
@@ -106,7 +107,7 @@ const AddPlayerSearch = ({scraper, handlePlayerTransfer, scrapePlayerInfo}) => {
                                 <Typography>{player.state}</Typography>
                             </Grid>
                             <Grid item xs={3}>
-                                <Typography>{player.regularRating || player.rating}</Typography>
+                                <Typography>{ratingParser(player.regularRating || player.rating)}</Typography>
                             </Grid>
                             <Grid item xs={3}>
                                 <Typography>{player.expirationDate}</Typography>

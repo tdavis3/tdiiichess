@@ -64,3 +64,13 @@ export function stripPrefix(value) {
     }
     return splitt[0];
 }
+
+export function ratingParser(rating) {
+    if (rating.includes("/")) {
+        return rating.split("/")[0];  // Provisional rating
+    } else if (rating.includes("*")) {
+        return rating.split("*")[0];  // Rating minus the star
+    } else {
+        return rating;
+    }
+}

@@ -7,6 +7,7 @@ import ByeInput from "../ByeInput";
 import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 import {createPlayer} from "../../../../actions/players";
+import {ratingParser} from "../../../../utils/helpers";
 
 
 const AddPlayerManual = ({sectionId, tournament, playerToTransfer, handleClose, createPlayer}) => {
@@ -16,7 +17,7 @@ const AddPlayerManual = ({sectionId, tournament, playerToTransfer, handleClose, 
         lastName: playerToTransfer.lastName || "",
         suffix: playerToTransfer.suffix || "",
         uscfId: playerToTransfer.uscfId || "",
-        uscfRegRating: playerToTransfer.regularRating || "",
+        uscfRegRating: ratingParser(playerToTransfer.regularRating || playerToTransfer.rating || ""),
         uscfBlitzRating: playerToTransfer.blitzRating || "",
         uscfQuickRating: playerToTransfer.quickRating || "",
         state: playerToTransfer.state || "",
