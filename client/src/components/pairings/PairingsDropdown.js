@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     }
 ));
 
-const PairingsDropdown = ({selectedSectionIndex, currentSectionId, players, sections, generatePairings}) => {
+const PairingsDropdown = ({tournament, selectedSectionIndex, currentSectionId, players, sections, generatePairings}) => {
     const classes = useStyles();
 
     const anchorRef = useRef(null);
@@ -50,7 +50,7 @@ const PairingsDropdown = ({selectedSectionIndex, currentSectionId, players, sect
 
     const handlePairNextRound = () => {
         // Check that all results have been entered for the section
-        generatePairings(currentSectionId, sections.sections[selectedSectionIndex].currentRound, players.players[selectedSectionIndex]);
+        generatePairings(tournament.SK, currentSectionId, sections.sections[selectedSectionIndex].currentRound);
         setOpen(false);
     };
 
@@ -89,6 +89,7 @@ const PairingsDropdown = ({selectedSectionIndex, currentSectionId, players, sect
 }
 
 PairingsDropdown.propTypes = {
+    tournament: PropTypes.object.isRequired,
     selectedSectionIndex: PropTypes.number.isRequired,
     currentSectionId: PropTypes.string.isRequired,
     players: PropTypes.object.isRequired,

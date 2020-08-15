@@ -255,8 +255,9 @@ const DashboardTable = ({
                 {/*<MovePlayerDialog selectedSectionId={sectionId} selectedRowIds={selectedRowIds}/>*/}
                 <Typography className={classes.leftSection}></Typography>
                 <PairingsDropdown
-                    selectedSectionIndex={selectedSectionIndex}
+                    tournament={tournament}
                     currentSectionId={sectionId}
+                    selectedSectionIndex={selectedSectionIndex}
                 />
                 <Button size={"small"}>Standings</Button>
                 <Button size={"small"}>Reports</Button>

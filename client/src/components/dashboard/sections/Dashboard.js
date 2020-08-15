@@ -58,34 +58,55 @@ const Dashboard = ({
     const [sectionDisplayedIndex, setSectionDisplayedIndex] = useState(0);
     let selectedSectionId = (sections.loading || sections.sections.length === 0) ? "" : stripPrefix(sections.sections[sectionDisplayedIndex].SK);
 
-    const columns = useMemo(
-        () => [
-            {
-                Header: 'Player',
-                accessor: d => `${d.firstName} ${d.lastName} ${d.suffix}`,
+    const getRoundColumns = () => {
+        if (sections.loading || sections.sections.length === 0) {
+            return [];
+        }
+        const currentRound = sections.sections[sectionDisplayedIndex].currentRound;
+        let roundHeaders = [];
+        for (let i = 1; i < currentRound + 1; i++) {
+            roundHeaders.push({
+                Header: 'Rd '.concat(currentRound),
+                accessor: 'playerHistory',
                 width: 150,
                 minWidth: 150,
                 maxWidth: 150,
-                // collapse: true,
-                Cell: ({cell: {row: {original: {firstName, lastName, suffix, uscfId, uscfRegRating}}}}) => {
-                    return (
-                        <Grid container spacing={2} direction={'column'}>
-                            <Grid item xs={5} md={3}>
-                                <Typography>{firstName.concat(" ", lastName, " ", suffix)}</Typography>
-                            </Grid>
-                            <Grid item xs={5} container>
-                                <Grid item xs={4} md={3}>
-                                    <Typography>{uscfId}</Typography>
+            });
+        }
+        return roundHeaders;
+    };
+
+    const columns = useMemo(
+        () => {
+            const roundHeaders = getRoundColumns();
+            return [
+                {
+                    Header: 'Player',
+                    accessor: d => `${d.firstName} ${d.lastName} ${d.suffix}`,
+                    width: 150,
+                    minWidth: 150,
+                    maxWidth: 150,
+                    // collapse: true,
+                    Cell: ({cell: {row: {original: {firstName, lastName, suffix, uscfId, uscfRegRating}}}}) => {
+                        return (
+                            <Grid container spacing={2} direction={'column'}>
+                                <Grid item xs={5} md={3}>
+                                    <Typography>{firstName.concat(" ", lastName, " ", suffix)}</Typography>
                                 </Grid>
-                                <Grid item xs={2}>
-                                    <Typography>{uscfRegRating}</Typography>
+                                <Grid item xs={5} container>
+                                    <Grid item xs={4} md={3}>
+                                        <Typography>{uscfId}</Typography>
+                                    </Grid>
+                                    <Grid item xs={2}>
+                                        <Typography>{uscfRegRating}</Typography>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    );
-                }
-            }
-        ],
+                        );
+                    }
+                }, ...roundHeaders
+            ]
+        },
         []
     );
 

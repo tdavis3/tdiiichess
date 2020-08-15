@@ -49,7 +49,7 @@ export const createSection = (tournamentId, section) => async dispatch => {
             section,
             config
         );
-        dispatch({type: CREATE_SECTION, payload: {...section, PK: res.data.PK, SK: res.data.SK}});
+        dispatch({type: CREATE_SECTION, payload: {...section, currentRound: 0, PK: res.data.PK, SK: res.data.SK}});
         dispatch(setAlert("Section created", "success"));
     } catch (err) {
         dispatch(setAlert(err.response.data.msg, "error"));
