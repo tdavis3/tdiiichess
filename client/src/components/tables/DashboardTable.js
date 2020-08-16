@@ -98,23 +98,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const IndeterminateCheckbox = React.forwardRef(
-    ({indeterminate, ...rest}, ref) => {
-        const defaultRef = React.useRef();
-        const resolvedRef = ref || defaultRef;
-
-        useEffect(() => {
-            resolvedRef.current.indeterminate = indeterminate
-        }, [resolvedRef, indeterminate]);
-
-        return (
-            <>
-                <Checkbox size="small" ref={resolvedRef} {...rest} />
-            </>
-        )
-    }
-);
-
 // Define a default UI for filtering
 function GlobalFilter({
                           preGlobalFilteredRows,
@@ -202,27 +185,6 @@ const DashboardTable = ({
         useGlobalFilter,
         useSortBy,
         useRowSelect,
-        hooks => {
-            hooks.allColumns.push(columns => [
-                // A column for selection
-                {
-                    id: 'selection',
-                    width: 10,
-                    maxWidth: 20,
-                    Header: ({getToggleAllRowsSelectedProps}) => (
-                        <div>
-                            <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-                        </div>
-                    ),
-                    Cell: ({row}) => (
-                        <div>
-                            <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-                        </div>
-                    ),
-                },
-                ...columns,
-            ])
-        },
         useResizeColumns,
         useFlexLayout,
     );

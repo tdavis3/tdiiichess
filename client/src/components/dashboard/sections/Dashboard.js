@@ -94,11 +94,11 @@ const Dashboard = ({
                                     <Typography>{firstName.concat(" ", lastName, " ", suffix)}</Typography>
                                 </Grid>
                                 <Grid item xs={5} container>
-                                    <Grid item xs={4} md={3}>
-                                        <Typography>{uscfId}</Typography>
-                                    </Grid>
                                     <Grid item xs={2}>
                                         <Typography>{uscfRegRating}</Typography>
+                                    </Grid>
+                                    <Grid item xs={4} md={3}>
+                                        <Typography noWrap>{uscfId}</Typography>
                                     </Grid>
                                 </Grid>
                             </Grid>
