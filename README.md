@@ -2,7 +2,7 @@
 
 TDIII Chess is a new, powerful, and aesthetic chess tournament management and pairing software. It seeks to make any tournament director's job super easy.
 
-MERN Stack: MongoDB, Express, React.js, Node.js
+MERN Stack: DynamoDB, AWS SAM, React.js, Node.js
 
 Most of the frontend components are from Material-UI (https://material-ui.com/)
 
